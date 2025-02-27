@@ -43,12 +43,17 @@ def parse_arguments() -> argparse.Namespace:
         '--srx', type=str, help="SRX accessions", required=True
     )
     parser.add_argument(
-        '--path', type=str, help="Path to matrix.mtx.gz files", required=True
+        '--mtx-path', type=str, help="Path to matrix.mtx.gz files", nargs='+', required=True
     )
     parser.add_argument(
         '--missing-metadata', type=str, default="error", 
         choices=["error", "skip", "allow"],
         help="How do handle missing metadata?"
+    )
+    parser.add_argument(
+        '--feature-type', default='GeneFull_Ex50pAS', 
+        choices=['Gene', 'GeneFull', 'GeneFull_Ex50pAS', 'GeneFull_ExonOverIntron', 'Velocyto'], 
+        help='Feature type to process'
     )
     parser.add_argument(
         '--threads', type=int, default=8, help="Number of threads to use"
@@ -78,11 +83,12 @@ def load_matrix_as_anndata(
         .select(
             srx_metadata.lib_prep, 
             srx_metadata.tech_10x,
+            srx_metadata.cell_prep,
             srx_metadata.organism,
             srx_metadata.tissue,
             srx_metadata.disease,
             srx_metadata.purturbation,
-            srx_metadata.cell_line,            # TODO: add cell_prep
+            srx_metadata.cell_line,     
             srx_metadata.czi_collection_id,
             srx_metadata.czi_collection_name,
         )
@@ -177,8 +183,18 @@ def main():
     args = parse_arguments()
 
     # parse args
-    mtx_files = list(zip(parse_arg(args.srx), parse_arg(args.path)))
-    logging.info(f"mtx file count: {len(mtx_files)}")
+    srx_ids = parse_arg(args.srx)
+
+    # combine srx and path
+    srx_mtx = []
+    for i in range(len(srx_ids)):
+        if args.feature_type == "Velocyto" and i % 3 != 0:     
+            continue
+        srx_mtx.append([srx_ids[i], f"{i+1}_matrix.mtx.gz"])
+    print(srx_mtx); exit();
+
+    #mtx_files = list(zip(parse_arg(args.srx), parse_arg(args.path)))
+    #logging.info(f"mtx file count: {len(mtx_files)}")
 
     # create h5ad files
     mtx_to_h5ad(
@@ -188,6 +204,4 @@ def main():
     )
 
 if __name__ == "__main__":
-    from dotenv import load_dotenv
-    load_dotenv(override=True)
     main()

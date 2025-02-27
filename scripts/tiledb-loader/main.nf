@@ -6,15 +6,34 @@ workflow {
     mtx_files = FIND_MTX.out.csv
         .splitCsv( header: true )
         .map { row -> 
-            tuple( row["batch"], row["srx"], row["matrix_path"] ) 
-        }
-        .groupTuple()
+            tuple( 
+              row["batch"], row["srx"], file(row["matrix_path"]), file(row["features_path"]), file(row["barcodes_path"])
+            )
+        }.groupTuple()
+        
 
+    // group Velocyto MTX files by SRX
+    /*
+    if( params.feature_type == "Velocyto"){
+      mtx_files = mtx_files.groupTuple(by: [0,1]).map{ group -> 
+        tuple(group[0], group[1], group[2], group[3][0], group[4][0])
+      }
+    } else {
+      mtx_files = mtx_files.groupTuple()
+    }
+    */
+    
+    //mtx_files.view()
+    
+    
     // aggregate mtx files as h5ad
     MTX_TO_H5AD( mtx_files )
 
+    /*
+
     // add the h5ad files to the database
     H5AD_TO_DB( MTX_TO_H5AD.out.h5ad.buffer( size: params.h5ad_batch_size, remainder: true ) )
+    */
 }
 
 process H5AD_TO_DB {
@@ -43,19 +62,24 @@ process MTX_TO_H5AD {
     maxForks 4
 
     input:
-    tuple val(batch), val(srx), val(mtx_path)
+    tuple val(batch), val(srx), path("*_matrix.mtx.gz"), path("*_features.mtx.gz"), path("*_barcodes.mtx.gz")
 
     output:
     path "data.h5ad",                      emit: h5ad
-    path "mtx_to_h5ad_batch-${batch}.log", emit: log
+    path "mtx-to-h5ad_batch-${batch}.log", emit: log
 
     script:
     """
+    export GCP_SQL_DB_HOST="${params.db_host}"
+    export GCP_SQL_DB_NAME="${params.db_name}"
+    export GCP_SQL_DB_USERNAME="${params.db_username}"
+
     mtx-to-h5ad.py \\
       --threads ${task.cpus} \\
+      --feature-type "${params.feature_type}" \\
       --missing-metadata "${params.missing_metadata}" \\
       --srx "$srx" \\
-      --path "$mtx_path" \\
+      --mtx-path *_matrix.mtx \\
       2>&1 | tee mtx_to_h5ad_batch-${batch}.log
     """
 }
@@ -69,8 +93,14 @@ process FIND_MTX {
     path "find_mtx.log",  emit: log
 
     script:
+    def organisms = params.organisms != "" ? "--organisms \"${params.organisms}\"" : ""
+    def redo_processed = params.redo_processed.toString() == "true" ? "--redo-processed" : ""
     """
-    find-mtx.py \\
+    export GCP_SQL_DB_HOST="${params.db_host}"
+    export GCP_SQL_DB_NAME="${params.db_name}"
+    export GCP_SQL_DB_USERNAME="${params.db_username}"
+
+    find-mtx.py ${organisms} ${redo_processed} \\
       --feature-type ${params.feature_type} \\
       --max-datasets ${params.max_datasets} \\
       --batch-size ${params.mtx_batch_size} \\

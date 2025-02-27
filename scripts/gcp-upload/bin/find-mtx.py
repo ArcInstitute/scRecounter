@@ -281,7 +281,7 @@ def main():
         df = complete_srx.copy()
         num_filtered = len(set(df['srx'])) - len(set(complete_srx['srx']))
         if num_filtered > 0:
-            logging.warning(f"Filtered {num_filtered} SRX records that did not have all 4 Velocyto matrix files")
+            logging.warning(f"Filtered {num_filtered} SRX records that did not have all 3 Velocyto matrix files")
 
     # write as csv
     df.to_csv('mtx_files.csv', index=False)
