@@ -138,36 +138,17 @@ def load_srx_metadata(organisms: str) -> Set[str]:
         organisms = organisms.split(',')
         metadata = metadata[metadata['organism'].isin(organisms)]
         
-    # return set of SRX accessions
-    srx = set(metadata['srx_accession'].tolist())
-    logging.info(f"  Found {len(srx)} SRX/ERX accessions with metadata.")
-    return srx
+    # deduplicate
+    metadata.drop_duplicates(inplace=True)
 
-# def load_scbasecamp_metadata(feature_type: str) -> Set[str]:
-#     """
-#     Load metadata from scBasecamp database.
-#     """
-#     logging.info("Obtaining scbasecamp metadata...")
-
-#     # get metadata from scRecounter postgresql database
-#     scbc_metadata = Table("scbasecamp_metadata")
-#     stmt = (
-#         Query
-#         .from_(scbc_metadata)
-#         .select(
-#             scbc_metadata.srx_accession,
-#         ).where(
-#             scbc_metadata.feature_type == feature_type
-#         )
-#     )
-#     with db_connect() as conn:
-#         metadata = pd.read_sql(str(stmt), conn)
-#     return set(metadata['srx_accession'].tolist())
+    # status
+    logging.info(f"  Found {metadata.shape[0]} SRX/ERX accessions with metadata.")
+    return metadata
 
 def find_matrix_files(
         base_dir: str, 
         feature_type: str, 
-        has_srx_metadata: Set[str],
+        srx_metadata: Set[str],
         processed_srx: Set[str],
         multi_mapper: str='None',
         raw: bool=False, 
@@ -178,7 +159,7 @@ def find_matrix_files(
     Args:
         base_dir: Base directory to search
         feature_type: 'Gene' or 'GeneFull'
-        has_srx_metadata: Set of SRX IDs with metadata; records skipped if no metadata
+        srx_metadata: Set of SRX IDs with metadata; records skipped if no metadata
         processed_srx: Set of existing SRX IDs
         multi_mapper: 'EM', 'uniform', or 'None'
         raw: Use raw count matrix files instead of filtered
@@ -218,6 +199,7 @@ def find_matrix_files(
         raise ValueError(f"Invalid multi-mapper strategy: {multi_mapper}")
 
     # Walk through directory structure
+    srx_accessions_with_metadata = set(srx_metadata['srx_accession'])
     num_dirs = 0
     for srx_dir in chain(base_path.glob('**/SRX*'), base_path.glob('**/ERX*')):
         # skip files
@@ -237,7 +219,7 @@ def find_matrix_files(
             continue
 
         # Check if SRX directory exists in srx_metadata
-        if srx_dir.name in has_srx_metadata:
+        if srx_dir.name in srx_accessions_with_metadata:
             stats['has_metadata'] += 1
         else:
             stats['no_metadata'] += 1
@@ -287,41 +269,59 @@ def find_matrix_files(
     logging.info(f"  {stats['novel']} novel SRX directories found (final).")
     return results
 
-# def make_batch(num_repeats: int, total_numbers: int, feature_type: str) -> List[int]:
-#     """
-#     Bin numbers into batches of num_repeats.
-#     Args:
-#         num_repeats: Number of repeats per unique number
-#         total_numbers: Total number of unique numbers
-#     Returns:
-#         List of batch numbers
-#     """
-#     batch_counts = []
-#     unique_count = int(round(total_numbers / num_repeats + 0.5))
-#     for i in range(1, unique_count + 1):
-#         batch_counts.extend(repeat(i, num_repeats))
-#     return batch_counts[:total_numbers]
-
 def make_batch(df: pd.DataFrame, batch_size: int) -> pd.DataFrame:
-    unique_srx = sorted(df['srx'].drop_duplicates().tolist())
+    """
+    Assign batch numbers ensuring combinations of [matrix_type, organism] stay together.
+    
+    Args:
+        df: DataFrame containing the matrix files
+        batch_size: Target size for each batch
+    
+    Returns:
+        DataFrame with batch column added
+    """
+    # Create a unique key for each combination of matrix_type and organism
+    df['group_key'] = df.apply(lambda x: f"{x['matrix_type']}_{x['organism']}", axis=1)
+    
+    # Count file records per unique combination
+    group_counts = df['group_key'].value_counts().to_dict()
+    
+    # Sort unique combinations to ensure consistent batching
+    unique_groups = sorted(group_counts.keys())
+    
+    # Assign batches ensuring groups stay together
     batch_mapping = {}
     batch_num = 1
-    count = 0
-    for s in unique_srx:
-        if count >= batch_size:
+    current_batch_size = 0
+    
+    for group in unique_groups:
+        group_size = group_counts[group]
+        
+        # If adding this group exceeds batch size and the batch isn't empty, start a new batch
+        if current_batch_size > 0 and current_batch_size + group_size > batch_size:
             batch_num += 1
-            count = 0
-        batch_mapping[s] = batch_num
-        count += 1
-    df["batch"] = df["srx"].map(batch_mapping)
+            current_batch_size = 0
+            
+        batch_mapping[group] = batch_num
+        current_batch_size += group_size
+    
+    # Map batch numbers back to rows
+    df["batch"] = df["group_key"].map(batch_mapping)
+    
+    # Remove the temporary column
+    df = df.drop(columns=['group_key'])
+    
     return df
 
 def main():
     """Main function to run the TileDB loader workflow."""
     args = parse_arguments()
 
+    # change pandas display width
+    pd.set_option('display.width', 2000)
+
     # Load scRecounter SQL db records
-    has_srx_metadata = load_srx_metadata(args.organisms)
+    srx_metadata = load_srx_metadata(args.organisms)
     
     # Load tiledb records
     if args.redo_processed:
@@ -332,7 +332,7 @@ def main():
     # Find all matrix files and their corresponding SRX IDs
     matrix_files = find_matrix_files(
         args.base_dir, args.feature_type, 
-        has_srx_metadata = has_srx_metadata, 
+        srx_metadata = srx_metadata, 
         processed_srx = processed_srx,
         multi_mapper=args.multi_mapper,
         raw=args.raw, 
@@ -343,6 +343,9 @@ def main():
     df = pd.DataFrame(
         matrix_files, columns=['srx', 'matrix_path', 'features_path', 'barcodes_path']
     ).sort_values(['srx'])
+    df["matrix_type"] = df["matrix_path"].apply(lambda x: os.path.basename(x).split('.')[0])
+    # add organism via merge
+    df = df.merge(srx_metadata, left_on='srx', right_on='srx_accession', how='inner').drop(columns=['srx_accession'])
 
     # sort by srx and matrix_path and drop duplicate of the same srx+path
     df = df.sort_values(by=['srx', 'matrix_path'])
@@ -360,7 +363,9 @@ def main():
             logging.warning(f"Filtered {num_filtered} SRX records that did not have all 3 Velocyto matrix files")
 
     # assign batches ensuring all records for the same SRX are in the same batch
-    df = make_batch(df, args.batch_size)
+    df = make_batch(df, args.batch_size).sort_values(['batch', 'srx'])
+
+    #print(df[["srx", "matrix_type", "organism", "batch"]]); exit();
 
     # write as csv
     df.to_csv('mtx_files.csv', index=False)

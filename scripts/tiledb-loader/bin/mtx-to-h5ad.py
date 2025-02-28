@@ -87,7 +87,7 @@ def load_matrix_as_anndata(
             srx_metadata.organism,
             srx_metadata.tissue,
             srx_metadata.disease,
-            srx_metadata.purturbation,
+            srx_metadata.perturbation,
             srx_metadata.cell_line,     
             srx_metadata.czi_collection_id,
             srx_metadata.czi_collection_name,
@@ -121,7 +121,8 @@ def load_matrix_as_anndata(
     adata = sc.read_10x_mtx(
         os.path.dirname(matrix_path),
         var_names="gene_ids",
-        make_unique=True
+        make_unique=True,
+        prefix=os.path.basename(matrix_path).split("_")[0] + "_"
     )
 
     # calculate total counts
@@ -153,19 +154,28 @@ def mtx_to_h5ad(
     ) -> sc.AnnData:
     """
     Convert a list of matrix.mtx.gz files to a single h5ad file.
+    Args:
+        matrix_files: DataFrame with columns "srx" and "mtx_path"
+        missing_metadata: How to handle missing metadata
+        threads: Number of threads
+    Returns:
+        AnnData object
     """
     logging.info("Loading mtx files to h5ad...")
 
     # paralle load mtx files
-    with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-        adata = list(executor.map(
-            lambda x: load_matrix_as_anndata(
-                x[0], x[1], missing_metadata=missing_metadata
-            ), 
-            matrix_files
-        ))
-    ## filter out empty objects
-    adata = [a for a in adata if a is not None]
+    if threads == 1:
+        adata = [load_matrix_as_anndata(x["srx"], x["mtx_path"], missing_metadata=missing_metadata) for _,x in matrix_files.iterrows()]
+    else:
+        with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
+            adata = list(executor.map(
+                lambda x: load_matrix_as_anndata(
+                    x[1]["srx"], x[1]["mtx_path"], missing_metadata=missing_metadata
+                ), 
+                matrix_files.iterrows()
+        )   )
+        ## filter out empty objects
+        adata = [a for a in adata if a is not None]
 
     ## concat
     adata = sc.concat(adata, join="outer")
@@ -188,17 +198,12 @@ def main():
     # combine srx and path
     srx_mtx = []
     for i in range(len(srx_ids)):
-        if args.feature_type == "Velocyto" and i % 3 != 0:     
-            continue
         srx_mtx.append([srx_ids[i], f"{i+1}_matrix.mtx.gz"])
-    print(srx_mtx); exit();
-
-    #mtx_files = list(zip(parse_arg(args.srx), parse_arg(args.path)))
-    #logging.info(f"mtx file count: {len(mtx_files)}")
+    srx_mtx = pd.DataFrame(srx_mtx, columns=["srx", "mtx_path"])
 
     # create h5ad files
     mtx_to_h5ad(
-        mtx_files, 
+        srx_mtx, 
         threads=args.threads,
         missing_metadata=args.missing_metadata
     )
