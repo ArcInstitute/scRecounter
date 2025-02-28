@@ -100,6 +100,8 @@ def get_tiledb_srx_ids(db_uri: str) -> Set[str]:
                     .concat()
                     .to_pandas())
                 srx = set(metadata["SRX_accession"].unique())
+            except AttributeError:
+                logging.warning("No SRX/ERX accessions found in the database.")
     # status
     logging.info(f"  Found {len(srx)} SRX/ERX accessions in the tiledb database.")
     return srx

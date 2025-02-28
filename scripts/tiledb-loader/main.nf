@@ -7,10 +7,12 @@ workflow {
         .splitCsv( header: true )
         .map { row -> 
             tuple( 
-              row["batch"], row["srx"], file(row["matrix_path"]), file(row["features_path"]), file(row["barcodes_path"])
+              row["batch"], row["matrix_type"], row["organism"],
+              row["srx"], file(row["matrix_path"]), file(row["features_path"]), file(row["barcodes_path"])
             )
-        }.groupTuple()
+        }.groupTuple(by:[0,1,2])
         
+    //mtx_files.view()
 
     // group Velocyto MTX files by SRX
     /*
@@ -23,17 +25,11 @@ workflow {
     }
     */
     
-    //mtx_files.view()
-    
-    
     // aggregate mtx files as h5ad
     MTX_TO_H5AD( mtx_files )
 
-    /*
-
     // add the h5ad files to the database
-    H5AD_TO_DB( MTX_TO_H5AD.out.h5ad.buffer( size: params.h5ad_batch_size, remainder: true ) )
-    */
+    H5AD_TO_DB( MTX_TO_H5AD.out.h5ad )
 }
 
 process H5AD_TO_DB {
@@ -42,17 +38,17 @@ process H5AD_TO_DB {
     maxForks 1
 
     input:
-    path "?.h5ad"
+    path h5ad
 
     output:
-    path "h5ad_to_db.log", emit: log
+    path "h5ad-to-db.log", emit: log
 
     script:
     """
     h5ad-to-db.py \\
-      --threads ${task.cpus} \\
+      --feature-type ${params.feature_type} \\
       --db-uri ${params.db_uri} \\
-      *.h5ad 2>&1 | tee h5ad_to_db.log
+      $h5ad 2>&1 | tee h5ad-to-db.log
     """
 }
 
@@ -62,7 +58,7 @@ process MTX_TO_H5AD {
     maxForks 4
 
     input:
-    tuple val(batch), val(srx), path("*_matrix.mtx.gz"), path("*_features.mtx.gz"), path("*_barcodes.mtx.gz")
+    tuple val(batch), val(mtx_type), val(organism), val(srx), path("*_matrix.mtx.gz"), path("*_features.tsv.gz"), path("*_barcodes.tsv.gz")
 
     output:
     path "data.h5ad",                      emit: h5ad
@@ -80,7 +76,7 @@ process MTX_TO_H5AD {
       --missing-metadata "${params.missing_metadata}" \\
       --srx "$srx" \\
       --mtx-path *_matrix.mtx \\
-      2>&1 | tee mtx_to_h5ad_batch-${batch}.log
+      2>&1 | tee mtx-to-h5ad_batch-${batch}.log
     """
 }
 
@@ -90,7 +86,7 @@ process FIND_MTX {
 
     output:
     path "mtx_files.csv", emit: csv
-    path "find_mtx.log",  emit: log
+    path "find-mtx.log",  emit: log
 
     script:
     def organisms = params.organisms != "" ? "--organisms \"${params.organisms}\"" : ""
@@ -106,6 +102,6 @@ process FIND_MTX {
       --batch-size ${params.mtx_batch_size} \\
       --db-uri ${params.db_uri} \\
       ${params.input_dir} \\
-      2>&1 | tee find_mtx.log
+      2>&1 | tee find-mtx.log
     """
 }
