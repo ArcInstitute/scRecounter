@@ -14,6 +14,8 @@ workflow {
             )
         }
 
+    //mtx_files.view()
+
     // aggregate mtx files as h5ad
     MTX_TO_H5AD( mtx_files )
 
@@ -30,6 +32,7 @@ workflow {
 process H5AD_TO_DB {
     publishDir file(params.log_dir), mode: "copy", overwrite: true
     label "process_medium"
+    maxForks 1
 
     input:
     tuple val(mtx_type), val(organism), val(srx), path(h5ad)
@@ -55,10 +58,10 @@ process H5AD_REGISTER {
     maxForks 1
 
     input:
-    tuple val(mtx_type), val(organism), val(srx), path(h5ad)
+    tuple val(organism), val(srx), path(h5ad)
 
     output:
-    path "registration-plan.pkl", emit: pkl
+    tuple "registration-plan.pkl", emit: pkl
     path "h5ad-register.log",     emit: log
 
     script:
