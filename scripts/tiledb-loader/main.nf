@@ -3,66 +3,86 @@ workflow {
     FIND_MTX()
 
     // list target MTX files
-    mtx_files = FIND_MTX.out.csv
-        .splitCsv( header: true )
+    mtx_files = FIND_MTX.out.csv.splitCsv( header: true )
         .map { row -> 
+            // remove spaces from organism
+            row["organism"] = row["organism"].replaceAll(" ", "_")
+            // return tuple
             tuple( 
-              row["batch"], row["matrix_type"], row["organism"],
-              row["srx"], file(row["matrix_path"]), file(row["features_path"]), file(row["barcodes_path"])
+              row["matrix_type"], row["organism"], row["srx"], 
+              file(row["matrix_path"]), file(row["features_path"]), file(row["barcodes_path"])
             )
-        }.groupTuple(by:[0,1,2])
-        
-    //mtx_files.view()
+        }
 
-    // group Velocyto MTX files by SRX
-    /*
-    if( params.feature_type == "Velocyto"){
-      mtx_files = mtx_files.groupTuple(by: [0,1]).map{ group -> 
-        tuple(group[0], group[1], group[2], group[3][0], group[4][0])
-      }
-    } else {
-      mtx_files = mtx_files.groupTuple()
-    }
-    */
-    
     // aggregate mtx files as h5ad
     MTX_TO_H5AD( mtx_files )
 
+    // group by h5ad files by matrix type and organism
+    h5ad_files = MTX_TO_H5AD.out.h5ad.groupTuple(by:[0,1])
+
+    // register
+    H5AD_REGISTER( h5ad_files )
+
     // add the h5ad files to the database
-    H5AD_TO_DB( MTX_TO_H5AD.out.h5ad )
+    H5AD_TO_DB( MTX_TO_H5AD.out.h5ad, H5AD_REGISTER.out.pkl )
 }
 
 process H5AD_TO_DB {
     publishDir file(params.log_dir), mode: "copy", overwrite: true
     label "process_medium"
-    maxForks 1
 
     input:
-    path h5ad
+    tuple val(mtx_type), val(organism), val(srx), path(h5ad)
+    each pkl
 
     output:
-    path "h5ad-to-db.log", emit: log
+    path "h5ad-to-db_${srx}.log", emit: log
 
     script:
     """
     h5ad-to-db.py \\
       --feature-type ${params.feature_type} \\
+      --organism ${organism} \\
       --db-uri ${params.db_uri} \\
-      $h5ad 2>&1 | tee h5ad-to-db.log
+      --registration-plan ${pkl} \\
+      $h5ad 2>&1 | tee h5ad-to-db_${srx}.log
+    """
+}
+
+process H5AD_REGISTER {
+    publishDir file(params.log_dir), mode: "copy", overwrite: true, pattern: "*.log"
+    label "process_medium"
+    maxForks 1
+
+    input:
+    tuple val(mtx_type), val(organism), val(srx), path(h5ad)
+
+    output:
+    path "registration-plan.pkl", emit: pkl
+    path "h5ad-register.log",     emit: log
+
+    script:
+    """
+    h5ad-register.py \\
+      --db-uri ${params.db_uri} \\
+      --feature-type ${params.feature_type} \\
+      --matrix-type ${mtx_type} \\
+      --organism ${organism} \\
+      $h5ad 2>&1 | tee h5ad-register.log
     """
 }
 
 process MTX_TO_H5AD {
     publishDir file(params.log_dir) , mode: "copy", overwrite: true, pattern: "*.log"
     label "process_high"
-    maxForks 4
+    maxForks 200
 
     input:
-    tuple val(batch), val(mtx_type), val(organism), val(srx), path("*_matrix.mtx.gz"), path("*_features.tsv.gz"), path("*_barcodes.tsv.gz")
+    tuple val(mtx_type), val(organism), val(srx), path("matrix.mtx.gz"), path("features.tsv.gz"), path("barcodes.tsv.gz")
 
     output:
-    path "data.h5ad",                      emit: h5ad
-    path "mtx-to-h5ad_batch-${batch}.log", emit: log
+    tuple val(mtx_type), val(organism), val(srx), path("${srx}.h5ad"), emit: h5ad
+    path "mtx-to-h5ad_${srx}.log", emit: log
 
     script:
     """
@@ -71,12 +91,11 @@ process MTX_TO_H5AD {
     export GCP_SQL_DB_USERNAME="${params.db_username}"
 
     mtx-to-h5ad.py \\
-      --threads ${task.cpus} \\
       --feature-type "${params.feature_type}" \\
       --missing-metadata "${params.missing_metadata}" \\
-      --srx "$srx" \\
-      --mtx-path *_matrix.mtx \\
-      2>&1 | tee mtx-to-h5ad_batch-${batch}.log
+      --srx $srx \\
+      --mtx-path matrix.mtx.gz \\
+      2>&1 | tee mtx-to-h5ad_${srx}.log
     """
 }
 

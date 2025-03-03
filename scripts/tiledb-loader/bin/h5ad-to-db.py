@@ -2,10 +2,9 @@
 # import
 ## batteries
 import os
-import gc
+import pickle
 import logging
 import argparse
-import concurrent.futures
 from typing import List, Set, Tuple, Optional
 ## 3rd party
 import pandas as pd
@@ -38,7 +37,13 @@ def parse_arguments() -> argparse.Namespace:
         'h5ad_path', type=str, help='Path to the h5ad file to load.'
     )
     parser.add_argument(
+        '--registration-plan', type=str, help='Path to the TileDB registration plan (pkl) file', required=True
+    )
+    parser.add_argument(
         '--db-uri', type=str, help='URI of the TileDB database.', required=True
+    )
+    parser.add_argument(
+        '--organism', type=str, help='Organism name.', required=True
     )
     parser.add_argument(
         '--feature-type', default='GeneFull_Ex50pAS', 
@@ -67,6 +72,13 @@ def append_to_database_from_mem(adata: sc.AnnData, db_uri: str, organism: str) -
         obs_field_name="obs_id",
         var_field_name="var_id",
     )
+
+    # pickle the rd object
+    with open("registration_data.pkl", "wb") as f:
+        dump(rd, f)
+        print(f"  Pickled registration data to {os.path.join(db_uri, 'registration_data.pkl')}")
+    exit();
+
     ## resize the experiment
     with tiledbsoma.Experiment.open(db_uri) as exp:
         tiledbsoma.io.resize_experiment(
@@ -82,6 +94,7 @@ def append_to_database_from_mem(adata: sc.AnnData, db_uri: str, organism: str) -
         measurement_name="RNA",
         registration_mapping=rd,
     )
+
 
 def create_tiledb_from_mem(adata: sc.AnnData, db_uri: str, organism: str) -> None:
     """
@@ -125,13 +138,20 @@ def main():
     """Main function to run the TileDB loader workflow."""
     args = parse_arguments()
 
-    # add feature type to the db uri
-    args.db_uri = os.path.join(args.db_uri, args.feature_type)
-    os.makedirs(args.db_uri, exist_ok=True)
+    # unpickle the registration plan
+    with open(args.registration_plan, "rb") as inF:
+        registration_plan = pickle.load(inF)
 
-    # Load data into memory and append to TileDB
-    load_tiledb_from_mem(args.h5ad_path, args.db_uri)
-
+    # load h5ad file to db
+    experiment_uri = os.path.join(args.db_uri, args.feature_type, args.organism)
+    tiledbsoma.io.from_h5ad(
+        experiment_uri,
+        args.h5ad_path,
+        measurement_name="RNA",
+        obs_id_name="obs_id",
+        var_id_name="feature_name",
+        registration_mapping=registration_plan,
+    )
 
 if __name__ == "__main__":
     main()

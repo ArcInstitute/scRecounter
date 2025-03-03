@@ -71,7 +71,7 @@ def parse_arguments() -> argparse.Namespace:
     )
     return parser.parse_args()
 
-def get_tiledb_srx_ids(db_uri: str) -> Set[str]:
+def get_tiledb_srx_ids(db_uri: str, feature_type: str) -> Set[str]:
     """
     Read metadata from existing database and return set of SRX IDs.
     Args:
@@ -79,6 +79,7 @@ def get_tiledb_srx_ids(db_uri: str) -> Set[str]:
     Returns:
         Set of SRX IDs already in the database
     """
+    db_uri = os.path.join(db_uri, feature_type)
     logging.info(f"Checking for existing SRX accessions in {db_uri}...")
 
     srx = set()
@@ -329,7 +330,7 @@ def main():
     if args.redo_processed:
         processed_srx = set()
     else:
-        processed_srx = get_tiledb_srx_ids(args.db_uri)
+        processed_srx = get_tiledb_srx_ids(args.db_uri, args.feature_type)
 
     # Find all matrix files and their corresponding SRX IDs
     matrix_files = find_matrix_files(
@@ -365,8 +366,7 @@ def main():
             logging.warning(f"Filtered {num_filtered} SRX records that did not have all 3 Velocyto matrix files")
 
     # assign batches ensuring all records for the same SRX are in the same batch
-    df = make_batch(df, args.batch_size).sort_values(['batch', 'srx'])
-
+    #df = make_batch(df, args.batch_size).sort_values(['batch', 'srx'])
     #print(df[["srx", "matrix_type", "organism", "batch"]]); exit();
 
     # write as csv

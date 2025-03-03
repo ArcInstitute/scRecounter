@@ -4,12 +4,8 @@
 import os
 import logging
 import argparse 
-import concurrent.futures
-from pathlib import Path
-from itertools import chain, repeat
 from typing import List, Set, Tuple, Optional
 ## 3rd party
-import numpy as np
 import scipy.sparse
 import pandas as pd
 import tiledbsoma
@@ -34,16 +30,16 @@ def parse_arguments() -> argparse.Namespace:
     """
     Parse command-line arguments.
     """
-    desc = 'Convert mtx files to h5ad.'
+    desc = 'Convert mtx file to h5ad.'
     epi = """DESCRIPTION:
-    Convert mtx files to h5ad in parallel.
+    Convert mtx files to h5ad
     """
     parser = argparse.ArgumentParser(description=desc, epilog=epi, formatter_class=CustomFormatter)
     parser.add_argument(
         '--srx', type=str, help="SRX accessions", required=True
     )
     parser.add_argument(
-        '--mtx-path', type=str, help="Path to matrix.mtx.gz files", nargs='+', required=True
+        '--mtx-path', type=str, help="Path to matrix.mtx.gz file", required=True
     )
     parser.add_argument(
         '--missing-metadata', type=str, default="error", 
@@ -55,11 +51,7 @@ def parse_arguments() -> argparse.Namespace:
         choices=['Gene', 'GeneFull', 'GeneFull_Ex50pAS', 'GeneFull_ExonOverIntron', 'Velocyto'], 
         help='Feature type to process'
     )
-    parser.add_argument(
-        '--threads', type=int, default=8, help="Number of threads to use"
-    )
     return parser.parse_args()
-
 
 def load_matrix_as_anndata(
         srx_id: str, 
@@ -122,7 +114,7 @@ def load_matrix_as_anndata(
         os.path.dirname(matrix_path),
         var_names="gene_ids",
         make_unique=True,
-        prefix=os.path.basename(matrix_path).split("_")[0] + "_"
+        #prefix=os.path.basename(matrix_path).split("_")[0] + "_"
     )
 
     # calculate total counts
@@ -147,42 +139,30 @@ def load_matrix_as_anndata(
 
     return adata
 
-def mtx_to_h5ad(
-    matrix_files: str, 
-    missing_metadata: str="error",
-    threads: int=8
-    ) -> sc.AnnData:
-    """
-    Convert a list of matrix.mtx.gz files to a single h5ad file.
-    Args:
-        matrix_files: DataFrame with columns "srx" and "mtx_path"
-        missing_metadata: How to handle missing metadata
-        threads: Number of threads
-    Returns:
-        AnnData object
-    """
-    logging.info("Loading mtx files to h5ad...")
+# def mtx_to_h5ad(
+#     matrix_files: str, 
+#     missing_metadata: str="error",
+#     ) -> sc.AnnData:
+#     """
+#     Convert a list of matrix.mtx.gz files to a single h5ad file.
+#     Args:
+#         matrix_files: DataFrame with columns "srx" and "mtx_path"
+#         missing_metadata: How to handle missing metadata
+#     Returns:
+#         AnnData object
+#     """
+#     logging.info("Loading mtx files to h5ad...")
 
-    # paralle load mtx files
-    if threads == 1:
-        adata = [load_matrix_as_anndata(x["srx"], x["mtx_path"], missing_metadata=missing_metadata) for _,x in matrix_files.iterrows()]
-    else:
-        with concurrent.futures.ThreadPoolExecutor(max_workers=threads) as executor:
-            adata = list(executor.map(
-                lambda x: load_matrix_as_anndata(
-                    x[1]["srx"], x[1]["mtx_path"], missing_metadata=missing_metadata
-                ), 
-                matrix_files.iterrows()
-        )   )
-        ## filter out empty objects
-        adata = [a for a in adata if a is not None]
+#     # process 
+#     #adata = [load_matrix_as_anndata(x["srx"], x["mtx_path"], missing_metadata=missing_metadata) for _,x in matrix_files.iterrows()]
+#     load_matrix_
 
-    ## concat
-    adata = sc.concat(adata, join="outer")
+#     ## concat
+#     adata = sc.concat(adata, join="outer")
 
-    ## write to h5ad
-    adata.write_h5ad(f"data.h5ad")
-    logging.info(f"Saved h5ad file to data.h5ad")
+#     ## write to h5ad
+#     adata.write_h5ad(f"data.h5ad")
+#     logging.info(f"Saved h5ad file to data.h5ad")
 
 def parse_arg(arg: str) -> List[str]:
     """Parse a comma-separated argument into a list."""
@@ -192,21 +172,29 @@ def main():
     """Main function to run the TileDB loader workflow."""
     args = parse_arguments()
 
+    adata = load_matrix_as_anndata(
+        args.srx,
+        args.mtx_path,
+        missing_metadata=args.missing_metadata
+    ) 
+    adata.write_h5ad(f"{args.srx}.h5ad")
+
+
     # parse args
-    srx_ids = parse_arg(args.srx)
+    #srx_ids = parse_arg(args.srx)
 
     # combine srx and path
-    srx_mtx = []
-    for i in range(len(srx_ids)):
-        srx_mtx.append([srx_ids[i], f"{i+1}_matrix.mtx.gz"])
-    srx_mtx = pd.DataFrame(srx_mtx, columns=["srx", "mtx_path"])
+    #srx_mtx = []
+    #for i in range(len(srx_ids)):
+    #    srx_mtx.append([srx_ids[i], f"{i+1}_matrix.mtx.gz"])
+    #srx_mtx = pd.DataFrame(srx_mtx, columns=["srx", "mtx_path"])
 
     # create h5ad files
-    mtx_to_h5ad(
-        srx_mtx, 
-        threads=args.threads,
-        missing_metadata=args.missing_metadata
-    )
+    # mtx_to_h5ad(
+    #     srx_mtx, 
+    #     threads=args.threads,
+    #     missing_metadata=args.missing_metadata
+    # )
 
 if __name__ == "__main__":
     main()
