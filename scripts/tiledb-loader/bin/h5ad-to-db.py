@@ -30,7 +30,7 @@ def parse_arguments() -> argparse.Namespace:
     desc = 'Add scRNA-seq data to a TileDB database.'
     epi = """DESCRIPTION:
     If the database does not exist, it will be created. Otherwise, the data will be appended.
-    The database collection structure is {feature_type}/{organism}/{experiment}.
+    The database collection structure is {organism}/{experiment}.
     """
     parser = argparse.ArgumentParser(description=desc, epilog=epi, formatter_class=CustomFormatter)
     parser.add_argument(
@@ -46,9 +46,7 @@ def parse_arguments() -> argparse.Namespace:
         '--organism', type=str, help='Organism name.', required=True
     )
     parser.add_argument(
-        '--feature-type', default='GeneFull_Ex50pAS', 
-        choices=['Gene', 'GeneFull', 'GeneFull_Ex50pAS', 'GeneFull_ExonOverIntron', 'Velocyto'], 
-        help='Feature type to process'
+        '--matrix-type', type=str, help='Matrix type', required=True
     )
     return parser.parse_args()
 
@@ -60,16 +58,27 @@ def main():
     with open(args.registration_plan, "rb") as inF:
         registration_plan = pickle.load(inF)
 
+    # Print the registration plan
+    print("-- Registration plan --")
+    print(registration_plan)
+
     # load h5ad file to db
-    experiment_uri = os.path.join(args.db_uri, args.feature_type, args.organism)
+    experiment_uri = os.path.join(args.db_uri, args.organism)
+    print(f"Experiment URI: {experiment_uri}")
     tiledbsoma.io.from_h5ad(
         experiment_uri,
         args.h5ad_path,
-        measurement_name="RNA",
+        measurement_name=args.matrix_type,
         obs_id_name="obs_id",
         var_id_name="feature_name",
         registration_mapping=registration_plan,
     )
+
+    # check results
+    with tiledbsoma.open(args.db_uri) as db:
+        experiment = db[args.organism]
+        print(f"n_obs={experiment.obs.count}")
+        print(f"n_vars={experiment.ms[args.matrix_type].var.count}")
 
 if __name__ == "__main__":
     main()

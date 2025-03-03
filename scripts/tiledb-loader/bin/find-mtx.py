@@ -316,6 +316,15 @@ def make_batch(df: pd.DataFrame, batch_size: int) -> pd.DataFrame:
     
     return df
 
+def get_matrix_type(matrix_path: Path) -> str:
+    """
+    Extract matrix type from matrix file path.
+    """
+    matrix_type = matrix_path.name.split('.')[0]
+    if matrix_type == "matrix":
+        matrix_type = "RNA"
+    return matrix_type
+
 def main():
     """Main function to run the TileDB loader workflow."""
     args = parse_arguments()
@@ -337,16 +346,17 @@ def main():
         args.base_dir, args.feature_type, 
         srx_metadata = srx_metadata, 
         processed_srx = processed_srx,
-        multi_mapper=args.multi_mapper,
-        raw=args.raw, 
-        max_datasets=args.max_datasets,
+        multi_mapper = args.multi_mapper,
+        raw = args.raw, 
+        max_datasets = args.max_datasets,
     )
 
     # convert to dataframe
     df = pd.DataFrame(
         matrix_files, columns=['srx', 'matrix_path', 'features_path', 'barcodes_path']
     ).sort_values(['srx'])
-    df["matrix_type"] = df["matrix_path"].apply(lambda x: os.path.basename(x).split('.')[0])
+    df["matrix_type"] = df["matrix_path"].apply(get_matrix_type)
+
     # add organism via merge
     df = df.merge(srx_metadata, left_on='srx', right_on='srx_accession', how='inner').drop(columns=['srx_accession'])
 

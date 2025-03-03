@@ -46,11 +46,6 @@ def parse_arguments() -> argparse.Namespace:
         choices=["error", "skip", "allow"],
         help="How do handle missing metadata?"
     )
-    parser.add_argument(
-        '--feature-type', default='GeneFull_Ex50pAS', 
-        choices=['Gene', 'GeneFull', 'GeneFull_Ex50pAS', 'GeneFull_ExonOverIntron', 'Velocyto'], 
-        help='Feature type to process'
-    )
     return parser.parse_args()
 
 def load_matrix_as_anndata(

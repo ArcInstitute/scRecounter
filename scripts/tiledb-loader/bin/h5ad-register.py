@@ -22,7 +22,6 @@ class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescri
     """Custom formatter for argparse to allow both default values and raw descriptions."""
     pass
 
-
 def parse_arguments() -> argparse.Namespace:
     """
     Parse command-line arguments.
@@ -32,31 +31,23 @@ def parse_arguments() -> argparse.Namespace:
     """
     desc = "Register h5ad files for loading into a TileDB database."
     epi = "DESCRIPTION: Registers AnnData (.h5ad) files to a TileDB database."
-
     parser = argparse.ArgumentParser(description=desc, epilog=epi, formatter_class=CustomFormatter)
     parser.add_argument("h5ad_files", type=str, nargs="+", help="Path to the h5ad file(s) to register.")
     parser.add_argument("--db-uri", type=str, required=True, help="URI of the TileDB database.")
     parser.add_argument("--organism", type=str, required=True, help="Organism name.")
     parser.add_argument("--matrix-type", type=str, required=True, help="Matrix type.")
-    parser.add_argument(
-        "--feature-type",
-        default="GeneFull_Ex50pAS",
-        choices=["Gene", "GeneFull", "GeneFull_Ex50pAS", "GeneFull_ExonOverIntron", "Velocyto"],
-        help="Feature type to process.",
-    )
-    
     return parser.parse_args()
 
 
-def create_db(db_uri: str, feature_type: str, organism: str, h5ad_path: str) -> str:
+def create_db(db_uri: str, matrix_type: str, organism: str, h5ad_path: str) -> str:
     """
     Creates or retrieves a TileDB collection and registers an h5ad dataset.
     
     Args:
-        db_uri (str): URI of the TileDB database.
-        feature_type (str): The type of feature collection.
-        organism (str): The organism for which the experiment is being created.
-        h5ad_path (str): Path to the h5ad file.
+        db_uri: URI of the TileDB database.
+        matrix_type: The type of matrix being registered.
+        organism: The organism for which the experiment is being created.
+        h5ad_path: Path to the h5ad file.
 
     Returns:
         str: The URI of the created experiment.
@@ -70,31 +61,21 @@ def create_db(db_uri: str, feature_type: str, organism: str, h5ad_path: str) -> 
         base_collection = tiledbsoma.Collection.open(db_uri)
         print(f"Base collection exists, opened {db_uri}")
 
-    # Create or retrieve the feature type collection
-    try:
-        ft_collection = base_collection.add_new_collection(feature_type)
-        print(f"Created feature type collection at {ft_collection.uri}")
-    except (tiledbsoma.AlreadyExistsError, KeyError):
-        ft_collection = base_collection[feature_type]
-        ft_collection = tiledbsoma.open(ft_collection.uri, "w")  # Ensure write mode
-        print(f"Feature type collection exists, opened {ft_collection.uri} in write mode")
-
     # Define the experiment URI
-    experiment_uri = f"{ft_collection.uri}/{organism}"
+    experiment_uri = f"{base_collection.uri}/{organism}"
 
     # Create the experiment if it does not already exist
     try:
         tiledbsoma.io.from_h5ad(
             experiment_uri,
             h5ad_path,
-            measurement_name="RNA",
+            measurement_name=matrix_type,
             obs_id_name="obs_id",
             var_id_name="feature_name",
             ingest_mode="schema_only",
         )
-
         # Add the experiment to the feature type collection
-        ft_collection[organism] = tiledbsoma.open(experiment_uri, "w")
+        base_collection[organism] = tiledbsoma.open(experiment_uri, "w")
         print(f"Created Experiment at {experiment_uri}")
     except tiledbsoma._exception.SOMAError:
         print(f"Experiment at {experiment_uri} already exists")
@@ -110,16 +91,29 @@ def main() -> None:
     args = parse_arguments()
 
     # Create or retrieve the database and experiment
-    experiment_uri = create_db(args.db_uri, args.feature_type, args.organism, args.h5ad_files[0])
+    experiment_uri = None
+    for i in range(3):
+        try:
+            experiment_uri = create_db(args.db_uri, args.matrix_type, args.organism, args.h5ad_files[0])
+            break
+        except RuntimeError as e:
+            continue
+    if not experiment_uri:
+        raise RuntimeError("Failed to create or retrieve the experiment")
+    print(f"Experiment URI: {experiment_uri}")
 
     # Register the h5ad files with the experiment
     registration_plan = tiledbsoma.io.register_h5ads(
         experiment_uri,
         args.h5ad_files,
-        measurement_name="RNA",
+        measurement_name=args.matrix_type,
         obs_field_name="obs_id",
         var_field_name="feature_name",
     )
+
+    # Print the registration plan
+    print("-- Registration plan --")
+    print(registration_plan)
 
     # Resize the experiment to accommodate the registered data
     tiledbsoma.io.resize_experiment(
@@ -132,7 +126,19 @@ def main() -> None:
     with open("registration-plan.pkl", "wb") as outF:
         pickle.dump(registration_plan, outF)
     print("Pickled registration plan: registration-plan.pkl")
-
+    
 
 if __name__ == "__main__":
     main()
+
+
+    # # load h5ad file to db
+    # for h5ad in args.h5ad_files:
+    #     tiledbsoma.io.from_h5ad(
+    #         experiment_uri,
+    #         h5ad,
+    #         measurement_name=args.matrix_type,
+    #         obs_id_name="obs_id",
+    #         var_id_name="feature_name",
+    #         registration_mapping=registration_plan,
+    #     )
