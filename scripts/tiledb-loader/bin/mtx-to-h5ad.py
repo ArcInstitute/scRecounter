@@ -133,35 +133,6 @@ def load_matrix_as_anndata(
 
     return adata
 
-# def mtx_to_h5ad(
-#     matrix_files: str, 
-#     missing_metadata: str="error",
-#     ) -> sc.AnnData:
-#     """
-#     Convert a list of matrix.mtx.gz files to a single h5ad file.
-#     Args:
-#         matrix_files: DataFrame with columns "srx" and "mtx_path"
-#         missing_metadata: How to handle missing metadata
-#     Returns:
-#         AnnData object
-#     """
-#     logging.info("Loading mtx files to h5ad...")
-
-#     # process 
-#     #adata = [load_matrix_as_anndata(x["srx"], x["mtx_path"], missing_metadata=missing_metadata) for _,x in matrix_files.iterrows()]
-#     load_matrix_
-
-#     ## concat
-#     adata = sc.concat(adata, join="outer")
-
-#     ## write to h5ad
-#     adata.write_h5ad(f"data.h5ad")
-#     logging.info(f"Saved h5ad file to data.h5ad")
-
-def parse_arg(arg: str) -> List[str]:
-    """Parse a comma-separated argument into a list."""
-    return [x.strip() for x in arg.lstrip("[").rstrip("]").split(",")]
-
 def main():
     """Main function to run the TileDB loader workflow."""
     args = parse_arguments()
@@ -173,22 +144,6 @@ def main():
     ) 
     adata.write_h5ad(f"{args.srx}.h5ad")
 
-
-    # parse args
-    #srx_ids = parse_arg(args.srx)
-
-    # combine srx and path
-    #srx_mtx = []
-    #for i in range(len(srx_ids)):
-    #    srx_mtx.append([srx_ids[i], f"{i+1}_matrix.mtx.gz"])
-    #srx_mtx = pd.DataFrame(srx_mtx, columns=["srx", "mtx_path"])
-
-    # create h5ad files
-    # mtx_to_h5ad(
-    #     srx_mtx, 
-    #     threads=args.threads,
-    #     missing_metadata=args.missing_metadata
-    # )
 
 if __name__ == "__main__":
     main()
