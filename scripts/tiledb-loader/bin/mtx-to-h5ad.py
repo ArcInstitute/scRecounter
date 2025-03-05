@@ -109,7 +109,6 @@ def load_matrix_as_anndata(
         os.path.dirname(matrix_path),
         var_names="gene_ids",
         make_unique=True,
-        #prefix=os.path.basename(matrix_path).split("_")[0] + "_"
     )
 
     # calculate total counts

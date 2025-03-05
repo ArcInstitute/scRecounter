@@ -16,9 +16,9 @@ workflow {
             )
         }
 
-    // filter to just organism == "Mus_musculus"
+    // filter to just one organism
     //mtx_files = mtx_files.filter { organism,matrix_type,srx,m_path,f_path,b_path -> organism == "Mus_musculus" }
-    mtx_files = mtx_files.filter { organism,matrix_type,srx,m_path,f_path,b_path -> organism == "Homo_sapiens" }
+    //mtx_files = mtx_files.filter { organism,matrix_type,srx,m_path,f_path,b_path -> organism == "Homo_sapiens" }
 
     // aggregate mtx files as h5ad
     MTX_TO_H5AD( mtx_files )

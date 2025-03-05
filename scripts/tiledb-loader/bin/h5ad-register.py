@@ -75,11 +75,14 @@ def create_db(db_uri: str, matrix_type: str, organism: str, h5ad_path: str) -> s
             ingest_mode="schema_only",
         )
         # Add the experiment to the feature type collection
-        base_collection[organism] = tiledbsoma.open(experiment_uri, "w")
+        with tiledbsoma.open(experiment_uri, "w") as exp:
+            base_collection[organism] = exp
         print(f"Created Experiment at {experiment_uri}")
     except tiledbsoma._exception.SOMAError:
         print(f"Experiment at {experiment_uri} already exists")
 
+    # close the base collection
+    base_collection.close()
     return experiment_uri
 
 
