@@ -52,34 +52,46 @@ def create_db(db_uri: str, matrix_type: str, organism: str, h5ad_path: str) -> s
     Returns:
         str: The URI of the created experiment.
     """
-
     # Create or open the base collection
     try:
         base_collection = tiledbsoma.Collection.create(db_uri)
         print(f"Created base collection at {db_uri}")
     except tiledbsoma.AlreadyExistsError:
-        base_collection = tiledbsoma.Collection.open(db_uri)
+        base_collection = tiledbsoma.Collection.open(db_uri, "w")
         print(f"Base collection exists, opened {db_uri}")
 
     # Define the experiment URI
     experiment_uri = f"{base_collection.uri}/{organism}"
 
-    # Create the experiment if it does not already exist
-    try:
-        tiledbsoma.io.from_h5ad(
-            experiment_uri,
-            h5ad_path,
-            measurement_name=matrix_type,
-            obs_id_name="obs_id",
-            var_id_name="feature_name",
-            ingest_mode="schema_only",
-        )
-        # Add the experiment to the feature type collection
-        with tiledbsoma.open(experiment_uri, "w") as exp:
-            base_collection[organism] = exp
-        print(f"Created Experiment at {experiment_uri}")
-    except tiledbsoma._exception.SOMAError:
-        print(f"Experiment at {experiment_uri} already exists")
+    # Add/update experiment
+    if organism in base_collection.keys():
+        print(f"Experiment at {experiment_uri} already exists. Adding new measurement...")
+        # add measurement
+        try:
+            with tiledbsoma.open(experiment_uri, "w") as exp:
+                exp.ms.add_new_collection(
+                    key=matrix_type,
+                    kind=tiledbsoma.Measurement,
+                )
+        except KeyError:
+            pass
+    else:
+        # Create the experiment if it does not already exist
+        try:
+            tiledbsoma.io.from_h5ad(
+                experiment_uri,
+                h5ad_path,
+                measurement_name=matrix_type,
+                obs_id_name="obs_id",
+                var_id_name="feature_name",
+                ingest_mode="schema_only",
+            )
+            # Add the experiment to the feature type collection
+            with tiledbsoma.open(experiment_uri, "w") as exp:
+                base_collection[organism] = exp
+            print(f"Created Experiment at {experiment_uri}")
+        except tiledbsoma._exception.SOMAError:
+            print(f"Experiment at {experiment_uri} already exists")
 
     # close the base collection
     base_collection.close()
@@ -119,11 +131,14 @@ def main() -> None:
     print(registration_plan)
 
     # Resize the experiment to accommodate the registered data
-    tiledbsoma.io.resize_experiment(
-        experiment_uri,
-        nobs=registration_plan.get_obs_shape(),
-        nvars=registration_plan.get_var_shapes(),
-    )
+    try:
+        tiledbsoma.io.resize_experiment(
+            experiment_uri,
+            nobs=registration_plan.get_obs_shape(),
+            nvars=registration_plan.get_var_shapes(),
+        )
+    except AttributeError:
+        pass
 
     # Pickle the registration plan for later use
     with open("registration-plan.pkl", "wb") as outF:
@@ -133,15 +148,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-
-
-    # # load h5ad file to db
-    # for h5ad in args.h5ad_files:
-    #     tiledbsoma.io.from_h5ad(
-    #         experiment_uri,
-    #         h5ad,
-    #         measurement_name=args.matrix_type,
-    #         obs_id_name="obs_id",
-    #         var_id_name="feature_name",
-    #         registration_mapping=registration_plan,
-    #     )

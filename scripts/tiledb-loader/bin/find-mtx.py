@@ -71,7 +71,7 @@ def parse_arguments() -> argparse.Namespace:
     )
     return parser.parse_args()
 
-def get_tiledb_srx_ids(db_uri: str, feature_type: str) -> Set[str]:
+def get_tiledb_srx_ids(db_uri: str) -> Set[str]:
     """
     Read metadata from existing database and return set of SRX IDs.
     Args:
@@ -79,28 +79,29 @@ def get_tiledb_srx_ids(db_uri: str, feature_type: str) -> Set[str]:
     Returns:
         Set of SRX IDs already in the database
     """
-    db_uri = os.path.join(db_uri, feature_type)
+    db_uri = os.path.join(db_uri)
     logging.info(f"Checking for existing SRX accessions in {db_uri}...")
 
     srx = set()
     if not os.path.exists(db_uri):
-        logging.info("Database does not exist yet. No SRX/ERX accessions to obtain.")
-    else:
-        with tiledbsoma.open(db_uri) as exp:
+        logging.info("  Database does not exist yet. No SRX/ERX accessions to obtain.")
+        return srx
+    with tiledbsoma.open(db_uri) as exp:
+        for organism in exp.keys():
             try:
-                metadata = (exp.obs.read(column_names=["SRX_accession"])
+                metadata = (exp[organism].obs.read(column_names=["SRX_accession"])
                     .concat()
                     .group_by(["SRX_accession"])
                     .aggregate([
                         ([], 'count_all'),
                     ])
                     .to_pandas())
-                srx = set(metadata["SRX_accession"].unique())
+                srx.update(metadata["SRX_accession"].unique().tolist())
             except tiledbsoma._exception.DoesNotExistError:
-                metadata = (exp.obs.read(column_names=["SRX_accession"])
+                metadata = (exp[organism].obs.read(column_names=["SRX_accession"])
                     .concat()
                     .to_pandas())
-                srx = set(metadata["SRX_accession"].unique())
+                srx.add(metadata["SRX_accession"].unique().tolist())
             except AttributeError:
                 logging.warning("No SRX/ERX accessions found in the database.")
     # status
@@ -187,7 +188,7 @@ def find_matrix_files(
     # account for all 3 matrix files if feature_type is Velocyto
     if feature_type == "Velocyto":
         if max_datasets > 0:
-            max_datasets = max_datasets * 4
+            max_datasets = max_datasets * 3
     
     # Determine which matrix file to look for based on multi_mapper
     if multi_mapper == 'None':
@@ -339,7 +340,7 @@ def main():
     if args.redo_processed:
         processed_srx = set()
     else:
-        processed_srx = get_tiledb_srx_ids(args.db_uri, args.feature_type)
+        processed_srx = get_tiledb_srx_ids(args.db_uri)
 
     # Find all matrix files and their corresponding SRX IDs
     matrix_files = find_matrix_files(
@@ -374,10 +375,6 @@ def main():
         num_filtered = len(set(df['srx'])) - len(set(complete_srx['srx']))
         if num_filtered > 0:
             logging.warning(f"Filtered {num_filtered} SRX records that did not have all 3 Velocyto matrix files")
-
-    # assign batches ensuring all records for the same SRX are in the same batch
-    #df = make_batch(df, args.batch_size).sort_values(['batch', 'srx'])
-    #print(df[["srx", "matrix_type", "organism", "batch"]]); exit();
 
     # write as csv
     df.to_csv('mtx_files.csv', index=False)

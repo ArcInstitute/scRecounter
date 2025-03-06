@@ -2,7 +2,7 @@ workflow {
     // find target MTX files to add to the database
     FIND_MTX()
 
-    // list target MTX files
+    // create channel of MTX files
     mtx_files = FIND_MTX.out.csv.splitCsv( header: true )
         .map { row -> 
             // remove spaces from organism
@@ -16,10 +16,6 @@ workflow {
             )
         }
 
-    // filter to just one organism
-    //mtx_files = mtx_files.filter { organism,matrix_type,srx,m_path,f_path,b_path -> organism == "Mus_musculus" }
-    //mtx_files = mtx_files.filter { organism,matrix_type,srx,m_path,f_path,b_path -> organism == "Homo_sapiens" }
-
     // aggregate mtx files as h5ad
     MTX_TO_H5AD( mtx_files )
 
@@ -27,7 +23,7 @@ workflow {
     H5AD_REGISTER( MTX_TO_H5AD.out.h5ad.groupTuple(by:[0,1]) )
 
     // join MTX_TO_H5AD.out.h5ad and H5AD_REGISTER.out.pkl on `organism`
-    h5ad_files = MTX_TO_H5AD.out.h5ad.combine( H5AD_REGISTER.out.pkl, by: 0 )
+    h5ad_files = MTX_TO_H5AD.out.h5ad.combine( H5AD_REGISTER.out.pkl, by: [0,1] )
 
     // add the h5ad files to the database
     H5AD_TO_DB( h5ad_files )
@@ -64,7 +60,7 @@ process H5AD_REGISTER {
   tuple val(organism), val(mtx_type), val(srx), path(h5ad)
 
   output:
-  tuple val(organism), path("registration-plan.pkl"), emit: pkl
+  tuple val(organism), val(mtx_type), path("registration-plan.pkl"), emit: pkl
   path "h5ad-register.log", emit: log
 
   script:
