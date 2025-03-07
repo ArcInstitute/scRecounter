@@ -1,156 +1,159 @@
 #!/usr/bin/env python3
 import argparse
-import gzip
+import sys
 import os
+import logging
+import gzip
+from typing import TextIO, Union
 
+# Set up logging
+logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
+logger = logging.getLogger(__name__)
+
+# Custom formatter for argparse
 class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter, argparse.RawDescriptionHelpFormatter):
     pass
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(
-        description='Filter cell barcodes and matrix based on UMI counts'
-    )
+    desc = 'Filter cells in a matrix to match target barcodes'
+    epi = """DESCRIPTION:
+    This script filters a matrix to keep only cells that match barcodes in the target file.
+    The script supports gzipped input files (.gz extension).
+    
+    Example:
+    # Filter matrix to match target barcodes
+    ./filter-mtx.py barcodes.txt matrix.mtx target_barcodes.tsv --output-matrix matrix_filt.mtx --output-barcodes barcodes_filt.tsv
+
+    ../../scripts/gcp-upload/bin/filter-mtx.py ./raw/barcodes.tsv ./raw/UniqueAndMult-EM.mtx ./filtered/barcodes.tsv
+    """
+    parser = argparse.ArgumentParser(description=desc, epilog=epi, formatter_class=CustomFormatter)
+    # Required arguments
     parser.add_argument('barcode_file', help='Input barcode file (can be gzipped)')
     parser.add_argument('matrix_file', help='Input matrix file (can be gzipped)')
-    parser.add_argument('--exactCells', type=int, default=0, 
-                        help='Exact number of cells to keep')
-    parser.add_argument('--maxCells', type=int, default=3000, 
-                        help='Maximum number of cells to consider')
-    parser.add_argument('--maxPercentile', type=float, default=0.99, 
-                        help='Percentile threshold for filtering')
-    parser.add_argument('--maxMinRatio', type=float, default=10, 
-                        help='Ratio between max and min UMI counts')
+    parser.add_argument('target_barcodes', help='Target barcodes file to match with (can be gzipped)')
+    # Optional output file paths
+    parser.add_argument('--output-matrix', default='matrix_filt.mtx', help='Output matrix file path')
+    parser.add_argument('--output-barcodes', default='barcodes_filt.tsv', help='Output barcodes file path')
+    # Parse arguments
     return parser.parse_args()
 
-def is_gzipped(filename: str) -> bool:
-    """Check if a file is gzipped based on its extension."""
-    return filename.endswith('.gz')
-
-def open_file(filename: str, mode: str='r') -> str:
-    """Open a file, gzipped or not, in the appropriate mode."""
-    if is_gzipped(filename):
-        return gzip.open(filename, mode + 't')  # 't' for text mode
+def open_file(filename: str, mode: str = 'r') -> Union[TextIO, gzip.GzipFile]:
+    """Open a file, handling gzip if the filename ends with .gz"""
+    if filename.endswith('.gz'):
+        return gzip.open(filename, mode + 't')  # Text mode for gzip
     else:
         return open(filename, mode)
+
+def match_barcodes(barcode_file: str, matrix_file: str, target_barcode_file: str, 
+                  out_cb_file: str, out_mat_file: str) -> None:
+    """
+    Filter matrix to keep only cells that match target barcodes
+    
+    Args:
+        barcode_file: Path to input barcode file
+        matrix_file: Path to input matrix file
+        target_barcode_file: Path to target barcodes file
+        out_cb_file: Path to output barcodes file
+        out_mat_file: Path to output matrix file
+    """
+    
+    logger.info(f"Starting barcode matching")
+    logger.info(f"  Input barcode file: {barcode_file}")
+    logger.info(f"  Input matrix file: {matrix_file}")
+    logger.info(f"  Target barcodes file: {target_barcode_file}")
+    
+    # Read original barcodes and create mapping
+    barcode_to_index = {}
+    with open_file(barcode_file) as f:
+        for i, line in enumerate(f, 1):
+            barcode = line.strip()
+            barcode_to_index[barcode] = i
+    
+    logger.info(f"  Found {len(barcode_to_index)} original barcodes")
+    
+    # Read target barcodes
+    target_barcodes = set()
+    with open_file(target_barcode_file) as f:
+        for line in f:
+            target_barcodes.add(line.strip())
+    
+    logger.info(f"  Found {len(target_barcodes)} target barcodes (used to filter)")
+    
+    # Find matching barcodes and create new index mapping
+    matched_indices = {}  # Maps original index to new index
+    matched_barcodes = []  # List of matched barcodes
+    
+    for barcode, orig_idx in sorted(barcode_to_index.items(), key=lambda x: x[1]):
+        if barcode in target_barcodes:
+            new_idx = len(matched_indices) + 1
+            matched_indices[orig_idx] = new_idx
+            matched_barcodes.append(barcode)
+    
+    logger.info(f"  Found {len(matched_barcodes)} matching barcodes")
+    
+    # Write matched barcodes
+    with open(out_cb_file, 'w') as out_f:
+        for barcode in matched_barcodes:
+            out_f.write(f"{barcode}\n")
+    
+    # Process matrix file
+    header_lines = []
+    filtered_entries = []
+    n_features = 0
+    
+    with open_file(matrix_file) as f:
+        # Process header lines (comments)
+        line = f.readline().strip()
+        while line.startswith('%'):
+            header_lines.append(line)
+            line = f.readline().strip()
+        
+        # Process dimensions line
+        dimensions = line.split()
+        n_features = int(dimensions[0])
+        
+        # Process data lines
+        for line in f:
+            cols = line.strip().split()
+            gene_idx = cols[0]
+            cell_idx = int(cols[1])
+            umi_count = cols[2]
+            
+            if cell_idx in matched_indices:
+                filtered_entries.append((gene_idx, matched_indices[cell_idx], umi_count))
+    
+    # Write filtered matrix
+    with open(out_mat_file, 'w') as out_f:
+        # Write header comments
+        for line in header_lines:
+            out_f.write(f"{line}\n")
+        
+        # Write new dimensions
+        out_f.write(f"{n_features} {len(matched_barcodes)} {len(filtered_entries)}\n")
+        
+        # Write filtered entries
+        for gene_idx, cell_idx, umi_count in filtered_entries:
+            out_f.write(f"{gene_idx} {cell_idx} {umi_count}\n")
+    
+    logger.info(f"  Filtered barcodes saved to {out_cb_file}")
+    logger.info(f"  Filtered matrix saved to {out_mat_file}")
+    logger.info(f"  Barcode matching complete: {len(matched_barcodes)} cells, {len(filtered_entries)} matrix entries")
 
 def main():
     args = parse_arguments()
     
-    # Set parameters
-    exactCells = args.exactCells
-    maxCells = args.maxCells
-    maxPercentile = args.maxPercentile
-    maxMinRatio = args.maxMinRatio
+    # Set default output file paths if not specified
+    out_mat_file = args.output_matrix if args.output_matrix else f"{args.matrix_file}.filtered"
+    out_cb_file = args.output_barcodes if args.output_barcodes else f"{args.barcode_file}.filtered"
     
-    # Print parameters
-    print(f"Parameters: exactCells={exactCells}, maxCells={maxCells}, "
-          f"maxPercentile={maxPercentile}, maxMinRatio={maxMinRatio}")
-    
-    # Define constants
-    n_header_lines = 3
-    
-    # Output file paths - remove .gz extension if present
-    base_barcode = args.barcode_file[:-3] if is_gzipped(args.barcode_file) else args.barcode_file
-    base_matrix = args.matrix_file[:-3] if is_gzipped(args.matrix_file) else args.matrix_file
-    out_cb_file = f"{base_barcode}.filtered"
-    out_mat_file = f"{base_matrix}.filtered"
-    
-    # Read barcodes
-    cb = {}
-    with open_file(args.barcode_file) as f:
-        for line_num, line in enumerate(f, 1):
-            cb[line_num] = line.strip()
-    
-    # Initialize data structures
-    a = {}  # Header lines
-    cell_g = {}  # Gene indices
-    cell_i = {}  # Cell indices
-    cell_n = {}  # UMI counts
-    cell_tot = {}  # Total UMIs per cell
-    
-    # Process matrix file
-    with open_file(args.matrix_file) as f:
-        for line_num, line in enumerate(f, 1):
-            cols = line.strip().split()
-            
-            if line_num <= n_header_lines:
-                a[line_num] = line.strip()
-                if line_num == n_header_lines:
-                    n_genes = int(cols[0])
-            else:
-                gene_idx = cols[0]
-                cell_idx = int(cols[1])
-                umi_count = int(cols[2])
-                
-                cell_g[line_num] = gene_idx
-                cell_i[line_num] = cell_idx
-                cell_n[line_num] = umi_count
-                
-                cell_tot[cell_idx] = cell_tot.get(cell_idx, 0) + umi_count
-        
-        n_lines = line_num  # Total number of lines read
-    
-    # Sort cell totals (equivalent to asort in AWK)
-    cell_tot_sorted = sorted(cell_tot.values())
-    
-    # Determine thresholds
-    if len(cell_tot_sorted) > 0:
-        if exactCells > 0:
-            if len(cell_tot) < exactCells:
-                n_min = cell_tot_sorted[0]  # Minimum value
-            else:
-                # Find the threshold that keeps exactly 'exactCells' number of cells
-                n_min = cell_tot_sorted[len(cell_tot_sorted) - exactCells]
-        else:
-            # Calculate based on percentile and ratio
-            idx = -int((1 - maxPercentile) * maxCells) + len(cell_tot_sorted)
-            idx = min(max(0, idx), len(cell_tot_sorted) - 1)  # Ensure index is within bounds
-            n_max = cell_tot_sorted[idx]
-            n_min = n_max / maxMinRatio
-    else:
-        n_min = 0
-        n_max = 0
-    
-    # Filter cells and write to output files
-    n_cell = 0
-    cell_i_new = {}
-    
-    with open(out_cb_file, 'w') as out_cb, open(f"{out_cb_file}.counts", 'w') as out_counts:
-        for ii in range(1, len(cb) + 1):
-            if ii in cell_tot and cell_tot[ii] >= n_min:
-                out_cb.write(f"{cb[ii]}\n")
-                n_cell += 1
-                cell_i_new[ii] = n_cell
-                out_counts.write(f"{n_cell} {cell_tot[ii]}\n")
-    
-    # Print statistics
-    if exactCells == 0:
-        max_umi = cell_tot_sorted[-1] if cell_tot_sorted else 0
-        print(f"maxUMIperCell={max_umi} Robust maxUMIperCel={n_max} minUMIperCell={n_min} Filtered N cells={n_cell}")
-    else:
-        print(f"total N cells={len(cell_tot)} exactCells={exactCells} minUMIperCell={n_min}")
-    
-    # Count filtered matrix entries
-    n_mat = 0
-    for ii in range(n_header_lines + 1, n_lines + 1):
-        cell_idx = cell_i[ii]
-        if cell_idx in cell_tot and cell_tot[cell_idx] >= n_min:
-            n_mat += 1
-    
-    # Write filtered matrix
-    with open(out_mat_file, 'w') as out_mat:
-        # Write header lines
-        for ii in range(1, n_header_lines):
-            out_mat.write(f"{a[ii]}\n")
-        
-        # Write dimensions line
-        out_mat.write(f"{n_genes} {n_cell} {n_mat}\n")
-        
-        # Write filtered entries
-        for ii in range(n_header_lines + 1, n_lines + 1):
-            cell_idx = cell_i[ii]
-            if cell_idx in cell_tot and cell_tot[cell_idx] >= n_min:
-                out_mat.write(f"{cell_g[ii]} {cell_i_new[cell_idx]} {cell_n[ii]}\n")
+    # Run barcode matching
+    match_barcodes(
+        barcode_file=args.barcode_file,
+        matrix_file=args.matrix_file,
+        target_barcode_file=args.target_barcodes,
+        out_cb_file=out_cb_file,
+        out_mat_file=out_mat_file
+    )
 
 if __name__ == "__main__":
     main()
