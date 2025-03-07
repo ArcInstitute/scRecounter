@@ -46,7 +46,8 @@ def parse_arguments() -> argparse.Namespace:
         help='Maximum number of datasets to process'
     )
     parser.add_argument( 
-        '--multi-mapper', default='None', choices=['None', 'EM', 'uniform'],
+        '--multi-mapper', default=['Unique'], nargs='+',
+        choices=['Unique', 'EM', 'Uniform'],
         help='Multi-mapper strategy to use' 
     )
     parser.add_argument(
@@ -94,7 +95,9 @@ def load_srx_metadata(organisms: str) -> Set[str]:
         metadata = metadata[metadata['organism'].isin(organisms)]
         
     # return set of SRX accessions
-    return set(metadata['srx_accession'].tolist())
+    srx = set(metadata['srx_accession'].tolist())
+    logging.info(f"Found {len(srx)} SRX accessions with metadata.")
+    return srx
 
 def load_scbasecamp_metadata(feature_type: str) -> Set[str]:
     """
@@ -115,14 +118,16 @@ def load_scbasecamp_metadata(feature_type: str) -> Set[str]:
     )
     with db_connect() as conn:
         metadata = pd.read_sql(str(stmt), conn)
-    return set(metadata['srx_accession'].tolist())
+    srx = set(metadata['srx_accession'].tolist())
+    logging.info(f"Found {len(srx)} SRX accessions already processed.")
+    return srx
 
 def find_matrix_files(
         base_dir: str, 
         feature_type: str, 
         has_srx_metadata: Set[str],
         processed_srx: Set[str],
-        multi_mapper: str='None',
+        multi_mapper: List[str],
         raw: bool=False, 
         max_datasets: Optional[int]=0
     ) -> List[tuple]:
@@ -133,7 +138,7 @@ def find_matrix_files(
         feature_type: 'Gene' or 'GeneFull'
         has_srx_metadata: Set of SRX IDs with metadata; records skipped if no metadata
         processed_srx: Set of existing SRX IDs
-        multi_mapper: 'EM', 'uniform', or 'None'
+        multi_mapper: 'EM', 'uniform', and/or 'Unique'
         raw: Use raw count matrix files instead of filtered
         max_datasets: Maximum number of datasets to process
     Returns:
@@ -152,23 +157,21 @@ def find_matrix_files(
         'mtx_file_missing': 0, 
         'novel': 0
     }
-
-    # account for all 3 matrix files if feature_type is Velocyto
-    if feature_type == "Velocyto":
-        if max_datasets > 0:
-            max_datasets = max_datasets * 4
     
     # Determine which matrix file to look for based on multi_mapper
-    if multi_mapper == 'None':
-        matrix_filename = ['matrix.mtx.gz']
-        if "Velocyto" in feature_type:
-            matrix_filename += ["ambiguous.mtx.gz", "spliced.mtx.gz", "unspliced.mtx.gz"]
-    elif multi_mapper == 'EM':
-        matrix_filename = ['UniqueAndMult-EM.mtx.gz']
-    elif multi_mapper == 'uniform':
-        matrix_filename = ['UniqueAndMult-Uniform.mtx.gz']
+    matrix_filenames = []
+    if "Velocyto" in feature_type: 
+        matrix_filenames += ["ambiguous.mtx.gz", "spliced.mtx.gz", "unspliced.mtx.gz"]
     else:
-        raise ValueError(f"Invalid multi-mapper strategy: {multi_mapper}")
+        if 'Unique' in multi_mapper:
+            matrix_filenames = ['matrix.mtx.gz']
+        if 'EM' in multi_mapper:
+            matrix_filenames += ['UniqueAndMult-EM.mtx.gz']
+        if 'Uniform' in multi_mapper:
+            matrix_filenames += ['UniqueAndMult-Uniform.mtx.gz']
+
+    # set max datasets
+    max_datasets *= len(matrix_filenames)
 
     # Walk through directory structure
     num_dirs = 0
@@ -197,23 +200,29 @@ def find_matrix_files(
             continue
 
         # Find target matrix file in SRX directory
-        mtx_files = []
-        for f in matrix_filename:
-            mtx_files.extend(srx_dir.glob(f'**/{f}'))
-        for mtx_file in mtx_files:
-            hit = None
-            # check for `feature_type/subdir` in file path
-            for i,x in enumerate(mtx_file.parts):
-                try:
-                    if feature_type == x and mtx_file.parts[i+1] == subdir:
-                        hit = True
-                        break
-                except IndexError:
+        for matrix_filename in matrix_filenames:
+            # EM and Uniform are in the raw directory
+            if matrix_filename in ['UniqueAndMult-EM.mtx.gz', 'UniqueAndMult-Uniform.mtx.gz']:
+                subdir_tmp = 'raw'
+            else:
+                subdir_tmp = subdir
+            # iterate through the glob results
+            for mtx_file in srx_dir.glob(f'**/{matrix_filename}'):
+                # check for `feature_type/subdir` in file path
+                hit = None
+                for i,x in enumerate(mtx_file.parts):
+                    try:
+                        if feature_type == x and mtx_file.parts[i+1] == subdir_tmp:
+                            hit = True
+                            break
+                    except IndexError:
+                        continue
+                # if target file found, check if it exists, and add to results
+                if hit:
+                    features_file = mtx_file.parent / "features.tsv.gz"
+                    barcodes_file = mtx_file.parent / "barcodes.tsv.gz"
+                else:
                     continue
-            # if target file found, check if it exists, and add to results
-            if hit:
-                features_file = mtx_file.parent / "features.tsv.gz"
-                barcodes_file = mtx_file.parent / "barcodes.tsv.gz"
                 try:
                     if not mtx_file.exists() or not features_file.exists() or not barcodes_file.exists():
                         stats['mtx_file_missing'] += 1
@@ -249,6 +258,7 @@ def main():
     
     # Load metadata
     if args.redo_processed:
+        logging.warning("Redoing processed SRX IDs.")
         processed_srx = set()
     else:
         processed_srx = load_scbasecamp_metadata(args.feature_type)

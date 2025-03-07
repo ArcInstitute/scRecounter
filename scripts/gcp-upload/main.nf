@@ -115,6 +115,7 @@ process FIND_MTX {
     path "find-mtx.log",  emit: log
 
     script:
+    def multi_mapper = params.multi_mapper.toString().tokenize(",").collect{ it.trim() }.join(" ")
     def organisms = params.organisms != "" ? "--organisms \"${params.organisms}\"" : ""
     def redo_processed = params.redo_processed.toString() == "true" ? "--redo-processed" : ""
     """
@@ -124,6 +125,7 @@ process FIND_MTX {
 
     find-mtx.py ${organisms} ${redo_processed} \\
       --feature-type ${params.feature_type} \\
+      --multi-mapper ${multi_mapper} \\
       --max-datasets ${params.max_datasets} \\
       ${params.input_dir} \\
       2>&1 | tee find-mtx.log
