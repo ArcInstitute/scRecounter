@@ -6,19 +6,15 @@ workflow {
     mtx_files = FIND_MTX.out.csv
       .splitCsv( header: true )
       .map{ row -> 
-        tuple(row.srx, file(row.matrix_path), file(row.features_path), file(row.barcodes_path))
-      }
+        tuple(row.srx, row.matrix_type, file(row.matrix_path), file(row.features_path), file(row.barcodes_path))
+      }.groupTuple()
 
-    // group Velocyto MTX files by SRX
-    if( params.feature_type == "Velocyto"){
-      mtx_files = mtx_files.groupTuple().map{ group -> 
-        tuple(group[0], group[1], group[2][0], group[3][0])
-      }
-    }
+    //.map{ group -> tuple(group[0], group[1], group[2], group[3][0], group[4][0])}
 
     // convert to h5ad and publish
     MTX_TO_H5AD( mtx_files, Channel.fromPath(params.tissue_categories) )
 
+    /*
     // write parquet after all MTX_TO_H5AD jobs complete
     if( params.update_db ){
       DB_TO_PARQUET( MTX_TO_H5AD.out.h5ad.collect() )
@@ -26,6 +22,7 @@ workflow {
     
     // aggregate obs metadata
     AGG_OBS_METADATA( MTX_TO_H5AD.out.csv.collate(100) )
+    */
 }
 
 process AGG_OBS_METADATA {
@@ -75,12 +72,12 @@ process DB_TO_PARQUET {
 process MTX_TO_H5AD {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, pattern: "h5ad/${params.feature_type}/*/*.h5ad.gz"
     publishDir file(params.log_dir) / params.feature_type, mode: "copy", overwrite: true, pattern: "*.log"
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }  // TODO: re-add?
     label "process_low"
     maxForks 200
 
     input:
-    tuple val(srx), path(mtx_path), path(features_path), path(barcodes_path)
+    tuple val(srx), val(mtx_types), path(mtx_paths), path("features*.tsv.gz"), path("barcodes*.tsv.gz")
     each path(tissue_categories)
 
     output:
@@ -89,6 +86,7 @@ process MTX_TO_H5AD {
     path "mtx-to-h5ad_${srx}.log", emit: log
 
     script:
+    def mtx_types_str = mtx_types.join(" ")
     def update_db = params.update_db ? "--update-database" : ""
     """
     export GCP_SQL_DB_HOST="${params.db_host}"
@@ -97,11 +95,14 @@ process MTX_TO_H5AD {
 
     mtx-to-h5ad.py ${update_db} \\
       --feature-type ${params.feature_type} \\
-      --missing-metadata "${params.missing_metadata}" \\
-      --tissue-categories "${tissue_categories}" \\
+      --matrix-types ${mtx_types_str} \\
       --srx ${srx} \\
-      --matrix ${mtx_path} \\
+      --matrix-paths ${mtx_paths} \\
       --publish-path "${params.output_dir}" \\
+      --feature-paths features*.tsv.gz \\
+      --tissue-categories "${tissue_categories}" \\
+      --barcode-paths barcodes*.tsv.gz \\
+      --missing-metadata "${params.missing_metadata}" \\
       2>&1 | tee mtx-to-h5ad_${srx}.log
     """
 }

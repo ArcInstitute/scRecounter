@@ -247,7 +247,7 @@ def find_matrix_files(
     logging.info(f"  {stats['mtx_file_missing']} missing matrix files (skipped).")
     logging.info(f"  {stats['permissions']} directories with permission errors (skipped).")
     logging.info(f"  {stats['novel']} novel SRX directories found (final).")
-    return results
+    return results, matrix_filenames
 
 def main():
     """Main function to run the TileDB loader workflow."""
@@ -264,7 +264,7 @@ def main():
         processed_srx = load_scbasecamp_metadata(args.feature_type)
 
     # Find all matrix files and their corresponding SRX IDs
-    matrix_files = find_matrix_files(
+    matrix_files, matrix_filenames = find_matrix_files(
         args.base_dir, args.feature_type, 
         has_srx_metadata = has_srx_metadata, 
         processed_srx = processed_srx,
@@ -277,21 +277,20 @@ def main():
     df = pd.DataFrame(
         matrix_files, columns=['srx', 'matrix_path', 'features_path', 'barcodes_path']
     ).sort_values(['srx'])
+    df["matrix_type"] = df["matrix_path"].apply(lambda x: x.name.split('.')[0])
 
     # sort by srx and matrix_path and drop duplicate of the same srx+path
     df = df.sort_values(by=['srx', 'matrix_path'])
     df["basename"] = df["matrix_path"].apply(lambda x: x.name)
     df = df.drop_duplicates(subset=['srx', 'basename'], keep='last').drop(columns=['basename'])
 
-    # if feature_type is Velocyto, check for 3 per SRX and filter incomplete records
-    if args.feature_type == "Velocyto":
-        # identify SRX with complete records (3 files)
-        complete_srx = df.groupby('srx').filter(lambda x: len(x) == 3)
-        # filter to keep only complete records
-        df = complete_srx.copy()
-        num_filtered = len(set(df['srx'])) - len(set(complete_srx['srx']))
-        if num_filtered > 0:
-            logging.warning(f"Filtered {num_filtered} SRX records that did not have all 3 Velocyto matrix files")
+    # identify SRX with complete records
+    complete_srx = df.groupby('srx').filter(lambda x: len(x) == len(matrix_filenames))
+    ## filter to keep only complete records
+    df = complete_srx.copy()
+    num_filtered = len(set(df['srx'])) - len(set(complete_srx['srx']))
+    if num_filtered > 0:
+        logging.warning(f"Filtered {num_filtered} SRX records that did not have all required matrix files")
 
     # write as csv
     df.to_csv('mtx_files.csv', index=False)
