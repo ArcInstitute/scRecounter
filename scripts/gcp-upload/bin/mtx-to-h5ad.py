@@ -153,26 +153,28 @@ def rename_files(files: List[str], matrix_types: List[str], prefix: str) -> List
         new_files[matrix_type] = new_file
     return new_files
 
-def build_velocyto_anndata(matrix_paths: List[str], feature_paths: List[str]) -> sc.AnnData:
-    """Generate an anndata object from the STAR aligner output folder"""
+def build_velocyto_anndata(matrix_paths: Dict[str,str], feature_paths: Dict[str,str], barcode_paths: Dict[str,str]) -> sc.AnnData:
+    """
+    Generate an anndata object from the STAR aligner output folder
+    """
     # check exists
-    for matrix_path in matrix_paths:
+    for _,matrix_path in matrix_paths.items():
         if not os.path.exists(matrix_path):
             raise FileNotFoundError(f"{matrix_path} not found")
 
     # Transpose counts matrix to have Cells as rows and Genes as cols as expected by AnnData objects
     ## Using spliced.mtx.gz as the reference matrix
-    X = sc.read_mtx('spliced.mtx.gz').X.transpose()
+    X = sc.read_mtx(matrix_paths['spliced']).X.transpose()
 
     # Load the 3 matrices containing Spliced, Unspliced and Ambigous reads
-    mtxU = np.loadtxt('unspliced.mtx.gz', skiprows=3, delimiter=' ')
-    mtxS = np.loadtxt('spliced.mtx.gz', skiprows=3, delimiter=' ')
-    mtxA = np.loadtxt('ambiguous.mtx.gz', skiprows=3, delimiter=' ')
+    mtxU = np.loadtxt(matrix_paths['unspliced'], skiprows=3, delimiter=' ')
+    mtxS = np.loadtxt(matrix_paths['spliced'], skiprows=3, delimiter=' ')
+    mtxA = np.loadtxt(matrix_paths['ambiguous'], skiprows=3, delimiter=' ')
 
     # Extract sparse matrix shape informations from the third row
-    shapeU = np.loadtxt('unspliced.mtx.gz', skiprows=2, max_rows = 1 ,delimiter=' ')[0:2].astype(int)
-    shapeS = np.loadtxt('spliced.mtx.gz', skiprows=2, max_rows = 1 ,delimiter=' ')[0:2].astype(int)
-    shapeA = np.loadtxt('ambiguous.mtx.gz', skiprows=2, max_rows = 1 ,delimiter=' ')[0:2].astype(int)
+    shapeU = np.loadtxt(matrix_paths['unspliced'], skiprows=2, max_rows = 1 ,delimiter=' ')[0:2].astype(int)
+    shapeS = np.loadtxt(matrix_paths['spliced'], skiprows=2, max_rows = 1 ,delimiter=' ')[0:2].astype(int)
+    shapeA = np.loadtxt(matrix_paths['ambiguous'], skiprows=2, max_rows = 1 ,delimiter=' ')[0:2].astype(int)
 
     # Read the sparse matrix with csr_matrix((data, (row_ind, col_ind)), shape=(M, N))
     # Subract -1 to rows and cols index because csr_matrix expects a 0 based index
@@ -182,11 +184,11 @@ def build_velocyto_anndata(matrix_paths: List[str], feature_paths: List[str]) ->
     ambiguous = sparse.csr_matrix((mtxA[:,2], (mtxA[:,0]-1, mtxA[:,1]-1)), shape = shapeA).transpose()
 
     # Load Genes and Cells identifiers
-    obs = pd.read_csv('spliced_barcodes.tsv.gz', header = None, index_col = 0)
+    obs = pd.read_csv(barcode_paths['spliced'], header = None, index_col = 0)
 
     # Remove index column name to make it compliant with the anndata format
     obs.index.name = None
-    var = pd.read_csv('spliced_features.tsv.gz', sep='\t', names = ('gene_ids', 'feature_types'), index_col = 1)
+    var = pd.read_csv(feature_paths['spliced'], sep='\t', names = ('gene_ids', 'feature_types'), index_col = 1)
   
     # Build AnnData object to be used with ScanPy and ScVelo
     adata = anndata.AnnData(
@@ -196,7 +198,7 @@ def build_velocyto_anndata(matrix_paths: List[str], feature_paths: List[str]) ->
     adata.var_names_make_unique()
 
     # Subset Cells based on STAR filtering
-    selected_barcodes = pd.read_csv('spliced_barcodes.tsv.gz', header = None)
+    selected_barcodes = pd.read_csv(barcode_paths['spliced'], header = None)
     return adata[selected_barcodes[0]]
 
 def open_file(filename: str, mode: str = 'r') -> Union[TextIO, gzip.GzipFile]:
@@ -212,7 +214,6 @@ def match_barcodes(
     ) -> None:
     """
     Filter matrix to keep only cells that match target barcodes
-    
     Args:
         barcode_file: Path to input barcode file
         matrix_file: Path to input matrix file
@@ -304,7 +305,15 @@ def match_barcodes(
     logging.info(f"  Barcode matching complete: {len(matched_barcodes)} cells, {len(filtered_entries)} matrix entries")
 
 def build_gene_anndata(matrix_paths: Dict[str, str], feature_paths: Dict[str,str], barcode_paths: Dict[str, str]) -> sc.AnnData:
-    """Generate an anndata object from the STAR aligner output folder"""    
+    """
+    Generate an anndata object from the STAR aligner output folder
+    Args:
+        matrix_paths: Path to matrix files, {matrix_type: path}
+        feature_paths: Path to feature files, {matrix_type: path}
+        barcode_paths: Path to barcode files, {matrix_type: path}
+    Returns:
+        Anndata object
+    """    
     # primary load count matrix
     logging.info("Loading primary count matrix...")
     adata = sc.read_10x_mtx(
@@ -315,7 +324,6 @@ def build_gene_anndata(matrix_paths: Dict[str, str], feature_paths: Dict[str,str
     
     # filtering multi-mapper count matrices
     logging.info("Adding multi-mapper count matrices as layers...")
-    filtered_mtx = {}
     for matrix_type in ['UniqueAndMult-Uniform', 'UniqueAndMult-EM']:
         logging.info(f"Filtering {matrix_type} matrix...")
         match_barcodes(
@@ -325,12 +333,8 @@ def build_gene_anndata(matrix_paths: Dict[str, str], feature_paths: Dict[str,str
             f'barcodes_{matrix_type}_filtered.tsv',
             f'{matrix_type}_filtered.mtx'
         )
-        #filtered_mtx[matrix_type] = [f'{matrix_type}_filtered.mtx', f'barcodes_{matrix_type}_filtered.tsv']
         adata.layers[matrix_type] = sc.read_mtx(f'{matrix_type}_filtered.mtx').X.transpose()
-    
-    # add layers
-    print(adata);
-    exit();
+    return adata
 
 
 def load_matrix_as_anndata(
@@ -346,7 +350,14 @@ def load_matrix_as_anndata(
     """
     Load a matrix.mtx.gz file as an AnnData object.
     Args:
-        
+        srx_id: SRX accession
+        metadata: Metadata for the SRX accession
+        matrix_paths: Path to matrix files
+        feature_paths: Path to feature files
+        barcode_paths: Path to barcode files
+        publish_path: Path to publish directory
+        feature_type: Feature type
+        update_database: Update the database?
     Returns:
         AnnData object
     """
@@ -364,10 +375,6 @@ def load_matrix_as_anndata(
         adata = build_gene_anndata(matrix_paths, feature_paths, barcode_paths)
     else:
         raise ValueError("Invalid matrix_paths")
-
-    exit();
-
-    
     
     # calculate total counts
     if sparse.issparse(adata.X):
@@ -376,9 +383,6 @@ def load_matrix_as_anndata(
     else:
         adata.obs["gene_count"] = (adata.X > 0).sum(axis=1)
         adata.obs["umi_count"] = adata.X.sum(axis=1)
-
-    # append SRX to barcode to create a global-unique index for tiledb
-    #adata.obs.index = adata.obs.index + f"_{srx_id}"
 
     # add metadata to adata
     adata.obs["SRX_accession"] = srx_id
@@ -410,7 +414,6 @@ def load_matrix_as_anndata(
             db_upsert(metadata, "scbasecamp_metadata", conn)
     else:
         logging.info(f"Skipping upserting metadata for SRX accession {srx_id}")
-
 
 def main():
     # parse args

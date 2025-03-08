@@ -9,12 +9,9 @@ workflow {
         tuple(row.srx, row.matrix_type, file(row.matrix_path), file(row.features_path), file(row.barcodes_path))
       }.groupTuple()
 
-    //.map{ group -> tuple(group[0], group[1], group[2], group[3][0], group[4][0])}
-
     // convert to h5ad and publish
     MTX_TO_H5AD( mtx_files, Channel.fromPath(params.tissue_categories) )
 
-    /*
     // write parquet after all MTX_TO_H5AD jobs complete
     if( params.update_db ){
       DB_TO_PARQUET( MTX_TO_H5AD.out.h5ad.collect() )
@@ -22,11 +19,10 @@ workflow {
     
     // aggregate obs metadata
     AGG_OBS_METADATA( MTX_TO_H5AD.out.csv.collate(100) )
-    */
 }
 
 process AGG_OBS_METADATA {
-    publishDir file(params.output_dir), mode: "copy", overwrite: true, pattern: "metadata_TMP/${params.feature_type}/*.csv.gz"
+    publishDir file(params.output_dir), mode: "copy", overwrite: true, pattern: "metadata_TO-AGG/${params.feature_type}/*.csv.gz"
     publishDir file(params.log_dir) / params.feature_type, mode: "copy", overwrite: true, pattern: "*.log"
     label "process_low"
 
@@ -72,7 +68,7 @@ process DB_TO_PARQUET {
 process MTX_TO_H5AD {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, pattern: "h5ad/${params.feature_type}/*/*.h5ad.gz"
     publishDir file(params.log_dir) / params.feature_type, mode: "copy", overwrite: true, pattern: "*.log"
-    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }  // TODO: re-add?
+    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' } 
     label "process_low"
     maxForks 200
 

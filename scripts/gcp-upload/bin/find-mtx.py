@@ -242,7 +242,7 @@ def find_matrix_files(
     # Status
     logging.info(f"  {stats['found']} total SRX directories found (total).")
     logging.info(f"  {stats['has_metadata']} has srx metadata (kept).")
-    logging.info(f"  {stats['no_metadata']} lacks srx metadata (skipped).")
+    logging.info(f"  {stats['no_metadata']} lack srx metadata (skipped).")
     logging.info(f"  {stats['already_processed']} existing SRX directories found (skipped).")
     logging.info(f"  {stats['mtx_file_missing']} missing matrix files (skipped).")
     logging.info(f"  {stats['permissions']} directories with permission errors (skipped).")
