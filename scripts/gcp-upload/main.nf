@@ -42,7 +42,7 @@ process AGG_OBS_METADATA {
 }
 
 process DB_TO_PARQUET {
-    publishDir file(params.output_dir), mode: "copy", overwrite: true, pattern: "metadata/${params.feature_type}/*/sample_metadata.parquet.gz"
+    publishDir file(params.output_dir), mode: "copy", overwrite: true, pattern: "metadata/${params.feature_type}/*/sample_metadata.parquet"
     publishDir file(params.log_dir) / params.feature_type, mode: "copy", overwrite: true, pattern: "*.log"
     label "process_low"
 
@@ -50,8 +50,8 @@ process DB_TO_PARQUET {
     path csv_files
 
     output:
-    path "metadata/${params.feature_type}/*/sample_metadata.parquet.gz", emit: samp_meta
-    path "db-to-parquet.log",                                            emit: log
+    path "metadata/${params.feature_type}/*/sample_metadata.parquet", emit: samp_meta
+    path "db-to-parquet.log",                                         emit: log
 
     script:
     """
@@ -66,7 +66,7 @@ process DB_TO_PARQUET {
 }
 
 process MTX_TO_H5AD {
-    publishDir file(params.output_dir), mode: "copy", overwrite: true, pattern: "h5ad/${params.feature_type}/*/*.h5ad.gz"
+    publishDir file(params.output_dir), mode: "copy", overwrite: true, pattern: "h5ad/${params.feature_type}/*/*.h5ad"
     publishDir file(params.log_dir) / params.feature_type, mode: "copy", overwrite: true, pattern: "*.log"
     //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' } 
     label "process_low"
@@ -77,7 +77,7 @@ process MTX_TO_H5AD {
     each path(tissue_categories)
 
     output:
-    path "h5ad/${params.feature_type}/*/${srx}.h5ad.gz",  emit: h5ad
+    path "h5ad/${params.feature_type}/*/${srx}.h5ad",  emit: h5ad
     path "metadata/${srx}.csv.gz", emit: csv
     path "mtx-to-h5ad_${srx}.log", emit: log
 
