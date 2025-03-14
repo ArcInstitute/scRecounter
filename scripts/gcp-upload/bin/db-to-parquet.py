@@ -48,7 +48,7 @@ def load_scbasecamp_metadata(feature_type: str) -> pd.DataFrame:
     logging.info("Obtaining scbasecamp metadata...")
 
     # get metadata from scRecounter postgresql database
-    srx_metadata = Table("scbasecamp_metadata")
+    srx_metadata = Table("scbasecamp_metadata_tmp")
     stmt = (
         Query
         .from_(srx_metadata)
@@ -74,7 +74,7 @@ def main():
         out_dir = Path("metadata") / Path(args.feature_type) / Path(organism_str)
         out_dir.mkdir(parents=True, exist_ok=True)
         # write to parquet
-        outfile = out_dir / 'sample_metadata.parquet.gz'
+        outfile = out_dir / 'sample_metadata.parquet'
         df.to_parquet(outfile, index=False, compression='gzip')
         logging.info(f"Saved metadata for {organism} to {outfile}")
 

@@ -106,7 +106,7 @@ def load_scbasecamp_metadata(feature_type: str) -> Set[str]:
     logging.info("Obtaining scbasecamp metadata...")
 
     # get metadata from scRecounter postgresql database
-    scbc_metadata = Table("scbasecamp_metadata")
+    scbc_metadata = Table("scbasecamp_metadata_tmp")
     stmt = (
         Query
         .from_(scbc_metadata)

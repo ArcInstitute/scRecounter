@@ -18,7 +18,7 @@ Slurm run
 nextflow run main.nf -profile conda,slurm,dev -resume 
 ```
 
-## prod
+## prod -> REDO
 
 ### GeneFull_Ex50pAS
 
@@ -28,9 +28,62 @@ nextflow run main.nf -profile conda,slurm,dev -resume
 nextflow run main.nf \
   -profile conda,slurm \
   --feature_type GeneFull_Ex50pAS \
-  --organisms "Mus musculus,Homo sapiens,Macaca mulatta" \
+  --input_dir /processed_datasets/scRecount/cellxgene/counted_SRXs \
+  --output_dir gs://arc-ctc-nextflow/gcp-loader/multi-mapper
+```
+
+#### scRecounter
+
+```bash
+nextflow run main.nf \
+  -profile conda,slurm \
+  --feature_type GeneFull_Ex50pAS \
+  --input_dir /processed_datasets/scRecount/scRecounter/prod3 \
+  --output_dir gs://arc-ctc-nextflow/gcp-loader/multi-mapper
+```
+
+**TO HERE**
+
+
+### Velocyto
+
+#### CZI
+
+```bash
+nextflow run main.nf \
+  -profile conda,slurm \
+  --feature_type Velocyto \
+  --max_datasets 8 \
+  --input_dir /processed_datasets/scRecount/cellxgene/counted_SRXs \
+  --output_dir gs://arc-ctc-nextflow/gcp-loader/multi-mapper
+```
+
+#### scRecounter
+
+```bash
+nextflow run main.nf \
+  -profile conda,slurm \
+  --feature_type Velocyto \
+  --max_datasets 8 \
+  --input_dir /processed_datasets/scRecount/scRecounter/prod3 \
+  --output_dir gs://arc-ctc-nextflow/gcp-loader/multi-mapper
+```
+
+
+***
+
+
+## prod
+
+### GeneFull_Ex50pAS
+
+```bash
+nextflow run main.nf \
+  -profile conda,slurm \
+  --feature_type GeneFull_Ex50pAS \
   --input_dir /processed_datasets/scRecount/cellxgene/counted_SRXs
 ```
+
 
 #### SRA
 

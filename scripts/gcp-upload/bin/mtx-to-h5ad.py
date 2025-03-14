@@ -123,6 +123,11 @@ def get_metadata(srx_id: str, missing_metadata: str="error") -> Optional[pd.Data
             raise ValueError(f"    Invalid value for `--missing-metadata`")
     if metadata.shape[0] > 1:
         raise ValueError(f"Multiple metadata entries found for SRX accession {srx_id}")
+    elif metadata.shape[0] == 1:
+        # lib_prep should be "10x_Genomics"
+        if metadata["lib_prep"].values[0] != "10x_Genomics":
+            metadata["lib_prep"] = "10x_Genomics"
+            metadata["tech_10x"] = "other"
     return metadata
 
 def add_tissue_category(metadata: pd.DataFrame, tissue_categories_path: str) -> None:
@@ -278,12 +283,14 @@ def match_barcodes(
         n_features = int(dimensions[0])
         
         # Process data lines
-        for line in f:
+        for i,line in enumerate(f,1):
             cols = line.strip().split()
             gene_idx = cols[0]
-            cell_idx = int(cols[1])
+            try:
+                cell_idx = int(cols[1])
+            except (IndexError, ValueError) as e:
+                raise ValueError(f"Line {i}: invalid matrix value: \"{line.strip()}\"")
             umi_count = cols[2]
-            
             if cell_idx in matched_indices:
                 filtered_entries.append((gene_idx, matched_indices[cell_idx], umi_count))
     
@@ -363,7 +370,7 @@ def load_matrix_as_anndata(
     """
     # add publish path
     metadata["file_path"] = metadata["organism"].apply(
-        lambda org: os.path.join(publish_path, "h5ad", feature_type, str(org).replace(" ", "_"), f"{srx_id}.h5ad.gz")
+        lambda org: os.path.join(publish_path, "h5ad", feature_type, str(org).replace(" ", "_"), f"{srx_id}.h5ad")
     )
 
     # build anndata
@@ -393,7 +400,7 @@ def load_matrix_as_anndata(
     ## write to h5ad
     outdir = os.path.join("h5ad", feature_type, metadata["organism"].values[0].replace(" ", "_"))
     os.makedirs(outdir, exist_ok=True)
-    outfile = os.path.join(outdir, f"{srx_id}.h5ad.gz")
+    outfile = os.path.join(outdir, f"{srx_id}.h5ad")
     logging.info(f"Writing to {outfile}...")
     adata.write_h5ad(outfile, compression="gzip")
 
@@ -411,7 +418,7 @@ def load_matrix_as_anndata(
     if update_database:
         logging.info(f"Upserting metadata for SRX accession {srx_id}...")
         with db_connect() as conn:
-            db_upsert(metadata, "scbasecamp_metadata", conn)
+            db_upsert(metadata, "scbasecamp_metadata_tmp", conn)
     else:
         logging.info(f"Skipping upserting metadata for SRX accession {srx_id}")
 
