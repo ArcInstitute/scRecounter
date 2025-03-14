@@ -1,0 +1,3066 @@
+tissue,tissue_group
+2 layer spheroid,other
+"3 layer spheroid channel 1,epithelial",other
+3 layer spheroid channel 2,other
+3D healthy skin model,skin of body
+A549 cells,lung
+ACA (Adult Cortex Area),cortex
+ACP close to the hypothalamus,brain
+ACP distant from the hypothalamus,brain
+AI-CLA,brain
+AI-CLA (specific brain region),brain
+AI-CLA (specific brain tissue),brain
+AId-AIv,brain
+AId-AIv (specific brain region),brain
+AId-AIv-AIp (specific brain regions),brain
+ALI Distal Lung Organoid,lung
+AML,bone marrow
+AML cells,bone marrow
+AML-iPSC-derived xenograft,bone marrow
+APAP liver explant,liver
+"AT2 YFP+ cells,16 weeks after Ad5SPC-Cre",lung
+AT2 cells,lung
+AT2 cells (GEMM),lung
+AT2 organoids,lung
+AUD (Auditory),sensory system
+Anterior Cingulate Area (ACA),cortex
+As4.1 cells,kidney
+Atrioventricular canal (AVC),heart
+B cell lymphoma,immune system
+B cell precursor leukemia,immune system
+B cells,immune system
+B cells from peripheral blood mononuclear cells (PBMC),immune system
+B-cells Ag2+,immune system
+B16 tumor,skin of body
+B16-OVA Tumor,skin of body
+B16F10 tumor,skin of body
+"B6 left lung, 2 hours post-reperfusion",lung
+BA11 brain region,cortex
+BA46,cortex
+BA46 (Brain tissue),cortex
+BA9 (Brain Area 9),cortex
+BJ fibroblast,skin of body
+BJ skin fibroblast,skin of body
+BMMC (Bone Marrow Mononuclear Cells),bone marrow
+BackSkin,skin of body
+Basal Plate placenta,placenta
+Bilateral V-SVZ of 4 littermates,brain
+Bone Marrow,bone marrow
+Bone Marrow 14d post treatment (M35),bone marrow
+Bone Marrow 14d post treatment (M6),bone marrow
+Bone Marrow 14d post treatment (T17),bone marrow
+Bone Marrow 14d post treatment (T19),bone marrow
+Bone Marrow 14d post treatment (T62),bone marrow
+Bone Marrow 14d post treatment (T63),bone marrow
+Bone Marrow 180d post treatment (M76),bone marrow
+Bone Marrow 180d post treatment (T25),bone marrow
+Bone Marrow 180d post treatment (T56),bone marrow
+Bone Marrow 180d post treatment (T65),bone marrow
+Bone Marrow 180d post treatment (T71),bone marrow
+Bone Marrow 30d post treatment (M39),bone marrow
+Bone Marrow 30d post treatment (T27),bone marrow
+Bone Marrow 30d post treatment (T66),bone marrow
+Bone Marrow 30d post treatment (T67),bone marrow
+Bone Marrow 30d post treatment (T72),bone marrow
+Bone Marrow 30d post treatment (T87),bone marrow
+Bone Marrow 90d post treatment (T30),bone marrow
+Bone Marrow 90d post treatment (T37),bone marrow
+Bone Marrow Baseline (M1),bone marrow
+Bone Marrow Baseline (T13),bone marrow
+Bone Marrow Baseline (T73),bone marrow
+Bone Marrow from AML Patient-Derived Xenografts,bone marrow
+CAR T,immune system
+CAR-T cells,immune system
+CBMC (Cord Blood Mononuclear Cells),blood
+CD14+ cells,immune system
+CD19-28z CAR T cells,immune system
+CD3+ CD8+ CD45RA+/- CCR7+/- sorted from PBMC,immune system
+CD34 positive AML primary cells,immune system
+CD34+ cells,immune system
+CD34+CD38+ AML blasts,immune system
+CD4+ T cell,immune system
+CD4+ T cells,immune system
+CD4-CD8- T cell,immune system
+CD45+ cells,immune system
+CD45+ spleen,spleen
+CD45+ tumor infiltrating lymphocytes,immune system
+CD45- CD31+,vasculature
+CD45- CD31- (sorted cells),other
+CD8 T cells,immune system
+"CD8 T cells, central memory CD8 T cells",immune system
+CD8+ T cells,immune system
+CNS,central nervous system
+CNS (Central Nervous System),central nervous system
+CNU - PAL,brain
+CNU - PAL (specific brain region),brain
+CSF,central nervous system
+CSF (Cerebrospinal Fluid),central nervous system
+CSF cells,central nervous system
+CT26 xenografts,colon
+CT26-induced tumour,colon
+CTXsp - CLA-EP-LA-BLA-BMA-PA,cortex
+CTXsp - CLA-EP-LA-BLA-BMA-PA (Cortex specific regions),cortex
+Carnegie stage 13 dorsal aorta,vasculature
+Central Nervous System,central nervous system
+Cerebellum - Hemispheres (CB - HEM),brain
+Circle of Willis,vasculature
+Cortex & Hippocampus,brain
+Cortex & Hippocampus (3mm piece around the injury),brain
+Cortex & Hippocampus around the contusion,brain
+Cortex & Hippocampus around the injury,brain
+Cryopreserved PBMCs,blood
+D4 aggregate,other
+DAOY cell line,brain
+DAOY tumour-spheroid,brain
+DAOY-cerebellar organoid coculture,brain
+DDLPS_DD,adipose tissue
+DDLPS_WD,adipose tissue
+DLPFC,cortex
+DLPFC (Dorsolateral Prefrontal Cortex),cortex
+E14 retina,eye
+E14.5 dorsal telencephalon,brain
+E15 pregnant uterus,uterus
+E15.5 total backskin,skin of body
+E16.5 fetal proximal small intestine,small intestine
+E16.5 total backskin,skin of body
+E7-TCR T cells,immune system
+EG.7-OVA tumor,immune system
+ENT,respiratory system
+"ENT (Ear, Nose, Throat)",respiratory system
+ESC E14 (Embryonic Stem Cells),embryo
+ESCC cell line,esophagus
+ESI017 WT ESO hPSC,embryo
+ETX embryoid (Day 6),embryo
+EpiSC (Epithelial Stem Cells),other
+FDL tendon,skeletal system
+FDL tendons,skeletal system
+FNA,other
+FNAs,other
+FNAs (Fine-Needle Aspirates),other
+Fadu cell line (hypopharyngeal squamous carcinoma),respiratory system
+"Foetal liver, Foetal bone marrow",other
+G3 MB fresh tissue (from primary tumor #15),brain
+GBM biopsy,brain
+Gastrocnemius Skeletal Muscle,musculature
+Glioma-005,brain
+H1 human embryonic stem cells,embryo
+H9-derived neural progenitors,brain
+HCT116 (Colorectal carcinoma cell line),colon
+HF patient,other
+HSPC,bone marrow
+HY - HYa1,brain
+HY - HYa1 (specific brain region),brain
+HY - HYm2,brain
+HY - HYml,brain
+HY - HYml (specific brain region),brain
+HY - HYmm (specific brain region),brain
+HY - HYpl (specific brain region),brain
+HY - HYpm (specific brain region),brain
+HY - MEZ-PVZ-PVR,brain
+HY LZ,brain
+HY LZ (specific brain region),brain
+Hematopoietic Stem and Progenitor Cells (HSPC),bone marrow
+Hematopoietic Stem and Progenitor Cells (HSPCs),bone marrow
+HepaRG cells,liver
+HepaRG cells (derived from liver),liver
+Hepatocellular Carcinoma,liver
+High grade ovarian serous adenocarcinoma cells,ovary
+Human Umbilical Vein Endothelial Cells (HUVEC),vasculature
+Human neural progenitor cells (ReNcell VM),brain
+IMR90 (lung fibroblast cell line),lung
+Inguinal White adipose tissue,adipose tissue
+Jurkat T Lymphocytes,immune system
+Jurkat cells,immune system
+K562 (lymphoblast cells from CML),blood
+K562 (lymphoblast cells from Chronic Myeloid Leukemia),blood
+K562 cell line,blood
+K562 cells (erythroleukemia cell line),blood
+KPC organoid,pancreas
+LLC tumor,lung
+LLC1 Primary Tumor,lung
+"LesionWM, Brain",brain
+Liver P,liver
+Lung Draining Lymph Node,lymph node
+MB - PAG-RAmb (Adult Brain),brain
+MB - PAG-RAmb (Adult brain),brain
+MB - PAG-RAmb (Mouse Brain),brain
+MB - VTA-SN,brain
+MB-PONS - DR-PPN-SOC-V (specific brain region),brain
+MC38 tumors,colon
+MC38GP Tumor,colon
+MCF7,breast
+MCF7 cell line,breast
+MDA-MB-231-cortical organoid (GCO),cortex
+MDCK cells,kidney
+MDCK-SIAT1 and A549 cells,other
+MLN (Mesenteric Lymph Node),lymph node
+MMTV-PyMT tumor,breast
+MO-FRP,other
+MOp,cortex
+MOs-FRP,cortex
+MY - AP-DCO-VCO-DCN-ECU-NTS,musculature
+MY - CN-DCN-ECU-NTS-SPVC-SPVI-SPVO,musculature
+MY - MYsat-MYmot ant,musculature
+tissue,group
+a185_esophagus1,esophagus
+a188_esophagus1,esophagus
+a189_esophagus1,esophagus
+abdominal aorta,vasculature
+abdominal dialysis solution,other
+accumbens,brain
+adipose differentiating cells,adipose tissue
+adipose tissue,adipose tissue
+adjacent mucosa,mucosa
+adjacent noncancerous pancreatic tissue,pancreas
+"adjacent nonmalignant tissues,thyroid carcinoma",endocrine gland
+adjacent normal lung,lung
+adjacent tumor,other
+adrenal gland,adrenal gland
+adult brain - MB - PAG-RAmb,brain
+adult brain - MB - PRT,brain
+adult brain - MY - MYsat-MYmot ant,brain
+adult brain,brain
+adult human breast,breast
+adult kidney,kidney
+adult regenerating digit tip,other
+adult stem cell,other
+airway cells,respiratory system
+allograft tumor,other
+alveolar epithelial cells,lung
+anaplastic thyroid cancer,endocrine gland
+angioblasts and endothelial cells,vasculature
+ankle,skeletal system
+annulus fibrosus,skeletal system
+anogenital lesions,other
+anterior cingulate cortex,cortex
+anterior foregut endoderm,embryo
+anterior lobe of the prostate,prostate gland
+anterior palate,head
+antrum,stomach
+aorta,vasculature
+aortic root and ascending aorta,vasculature
+"aortic root, aortic arch, BCA, carotids",vasculature
+"aortic root, aortic arch, brachiocephalic artery, carotid arteries",vasculature
+aortic tissue,vasculature
+appendix,large intestine
+aqueous humor immune cells,eye
+articular cartilage of talus,skeletal system
+ascending aorta,vasculature
+ascending aortic wall tissue,vasculature
+ascending aortic wall,vasculature
+ascending colon,colon
+ascites cells from ovarian cancer patients,other
+ascites cells,other
+astrocyte and endothelial cells,brain
+atherosclerosis plaques,vasculature
+atherosclerotic plaque,vasculature
+atrioventricular canal (AVC),heart
+atrioventricular canal,heart
+auditory,sensory system
+basilic vein,vasculature
+bile duct,liver
+bladder tissue,urinary bladder
+bladder tumor,urinary bladder
+bladder,urinary bladder
+blastocyst,embryo
+blastocyte,embryo
+blood (CD4+ T cells),blood
+blood (PBMC),blood
+blood (PBMCs),blood
+blood (Peripheral Blood Mononuclear Cells - PBMCs),blood
+"blood (Peripheral Blood Mononuclear Cells, PBMCs)",blood
+blood (peripheral blood mononuclear cells),blood
+blood (Primary CD4+ T cells),blood
+blood (primary human CD4+ T cells),blood
+blood and liver,blood; liver
+blood and tumor,blood; other
+blood monocyte,blood
+blood monocytes,blood
+"blood, CD22+ B-lymphocyte",blood
+"blood, CD8+ T-lymphocyte",blood
+"blood, memory B cell",blood
+"blood, PBMC",blood
+"blood, specifically CD4 T cells",blood
+"blood, spleen, liver, lung, heart",blood; spleen; liver; lung; heart
+"blood, synovial fluid, synovial tissue, skin",blood; skeletal system; skin of body
+"blood, synovial fluid, synovial tissue",blood; skeletal system
+"blood, T cell",blood
+blood,blood
+bone (osteosarcoma),skeletal system
+bone and bone marrow,skeletal system; bone marrow
+bone marrow (femur),bone marrow
+bone marrow 14d post treatment (M18),bone marrow
+bone marrow 180d post treatment (M3),bone marrow
+bone marrow 180d post treatment (M81),bone marrow
+bone marrow 180d post treatment (T3),bone marrow
+bone marrow 180d post treatment (T56),bone marrow
+bone marrow 270d post treatment (M58),bone marrow
+bone marrow 30d post treatment (M38),bone marrow
+bone marrow 30d post treatment (M71),bone marrow
+bone marrow 30d post treatment (T24),bone marrow
+bone marrow 30d post treatment (T5),bone marrow
+bone marrow 30d post treatment (T6),bone marrow
+bone marrow 30d post treatment,bone marrow
+bone marrow 90d post treatment (T20),bone marrow
+bone marrow 90d post treatment (T58),bone marrow
+bone marrow 90d post treatment (T61),bone marrow
+bone marrow and peripheral blood,bone marrow; blood
+bone marrow and spleen,bone marrow; spleen
+bone marrow and splenic B cells,bone marrow; spleen
+bone marrow aspirate,bone marrow
+bone marrow baseline (T14),bone marrow
+bone marrow baseline (T18),bone marrow
+bone marrow biopsy,bone marrow
+bone marrow CD34-KSL cells,bone marrow
+bone marrow cells,bone marrow
+bone marrow derived macrophage,bone marrow
+bone marrow from AML PDXs,bone marrow
+bone marrow from cord blood PDXs,bone marrow
+bone marrow mononuclear cell,bone marrow
+"bone marrow, spleen",bone marrow; spleen
+"bone marrow, splenic B cells",bone marrow; spleen
+bone marrow,bone marrow
+bone scaffolds,skeletal system
+bone,skeletal system
+brachial artery,vasculature
+brachial lymph node,lymph node
+brain - cortex,brain
+brain - intermediate cortex,brain
+brain - prefrontal cortex,brain
+brain - STR - STRv,brain
+brain - TH,brain
+brain (barrel cortex),brain
+brain (cerebellum and olfactory bulb-removed),brain
+brain (cortex),brain
+brain (forebrain),brain
+brain (frontal cortex),brain
+brain (GBM tumour),brain
+brain (hippocampus),brain
+brain (including cortex and corpus callosum),brain
+brain (white matter from corpus callosum),brain
+brain (white matter),brain
+brain cells,brain
+brain cortex,brain
+brain frontal cortex,brain
+brain immune cells,brain
+brain meninges and associated vasculature,brain
+brain metastases,brain
+brain microenvironment enriched in astrocytes,brain
+brain microvessels,brain
+brain organoid,brain
+brain organoids,brain
+brain parenchyma,brain
+brain regions,brain
+brain section (ventral tegmental area),brain
+brain stem,brain
+brain tissue - striatum,brain
+brain tumor,brain
+brain white matter (contralateral to stroke),brain
+brain white matter (ipsilateral to stroke),brain
+brain white matter,brain
+"brain, cerebral cortex",brain
+"brain, corpus callosum",brain
+"brain, frontal lobe",brain
+"brain, grey matter",brain
+"brain, neocortex",brain
+"brain, specifically from white matter of the corpus callosum",brain
+"brain, specifically white matter",brain
+"brain, substantia nigra pars compacta",brain
+"brain, ventricular-subventricular zone",brain
+"brain, white matter",brain
+brain: hippocampus,brain
+brain,brain
+breast cancer adjacent tissue,breast
+breast cancer cell line,breast
+breast cancer cells,breast
+breast cancer tumor,breast
+"breast cancer, adjacent nonmalignant tissues",breast
+breast cancer,breast
+breast tissue (epithelial enriched),breast
+breast tissue,breast
+breast tumor tissue,breast
+breast tumor,breast
+"breast, epithelial enriched - LASP-sorted",breast
+"breast, epithelial enriched - unsorted",breast
+breast,breast
+bronchial brushing,respiratory system
+bronchial cells,respiratory system
+bronchial epithelial cells,respiratory system
+bronchial epithelium,respiratory system
+bronchoalveolar air,respiratory system
+bronchoalveolar lavage fluid (BALF) cells,respiratory system
+bronchoalveolar lavage fluid,respiratory system
+bronchoalveolar lavage,respiratory system
+bronchoalveolar,respiratory system
+brown adipose tissue,adipose tissue
+buccal mucosa,mucosa
+bulk lung,lung
+caecum,large intestine
+calvarial bone defect areas,skeletal system
+calvarial bone,skeletal system
+calvarial sutures,skeletal system
+cancer tumor tissues,other
+caput epididymidis,reproductive system
+carcinoma,other
+cardiac allograft,heart
+cardiac cells,heart
+cardiac immune cells,heart
+cardiac myxoma,heart
+cardiac progenitor cells,heart
+cardiac tissue,heart
+"cardiac, endothelial, mesenchymal, and hematopoietic tissue from organoids",heart
+"cardiac, pulmonary, splenic, renal, hepatic, muscular, bone",other
+cardiac,heart
+cardiomyogenic differentiation from CRISPRi TERT hiPSCs,heart
+carotid and aortic artery,vasculature
+carotid artery,vasculature
+carotid plaque,vasculature
+cartilage,skeletal system
+caudal forelimb area of primary motor cortex,brain
+caudate nucleus,brain
+caudate,brain
+celiac and superior mesenteric ganglia,peripheral nervous system
+cell culture in vitro,other
+cell cultures,other
+"cell line (A375, melanoma)",skin of body
+cell line xenograft,other
+cell line,other
+cells,other
+central nervous system-draining lymph nodes,lymph node
+central nervous system,central nervous system
+cerebellar cortex,brain
+cerebellar organoid,brain
+cerebellar organoids,brain
+cerebellum - hemispheres,brain
+cerebellum - vermis,brain
+cerebellum and olfactory bulb-removed brains,brain
+cerebellum,brain
+cerebral cortex,cortex
+cerebral organoid,brain
+cerebral organoids,brain
+cerebrospinal fluid (CSF) cells,central nervous system
+cerebrospinal fluid (CSF),central nervous system
+cerebrospinal fluid and blood,blood
+cerebrospinal fluid cells,central nervous system
+cerebrospinal fluid,central nervous system
+cervical cancer tissue,reproductive system
+cervical lymph node,lymph node
+cervix,reproductive system
+chimeras,other
+chorionic plate,placenta
+choroid plexus and ventricular wall,brain
+choroid,eye
+chronic foot ulcer,skin of body
+cingulate,brain
+cochlea,sensory system
+cochlear tissue,sensory system
+coculture of astrocyte cells and endothelial cells,other
+colon (normal tissue adjacent to neoplasm),colon
+colon (tumor and adjacent non-malignant tissue),colon
+colon assembloids,colon
+colon lamina propria,lamina propria
+colon organoids,colon
+colon tumor,colon
+colon tumors and adjacent normal colonic mucosa,colon
+colon,colon
+colonic fibroblast,colon
+colonic mucosa,mucosa
+colonic muscularis propria,colon
+colonic organoids,colon
+colonic tissue,colon
+colonic tissues,colon
+colonic tumor,colon
+colorectal cancer PDO,colon
+colorectal cancer,colon
+colorectal carcinoma cell (HCT116 cell line),colon
+colorectal carcinoma cell,colon
+colorectal carcinoma,colon
+contralateral brain tissue,brain
+control lymph node,lymph node
+cord blood mononuclear cells,blood
+cord blood,blood
+cornea,eye
+corneal epithelial cells,eye
+coronary artery,vasculature
+coronary plaque,vasculature
+corpus callosum white matter,brain
+corpus callosum,brain
+corpus,other
+cortex & hippocampus (3mm piece around the injury),brain
+cortex & hippocampus,brain
+cortex and hippocampus,brain
+"cortex, hippocampus",brain
+cortex,cortex
+cortical organoid,brain
+"cortical organoids, diencephalic organoids, hdSpO, hSeO",brain
+cortical organoids,brain
+cortical tissues,brain
+cranial bone,skeletal system
+cranial motor neurons (cMNs) at embryonic stages e10.5 and e11.5,brain
+cranial motor neurons at embryonic stages e10.5 and e11.5,brain
+cranial motor neurons from embryonic mouse tissue,brain
+cranial motor neurons,brain
+cranial region of mouse embryo,embryo
+cranial region,head
+decidua,uterus
+decidual and placental tissue,placenta
+decidual tissue,uterus
+dedifferentiated liposarcoma,adipose tissue
+deep cerebellar nuclei,brain
+definitive endoderm,embryo
+degenerative ligament,skeletal system
+delta cell-containing islet organoids,pancreas
+demineralised bone scaffold,skeletal system
+dental pulp stem cells,other
+dentate gyrus and subventricular zone of the brain,brain
+dentate gyrus,brain
+derived from human embryonic stem cells (hESC),embryo
+derived from human induced pluripotent stem cells (iPSCs),other
+derived from WA09 embryonic stem cells (ESC),embryo
+dermal fibroblasts and pluripotent stem cells,skin of body
+dermal fibroblasts,skin of body
+dermis,skin of body
+descending colon,colon
+developing cranial motor neurons,brain
+diaphragm,musculature
+differentiated human embryonic stem cells,embryo
+diffuse midline glioma,brain
+diffuse-type adenocarcinoma,stomach
+digested tumor,other
+dissociated human parathyroid,endocrine gland
+dissociated whole lung,lung
+dissociated whole tumor,other
+distal 2/3 of ileum,small intestine
+distal colon myenteric plexus,colon
+distal colon,colon
+dorsal aorta,vasculature
+dorsal dermis,skin of body
+dorsal forebrain organoids,brain
+dorsal forebrain,brain
+dorsal hippocampus,brain
+dorsal lobe of the prostate,prostate gland
+dorsal midbrain,brain
+dorsal root ganglia,peripheral nervous system
+dorsal skin biopsies,skin of body
+"dorsal skin, healthy",skin of body
+"dorsal skin, POD 4 wounded",skin of body
+dorsal skin,skin of body
+dorsal striatum,brain
+dorsal telencephalon,brain
+dorsal tissues,other
+"dorsal upper back, developmental stage: E14.5",skin of body
+dorsal upper back,skin of body
+dorsolateral prefrontal cortex,brain
+dorsomedial hypothalamus,brain
+draining (inguinal) lymph node,lymph node
+draining lymph node,lymph node
+draining lymph nodes,lymph node
+duodenal biopsy,small intestine
+duodenum,small intestine
+dura mater extrasinusoidal,central nervous system
+dura mater sinus,central nervous system
+dura,central nervous system
+ear skin,skin of body
+early blastoid,embryo
+elbow joint,skeletal system
+elongated neural tube organoid cultured in Matrigel drop for 10 days,central nervous system
+elongated neural tube organoid cultured in Matrigel drop for 6 days,central nervous system
+elongated neural tube organoid,central nervous system
+embryo (E8.5),embryo
+embryo and endometrial scaffold,embryo
+"embryo, cranial region",embryo
+embryo,embryo
+embryoid bodies,embryo
+embryoid bodies/myeloid-cell-forming complexes,embryo
+embryonic AGM cells,embryo
+embryonic and extraembryonic stem cells,embryo
+embryonic brain,brain
+embryonic foregut and midgut regions,digestive system
+embryonic hindlimb,hindlimb
+embryonic limb bud,embryo
+embryonic murine prosomere 2 (p2),brain
+embryonic pancreas,pancreas
+"embryonic stem cells, NIH3T3 cells",embryo
+embryonic stem cells,embryo
+embryonic,embryo
+endometrial epithelial organoids,uterus
+endometrial tumor tissue,uterus
+endometrium,uterus
+endothelial cells,vasculature
+endothelial,vasculature
+engineered T cells,immune system
+enriched RGC mouse retina,eye
+enriched T cells,immune system
+entorhinal cortex,cortex
+epidermis,skin of body
+epididymal adipose,adipose tissue
+epididymal fat (stromal vascular cells),adipose tissue
+epididymal fat,adipose tissue
+epididymal white adipose tissue,adipose tissue
+"epididymis, kidney, liver, lung, stomach",other
+"epithelial cells (End1/E6E7), fibroblasts (KCO2)",other
+epithelial tissue,other
+erythroid cells,blood
+erythroid progenitor,blood
+esophageal carcinoma,esophagus
+esophageal epithelium organoids,esophagus
+esophageal/gastroesophageal junction tumor,esophagogastric junction
+esophagitis,esophagus
+esophagus,esophagus
+exfoliated deciduous teeth,other
+extraembryonic endoderm stem cell,embryo
+extraembryonic mesoderm-like cells,embryo
+extrahepatic bile duct,digestive system
+eye (cornea),eye
+eye ball,eye
+eye organoid,eye
+eye,eye
+"eyecups containing retina, lens, and blood",eye
+female reproductive tract,reproductive system
+femoral and tibial growth plate cartilage,skeletal system
+femur and tibia,skeletal system
+fetal eye,eye
+fetal liver and fetal bone marrow,other
+"fetal liver, fetal bone marrow",other
+fetal liver,liver
+fetal lung organoids,lung
+fetal lung tissue,lung
+fetal lung,lung
+fetal ovarian somatic cells,ovary
+fetal sinoatrial node,heart
+fibrous dysplasia bone tissue,skeletal system
+fine-needle aspirates,other
+first-trimester decidua,uterus
+flank tumor section,other
+floor plate of midbrain,brain
+foetal liver and foetal bone marrow,liver;bone marrow
+"foetal liver, foetal bone marrow",liver;bone marrow
+foetal liver,liver
+follicle,ovary
+foot ulcer,skin of body
+forebrain,brain
+forelimb buds,forelimb
+fracture callus tissue,skeletal system
+frontal cortex (BA9),brain
+frontal cortex (brain),brain
+frontal cortex,brain
+frontal white matter,brain
+frozen heart,heart
+gastric cancer liver metastasis,liver
+gastric corpus epithelium,stomach
+gastric mucosa,stomach
+gastric muscle,stomach
+gastric tissue,stomach
+gastric,stomach
+gastrocnemius skeletal muscle,musculature
+gastrointestinal tract epithelium,digestive system
+gastruloid,embryo
+gastruloids derived from mouse embryonic stem cells,embryo
+gastruloids,embryo
+"gd T cells from spleen, lung, lymph nodes, jejunum, mesenteric lymph nodes",immune system
+gd T cells,immune system
+genitalia,reproductive system
+gingival,mucosa
+glioblastoma-cortical organoid (GCO),brain
+glioblastoma-cortical organoid,brain
+glioblastoma,brain
+glioma,brain
+gliomasphere,brain
+gonadal adipose tissue,adipose tissue
+gonadal,reproductive system
+great auricular nerve,peripheral nervous system
+gut,digestive system
+heart (left ventricle),heart
+heart (right ventricle),heart
+heart tissue (ventricles),heart
+heart valve,heart
+heart ventricle,heart
+heart ventricles,heart
+"heart, left ventricle",heart
+"heart, right ventricle",heart
+"heart, specifically right ventricle",heart
+"heart, specifically the left ventricle",heart
+heart,heart
+hematopoietic cells from IPSC,blood
+hematopoietic cells from iPSCs,blood
+hematopoietic cells,blood
+hematopoietic stem and progenitor cells,blood
+hematopoietic system,blood
+hematopoietic,blood
+hemibrain (olfactory bulb removed),brain
+"hemibrain, olfactory bulb removed",brain
+hepatocellular carcinoma,liver
+hepatocyte (derived from HepaRG cells),liver
+hESC-derived distal lung organoid,lung
+hESC-derived neuromesodermal progenitors,embryo
+hESC-derived Oligodendrocyte Progenitor Cells (OPCs),central nervous system
+hESC-derived skin organoid,skin of body
+hESC-derived spinal neuronal cultures,spinal cord
+hESC-derived trunk neural crest derivatives,peripheral nervous system
+hESC,embryo
+hESCs (human embryonic stem cells),embryo
+heterogeneous differentiating culture,other
+high grade brain tumor,brain
+high grade serous ovarian cancer cell,ovary
+"high grade serous ovarian cancer, patient derived xenograft",ovary
+hindbrain,brain
+hindlimb buds,hindlimb
+hindlimb,hindlimb
+hindpaw,hindlimb
+hippocampal and cortical regions of brain,brain
+hippocampal and cortical regions of the brain,brain
+hippocampal organoid,brain
+hippocampus,brain
+hiPSC 2D gastruloid,embryo
+hiPSC-derived GABAergic neurons,central nervous system
+hiPSC-derived neuron,central nervous system
+hiPSC-derived skin organoid,skin of body
+hiPSC,other
+"hNSC-derived astrocytes/neurons, hiPSC-derived microglia",central nervous system
+hNSC-derived astrocytes/neurons; hiPSC-derived microglia,central nervous system
+hPS-derived medial pallium organoids,brain
+hPSC-derived cardiac cells,heart
+hPSC-derived colonic organoids,colon
+human airway organoid,respiratory system
+human RA gastruloid,embryo
+"human umbilical cord endothelial cells, normal human lung fibroblast",vasculature
+left atrium,heart
+left hemisphere,brain
+left ventricle,heart
+left-sided colon,colon
+leptomeninges,central nervous system
+limb muscle (below knee),musculature
+liver (parenchymal and non-parenchymal fractions),liver
+liver biopsy,liver
+liver bud organoid,liver
+liver containing metastases of CRC origin,liver
+liver explant,liver
+liver macrophages,liver
+liver metastases of CRC origin,liver
+liver metastasis from prostate cancer,liver
+liver metastatic tumor,liver
+"liver normal, colorectal cancer patient",liver
+liver tumor,liver
+"liver, bone marrow",liver
+"liver, gonadal adipose tissue, pancreas",liver
+"liver, heart",liver
+"liver, kidney, muscle",liver
+"liver, lung, small intestine, lymph nodes, spleen",liver
+liver; bone marrow,liver
+liver,liver
+"long bone (femurs, tibiae, and humeri)",skeletal system
+"long bones (femurs, tibiae, humerus)",skeletal system
+"long bones (hip, femur, tibia, fibula, humerus, radius, and ulnar bones)",skeletal system
+long bones,skeletal system
+longbone periosteum,skeletal system
+low grade brain tumor,brain
+lumbar disc 3,skeletal system
+lung (CD11b+ cells),lung
+lung adenocarcinoma cell,lung
+lung adenocarcinoma,lung
+lung adjacent normal,lung
+lung cancer cell line,lung
+lung cells,lung
+lung draining lymph node,lymph node
+lung endothelial cells,lung
+lung immune cells,lung
+"lung lymph node, mesenteric lymph node, lung",lymph node
+lung neoplasms,lung
+lung organoid co-cultured with macrophage,lung
+lung organoids,lung
+lung primary cells,lung
+lung tissue (bronchoalveolar lavage),lung
+lung tissue (isolated from bronchoalveolar lavage),lung
+lung tissue,lung
+lung tumor central margin,lung
+lung tumor subpleural margin,lung
+lung tumor,lung
+lung tumors,lung
+"lung, brain, pleural fluid",lung
+"lung, lower lobe",lung
+lung,lung
+lungs,lung
+lymph node lymphocytes,lymph node
+lymph node metastasis,lymph node
+lymph node,lymph node
+lymph nodes,lymph node
+lymphocyte,immune system
+lymphoid tissue,immune system
+macula lutea,eye
+mammary epithelial cells,breast
+mammary fat pad,breast
+mammary fat-pad tumor,breast
+mammary gland,breast
+mammary pad,breast
+mammary tissue,breast
+mammary tumor,breast
+mammary_pad,breast
+mammary,breast
+mammillary body,brain
+marrow,bone marrow
+maxillary gingival tissue,mucosa
+medial frontal gyrus,cortex
+medial ganglionic eminence (MGE),brain
+medial prefrontal cortex,cortex
+mediastinal lymph node,lymph node
+medium/small size pulmonary artery,vasculature
+medullary brainstem,brain
+megakaryoblast cells (MEG01),blood
+melanoma cell,skin of body
+melanoma subcutaneous tumor,skin of body
+melanoma tumor,skin of body
+melanoma,skin of body
+"meninges, dura mater",central nervous system
+"meninges, leptomeninges",central nervous system
+meninges,central nervous system
+Merkel cell carcinoma tumor digest,skin of body
+Merkel cell carcinoma,skin of body
+mESC and gastruloids,embryo
+mesenchymal cells co-cultured with KPY organoids,other
+mesenchymal cells co-cultured with Y organoids,other
+mesenchymal cells,other
+mesenchymal co-culture,other
+mesenchymal stem cells,other
+mesenchyme embryonic hind limb bud cells,hindlimb
+mesendoderm derivatives,embryo
+mesenteric lymph node,lymph node
+mesenteric lymph nodes,lymph node
+Midbrain - Ventral Tegmental Area - Substantia Nigra,brain
+Mixed sample (Spleen/Lymphnode),immune system
+Motor Cortex (MOp),brain
+Motor Cortex,brain
+mPRAT Adipose,adipose tissue
+MY - MYsat-MYmot post,musculature
+MY - MYsat-Mymot-vent ant,musculature
+MY - MYsat-MYmot-vent post,musculature
+MY - SPVC-SPVI-SPVO (specific brain regions),musculature
+MY - SPVC-SPVI-SPVO,musculature
+MY - VNC-PHY-DMX-XII,musculature
+NK cell,immune system
+NKTs (Natural Killer T cells),immune system
+NKTs,immune system
+NRAS-mutated melanoma PDX,skin of body
+NSC differentiation cell culture,brain
+OCCC tumor,ovary
+OCI-Ly18 subcutaneous tumor (NSG),lymph node
+OLF - AON-TT-DP-PIR-COA-NLOT-PAA-TR (specific brain regions),brain
+OLF - AON-TT-DP-PIR-COA-NLOT-PAA-TR,brain
+OLF - COA-PAA-NLOT-TR,brain
+OLF - MOB-AOB,brain
+ONS-76 tumour-spheroid,brain
+ONS-76-cerebellar organoid coculture,brain
+OSCC-GB primary tumor tissue,mucosa
+OVCA420 cell line,ovary
+P14 CD8 T cells,immune system
+P5 Retinal,eye
+P6 Terminal ileum and ascending colon biopsies,digestive system
+Pancreatic Islets of Langerhans,pancreas
+PAR-POST-PRE-SUB-ProS (specific brain regions),brain
+PAR-POST-PRE-SUB-ProS,brain
+PBMC (Peripheral Blood Mononuclear Cells),blood
+PBMC 14 days post treatment,blood
+PBMC 14d post treatment (M21),blood
+PBMC 14d post treatment (M9),blood
+PBMC 14d post treatment (T7),blood
+PBMC 14d post treatment (T80),blood
+PBMC 180 days post treatment,blood
+PBMC 180d post treatment (M28),blood
+PBMC 180d post treatment,blood
+PBMC 270 days post treatment,blood
+PBMC 30 days post treatment,blood
+PBMC 30d post treatment (M72),blood
+PBMC 30d post treatment (M74),blood
+PBMC 30d post treatment (M92),blood
+PBMC 30d post treatment,blood
+PBMC 360 days post treatment,blood
+PBMC 360d post treatment (M56),blood
+PBMC 90 days post treatment,blood
+PBMC 90d post treatment (M34),blood
+PBMC 90d post treatment (M65),blood
+PBMC 90d post treatment (M90),blood
+PBMC 90d post treatment (T78),blood
+PBMC 90d post treatment (T84),blood
+PBMC Baseline (M13),blood
+PBMC Baseline (M15),blood
+PBMC Baseline (M17),blood
+PBMC Baseline (M2),blood
+PBMC Baseline (M24),blood
+PBMC Baseline (M86),blood
+PBMC Baseline (T2),blood
+PBMC Baseline (T22),blood
+PBMC Baseline (T52),blood
+PBMC Baseline (T54),blood
+PBMC Baseline (T85),blood
+PBMC from 2 donors,blood
+PBMC from Healthy control (M49),blood
+PBMC from healthy control,blood
+PBMC from peripheral blood,blood
+PBMC Healthy control (M47),blood
+PBMC Healthy control (T50),blood
+PBMC isolated from blood,blood
+PBMC,blood
+PBMCs (Peripheral Blood Mononuclear Cells),blood
+PBMCs and iPSCs,blood
+PBMCs,blood
+PDAC (Pancreatic Ductal Adenocarcinoma),pancreas
+PDAC tumor,pancreas
+PDAC tumors,pancreas
+PDAC,pancreas
+PDO harvested at day 61,other
+PDX mammary tumor,breast
+PDX meningioma,brain
+PDX organoid,other
+PDX-GIC-sample,brain
+Percoll density separated tumor,other
+Peripheral blood (NSG),blood
+Peripheral Blood and Bone Marrow,blood; bone marrow
+Peripheral blood and Prostate,blood; prostate gland
+Peripheral Blood Lymphocytes (PBL),blood
+Peripheral Blood Mononuclear Cells (PBMC) 90 days post treatment,blood
+"Peripheral Blood Mononuclear Cells (PBMC), CD4 enriched",blood
+Peripheral Blood Mononuclear Cells (PBMC),blood
+Peripheral blood mononuclear cells (PBMC),blood
+Peripheral Blood Mononuclear Cells (PBMCs),blood
+Peripheral blood mononuclear cells (PBMCs),blood
+Peripheral blood mononuclear cells,blood
+"Peripheral blood, CD4+ CD26- T cells",blood
+Peripheral Blood,blood
+"Peritoneal Cavity, Spleen",spleen
+Peyer's patch,small intestine
+Pharyngeal Endoderm (PE),embryo
+PL-ILA-ORB (specific brain region),brain
+Plerixafor mobilized HSPCs,bone marrow
+PNET tumor,brain
+PONS - Pmot-Psat ant,brain
+PONS - Pmot-Psat post,brain
+PONS - Psen,brain
+Primary CD25+CD127-Treg,immune system
+Primary CD4 cells,immune system
+Primary CD4+ T cells,immune system
+Primary Hematopoietic Stem and Progenitor Cells (HSPCs),bone marrow
+Primary human CD4+ T cells (blood),blood
+PT organoid (from colorectal cancer),colon
+PT organoid,other
+PTCC organoid,other
+PTLp (Posterior Thalamic Nucleus),brain
+PTN organoid,other
+PVN (Paraventricular Nucleus),brain
+"RD (ATCC, CCL-136) cell line",musculature
+ReNcell VM human neural progenitor,brain
+Retrosplenial Cortex (RSP),cortex
+RM1 Tumors,other
+RMA-Qa1KO Tumor,other
+RPE/choroid,eye
+S1 cortex,cortex
+SAP developmental cells,other
+Schwannoma cells,peripheral nervous system
+SHH MB tumors with MBEN histology,brain
+Sigma,other
+SS-GU-VISC,other
+SSp (Somatosensory Cortex),cortex
+SSs-GU-VISC-AIp,other
+STR - LSX,brain
+STR - sAMY (Striatum - Amygdala),brain
+STR - STRd,brain
+STR - STRv,brain
+SW1 melanoma tumors,skin of body
+T cell,immune system
+T cells cultured in extracellular matrices,immune system
+T cells from PBMCs,immune system
+T cells,immune system
+T47D cell line,breast
+TCR negative T cells,immune system
+TEa-PERI-ECT,other
+TH - Anterior (part of the brain),brain
+TH - Anterior,brain
+TH - LGd-IGL-LGv,brain
+TH - MG-SPFp-PP-POL-SGN-PoT-PIL,brain
+TH - Middle-lateral (part of the adult brain),brain
+TH - Middle-lateral,brain
+TH - Middle-medial,brain
+TH - PO-Eth,brain
+TH - Posterior (Tissue from the adult mouse brain),brain
+TH - Posterior,brain
+TH - RE-RH-CM-IAM-SMT-PR-Xi,brain
+TH (Tyrosine Hydroxylase),brain
+TH,brain
+TILs from organoid-derived primary colorectal cancer (CRC),colon
+Tissue Resident Memory T cells,immune system
+Undifferentiated Pleiomorphic Sarcoma tumor,other
+VAD ERG (Vascular Dementia Endothelial),vasculature
+Venus-negative TECs,immune system
+Venus-positive TECs,immune system
+VIS-PTLp (part of the adult brain),cortex
+VIS-PTLp,cortex
+VISm (Visual cortex),cortex
+VISp (Visual Cortex),cortex
+VISp (Visual cortex),cortex
+WDLPS,adipose tissue
+WT organoid,other
+XEN (Extraembryonic endoderm stem cell),embryo
+XEN-iPS,embryo
+XEN,embryo
+human ascending somatosensory assembloids,central nervous system
+human ascending somatosensory assembloids (hASA),central nervous system
+human bronchial epithelial cells,respiratory system
+human bronchial epithelial cells (HBE),respiratory system
+human dermal fibroblasts,skin of body
+human embryo and endometrial scaffold,embryo
+human embryoids,embryo
+human embryonic stem cells,embryo
+human embryonic stem cells (hESC),embryo
+human fetal osteoblasts (hFOB 1.19),skeletal system
+human intestinal organoid,intestine
+human liver bud organoid (HLBO),liver
+human mammary epithelial cells,breast
+human neural stem cells,central nervous system
+hypodermis,adipose tissue
+hypothalamic cells,brain
+hypothalamus,brain
+iBAT Adipose,adipose tissue
+idiopathic subglottic tracheal stenosis,respiratory system
+iDiscoid embryo model,embryo
+ileal pouch,small intestine
+ileum,small intestine
+ileum IEL,small intestine
+ileum IEL (Intraepithelial lymphocytes),small intestine
+iMeLC (induced Mesodermal-like Cells),other
+immune cells,immune system
+in vitro,other
+in vitro culture,other
+in vitro differentiated cells,other
+incisor tissue,skeletal system
+incisor tooth,skeletal system
+induced from hADSC,adipose tissue
+induced from human adipose-derived stem cells (hADSC),adipose tissue
+induced pluripotent stem cell,other
+induced pluripotent stem cell-derived cardiomyocytes,heart
+induced pluripotent stem cells,other
+induced pluripotent stem cells (iPSCs),other
+induced Treg (Regulatory T cells),immune system
+inferior frontal gyrus,brain
+inferior frontal gyrus (IFG),brain
+inferior vena cava,vasculature
+infrarenal segment of the aorta,vasculature
+inguinal lymph node,lymph node
+inguinal lymph nodes,lymph node
+inguinal white adipose,adipose tissue
+inguinal white adipose tissue,adipose tissue
+inguinal white adipose tissue (iWAT),adipose tissue
+injured heart,heart
+injured heart tissue,heart
+inner cell mass,embryo
+inner cell mass (from brain organoid),embryo
+inner ear cochlea,sensory system
+inner ear organoids,sensory system
+interscapular brown adipose tissue,adipose tissue
+intervertebral disc nucleus pulposus cells,skeletal system
+intervertebral discs,skeletal system
+intestinal enriched crypts,intestine
+intestinal epithelial cells,intestine
+intestinal epithelium,intestine
+intestinal organoid,intestine
+intestine,intestine
+intestine (ileum),small intestine
+intracranial tumors,brain
+intraembryonic mouse embryo,embryo
+iPS-derived Brain Organoids,central nervous system
+iPS-derived Retinal Organoids,eye
+iPSC,other
+iPSC-derived astrocyte,central nervous system
+iPSC-derived CD4+ T cells,immune system
+iPSC-derived culture,other
+iPSC-derived microglia,central nervous system
+iPSC-derived T cells,immune system
+iPSC-derived Tenocytes,tendon of semitendinosus
+iPSC-Treg,immune system
+iPSCs,other
+iPSCs (induced pluripotent stem cells),other
+ischemic muscles,musculature
+islet cells,pancreas
+isolated islets,pancreas
+iXEN,embryo
+joint,skeletal system
+joint (IPFP/synovium cells),skeletal system
+kidney,kidney
+kidney biopsy,kidney
+kidney biopsy tissue,kidney
+kidney cortex,kidney
+kidney grafts,kidney
+kidney organoid,kidney
+kidney organoids,kidney
+kidney proximal tubule,kidney
+labial salivary gland,exocrine gland
+lacrimal gland,exocrine gland
+lamina propria,lamina propria
+large intestinal lamina propria,lamina propria
+large intestine,large intestine
+larynx,respiratory system
+lateral amygdala,brain
+"lateral nasal gland, nasal mucosa",nose
+left atrial tissue,heart
+mesenteric lymph nodes and peritoneum,lymph node
+mesentery metastasis of intestinal adenocarcinoma,intestine
+metastatic tumor in the liver,liver
+"metastatic tumor in the liver, breast cancer",liver
+methanol-fixed MDCK-SIAT1 and infected A549 cells,other
+micro-patterned airway epithelial cells,respiratory system
+micro-small intestinal tissue,small intestine
+microfluidic human skin equivalents,skin of body
+microfluidic skin equivalent (HSE),skin of body
+microfluidic skin equivalents,skin of body
+mid thoracic spinal cord,spinal cord
+mid-gut,small intestine
+mid-secretory endometrium,uterus
+midbrain,brain
+midbrain - inferior colliculus,brain
+midbrain organoids,brain
+mineralized and demineralized bone scaffolds,skeletal system
+mineralized bone scaffold,skeletal system
+minor labial salivary gland,exocrine gland
+mixed,other
+"mixed sample (melanoma, pancreatic cancer, non-small cell lung cancer)",other
+"mixture of lung lymph node, mesenteric lymph node, lung",other
+molar tooth,other
+monocyte-derived macrophages,immune system
+monocytes/macrophages,immune system
+motor cortex,brain
+mouse,other
+mouse blastoid,embryo
+"mouse brain, motor cortex, cingulate cortex",brain
+"mouse cell line single cell, IDHmutant mouse glioma cell",brain
+"mouse cell line single cell, IDHmutant mouse glioma cell NOTCH1 KO",brain
+mouse embryo,embryo
+"mouse embryo, cranial region",embryo
+mouse embryoid bodies,embryo
+mouse embryoid body from epiblast cell line,embryo
+mouse embryonic AGM cells,embryo
+mouse embryonic stem cells,embryo
+mouse embryonic stem cells and gastruloids,embryo
+mouse gastruloid,embryo
+murine embryonic fibroblasts,embryo
+muscle,musculature
+myocardium,heart
+myometrial cells,uterus
+myometrium,uterus
+nasal,nose
+nasal associated lymphoid tissue and olfactory epithelium,nose
+nasal epithelial and immune cells,nose
+nasal epithelial cells,nose
+nasal inferior turbinate,nose
+nasal mucosa,nose
+"nasal mucosa, respiratory mucosa",nose
+natural killer (NK) cells,immune system
+natural killer cells,immune system
+neonatal mouse derma,skin of body
+neonatal mouse dermis,skin of body
+neonatal oviduct,fallopian tube
+neonatal uterus,uterus
+neoplasm,other
+neoplasm (tumor tissue from melanoma),skin of body
+neoplasm (tumor tissue),other
+neoplasm (tumor),other
+nervous tissue,central nervous system
+nervous tissue formation,central nervous system
+neural,central nervous system
+neural cells,central nervous system
+neural culture cells,central nervous system
+neural organoid,brain
+neural progenitor cells,central nervous system
+neural progenitors,central nervous system
+neural retina,eye
+neural stem cells derived from the hippocampus,brain
+neural tube cells,embryo
+neural tube organoid,embryo
+neural tube organoids,embryo
+neuroblastoma cells (SH-SY5Y),peripheral nervous system
+neuron,central nervous system
+neurons and astrocytes derived from iPSCs,central nervous system
+neurons differentiated from iPSCs,central nervous system
+neutrophil,immune system
+non mobilized HSCPs,bone marrow
+non mobilized HSPCs,bone marrow
+non tumor,other
+non-draining lymph node (axillary),lymph node
+non-draining lymph nodes,lymph node
+normal appendix,large intestine
+nose,nose
+not applicable,other
+not_applicable,other
+nucleus pulposus,skeletal system
+nucleus pulposus tissue,skeletal system
+ocular,eye
+ocular immune cells,eye
+olfactory - piriform cortex,brain
+olfactory and anterior olfactory nucleus,brain
+olfactory bulb,brain
+olfactory epithelium,nose
+"olfactory mucosa, nasal mucosa",nose
+olfactory region,nose
+omental fat,omentum
+omental white adipose tissue,omentum
+omentum,omentum
+oral cavity,mucosa
+oral mucosa,mucosa
+oral squamous cell carcinoma,mucosa
+oral squamous cell carcinoma tissue,mucosa
+orbitofrontal cortex,brain
+organoid,other
+organoids,other
+orthotopic tumor,other
+orthotopic tumor (PDA.7940B tumor cells),other
+ossicles,skeletal system
+osteosarcoma tumor,skeletal system
+ovarian,ovary
+ovary,ovary
+oviduct,fallopian tube
+oviduct (infundibulum and ampulla),fallopian tube
+oviduct (isthmus and uterotubal junction),fallopian tube
+palatine tonsil,immune system
+pancreas,pancreas
+pancreas metastasis,pancreas
+pancreas tumor,pancreas
+pancreatic,pancreas
+pancreatic cancer organoid,pancreas
+pancreatic cancer primary tumor,pancreas
+pancreatic draining lymph nodes,lymph node
+pancreatic draining lymph nodes (pLN),lymph node
+pancreatic islet,pancreas
+pancreatic islets,pancreas
+pancreatic lymph node,lymph node
+pancreatic lymph nodes,lymph node
+pancreatic orthotopic tumor cells,pancreas
+pancreatic tissue,pancreas
+pancreatic tumor,pancreas
+pancreatic tumor tissue,pancreas
+papilloma,other
+parathyroid adenoma cells,endocrine gland
+paraventricular nucleus (PVN),brain
+parietal cortex,brain
+parietal pleura,pleura
+parotid gland,exocrine gland
+patient-derived AML cells,bone marrow
+patient-derived neurospheres,brain
+patient-derived xenograft,other
+patient-derived xenograft (PDX) meningioma,brain
+patient-derived xenograft AML cells,bone marrow
+pelvic organs,reproductive system
+percoll density separated tumor,other
+periodontal ligament (PDL),skeletal system
+periodontal tissue,skeletal system
+periosteum,skeletal system
+periovarian fat,adipose tissue
+peripheral blood,blood
+peripheral blood (NSG),blood
+peripheral blood mononuclear cell,blood
+peripheral blood mononuclear cell (PBMC),blood
+peripheral blood mononuclear cells,blood
+peripheral blood mononuclear cells (PBMC),blood
+peripheral blood mononuclear cells (PBMCs),blood
+peripheral blood mononuclear cells and bronchoalveolar lavage cells,other
+peripheral blood mononuclear cells and tumor biopsies,other
+"peripheral blood, synovium, connective tissue",other
+peripheral nerve tumor,peripheral nervous system
+peripheral region of retina,eye
+peripheral venous blood,blood
+"peritoneal cavity, spleen",other
+peritoneal cells,other
+peritoneal dialysis overnight effluent,other
+peritoneal exudate,other
+peritoneal lavage cells,other
+peritoneal metastasis,other
+peritoneum,other
+perivascular adipose tissue,adipose tissue
+periventricular white matter,brain
+pituitary,endocrine gland
+pituitary gland,endocrine gland
+placenta,placenta
+placenta villi,placenta
+plantar skin,skin of body
+plaque isolated cells,vasculature
+plasma,blood
+plasmablast,immune system
+pleural effusion,pleural fluid
+pleural mesothelioma,pleura
+plexiform neurofibroma,peripheral nervous system
+pluripotent stem cells-derived beta cells,pancreas
+pluripotent stem cells-derived β cells,pancreas
+pons,brain
+pons/medulla,brain
+popliteal lymph node,lymph node
+post mortem human brain,brain
+post-mortem tissue,other
+posterior cerebellum,brain
+posterior of eye,eye
+postmortem human brain,brain
+pre-manufacture T cells,immune system
+pre-pouch ileum,small intestine
+prefrontal cortex,brain
+primary airway cells,respiratory system
+primary breast tumor,breast
+primary CD4 cells,immune system
+primary cell culture,other
+primary cells,other
+primary cells (from PDX tumor samples),other
+primary cells from PDX tumor samples,other
+primary hematopoietic stem and progenitor cells (HSPCs),bone marrow
+primary HSPC (Hematopoietic Stem and Progenitor Cells),bone marrow
+primary human breast tissue,breast
+primary human epididymis epithelial cells,reproductive system
+primary motor cortex,brain
+primary mouse embryonic fibroblasts,embryo
+primary mouse embryonic fibroblasts (MEFs),embryo
+primary osteosarcoma tumor tissue,skeletal system
+primary patient-derived gliomasphere,brain
+primary teeth,skeletal system
+primary Treg (regulatory T cells),immune system
+primary tumor,other
+primed hESCs,embryo
+primed induced pluripotent stem cells from adult human dermal fibroblasts,other
+prostate,prostate gland
+prostate cancer,prostate gland
+prostate cancer cell line (C4-2B),prostate gland
+prostate organoid,prostate gland
+"prostate tumor, lymph node",prostate gland
+"prostate tumor, primary",prostate gland
+proximal colon,colon
+rectum,large intestine
+regenerative tissue,other
+renal cell carcinoma,kidney
+renal cells,kidney
+renal organoids,kidney
+reprogramming intermediate,other
+resection,other
+respiratory mucosa,mucosa
+"respiratory mucosa, nasal mucosa",mucosa
+rete ovarii and ovarian capsule,ovary
+retina,eye
+retina enriched sample,eye
+retinal,eye
+retinal epithelium,eye
+retinal ganglion cells,eye
+retinal organoid,eye
+retinal organoids,eye
+retinal pigment epithelium,eye
+retrosplenial cortex,brain
+"right brain hemisphere, minus cerebellum and olfactory bulb",brain
+right ventricle,heart
+rostral rhinal hub,brain
+rotator cuff,musculature
+s.c. tumor,skin of body
+salivary gland,exocrine gland
+salivary glands (parotid and submandibular),exocrine gland
+sAMY (Subregion of the mouse brain),brain
+scalp,scalp
+schwannoma,peripheral nervous system
+schwannoma cells,peripheral nervous system
+sciatic nerve,peripheral nervous system
+seminal vesicle,reproductive system
+sentinel lymph node,lymph node
+serum,blood
+sigma,large intestine
+sigma (colonic tissue),large intestine
+single cell suspension from HCC,liver
+skeletal muscle,musculature
+skeletal muscle; flexor hallucis longus,musculature
+skin,skin of body
+skin (keloid tissue),skin of body
+skin adipose,adipose tissue
+skin epidermis,skin of body
+skin fibroblast,skin of body
+skin of body,skin of body
+"skin of body, matched livers",skin of body
+skin of prepuce of penis,skin of body
+skin punch biopsy,skin of body
+skin tumor,skin of body
+skin-derived,skin of body
+"skin, inner cell mass",skin of body
+"skin, lymph node, tumor",skin of body
+"skin, neoplasm",skin of body
+skull,skeletal system
+small intestinal epithelial villi,small intestine
+small intestinal epithelium,small intestine
+small intestinal lamina propria,small intestine
+small intestine,small intestine
+small intestine jejunum,small intestine
+small intestine lamina propria,small intestine
+small intestine LP,small intestine
+small intestine tumor,small intestine
+small intestine tumour,small intestine
+solid tumors,other
+somatic cells,other
+somatic cells during chemical reprogramming stage II,other
+somatosensory cortex,brain
+sorted cell,other
+spheroids,other
+spinal cord,spinal cord
+spinal cord (neonatal),spinal cord
+spinal cord central canal region,spinal cord
+spinal cord motor neuron organoid,spinal cord
+spinal cords from E12.5 mice,spinal cord
+spleen,spleen
+spleen and lymph nodes,immune system
+"spleen, mesenteric LN, inguinal LN, skin",immune system
+"spleen, mesenteric lymph nodes, inguinal lymph nodes, skin",immune system
+splenic dendritic cells,spleen
+splenic T cells,spleen
+splenocyte,spleen
+splenocytes,spleen
+stellate ganglia,peripheral nervous system
+stem cell derived choroid plexus brain organoids,brain
+stem cell-derived ETX embryoid,embryo
+stem cell-derived oligodendrocyte progenitor cells,brain
+stem cells,other
+stembryo,embryo
+stomach,stomach
+stomach flush,stomach
+striatum,brain
+striatum - amygdala,brain
+striatum - lateral striatum,brain
+sub-cutaneous tumor,skin of body
+subcutaneous inguinal adipose depot,adipose tissue
+subcutaneous MC38 tumors,skin of body
+subcutaneous melanoma,skin of body
+subcutaneous tumor,skin of body
+subcutaneous tumors,skin of body
+subcutaneous tumour,skin of body
+subcutaneous white adipose tissue,adipose tissue
+subependymal zone,brain
+subfornical organ (SFO),brain
+subgalea,scalp
+subgalea and epidural,scalp
+subglottic tracheal tissue,respiratory system
+"submandibular gland, spleen",other
+submandibular salivary gland,exocrine gland
+substantia nigra,brain
+subventricular zone,brain
+subventricular zone (adult brain),brain
+superior colliculus,brain
+supraclavicular brown adipose tissue,adipose tissue
+syngeneic brain tumors,brain
+syngeneic tumor model,other
+synovial ankle/wrist joints,skeletal system
+synovial fluid,skeletal system
+synovial joint,skeletal system
+synovial membrane,skeletal system
+synovial tissue,skeletal system
+synovium,skeletal system
+synthetic-embryo,embryo
+telencephalon medial pallium,brain
+temporal cortex,brain
+tendon injury,skeletal system
+terminal ileum,small intestine
+testes,testis
+testis,testis
+thalamic organoid,brain
+thalamus,brain
+third pharyngeal region cells,respiratory system
+thoracic aorta,vasculature
+thoracic wall,chest wall
+thymic epithelial cells,immune system
+thymic hematopoietic cells,immune system
+thymic stromal cells,immune system
+thymus,immune system
+thyroid,endocrine gland
+thyroid follicle organoid,endocrine gland
+thyroid tumor,endocrine gland
+thyroid tumor and adjacent normal thyroid,endocrine gland
+tibialis anterior,musculature
+tibialis anterior muscle,musculature
+"tibialis anterior, gastrocnemius",musculature
+tissue donors,other
+tongue,tongue
+tongue epithelium,tongue
+tonsil,immune system
+tonsil and blood,immune system
+tonsillar cancer,immune system
+tonsils,immune system
+trabecular bone tissue,skeletal system
+trabecular meshwork,eye
+trachea,respiratory system
+tracheal aspirate,respiratory system
+tracheobronchial epithelium,respiratory system
+transplanted cells,other
+transplanted human intestinal organoids,intestine
+transplanted mouse bone marrow,bone marrow
+transverse colon,colon
+traumatic ligament,skeletal system
+trigeminal ganglia,peripheral nervous system
+trophoectoderm,embryo
+tubule epithelial cells,kidney
+tumor,other
+tumor (EMT6 tumors),other
+tumor (schwannoma),peripheral nervous system
+tumor (TIL),other
+tumor and lymph nodes,other
+tumor cells,other
+tumor cells from glioblastoma,brain
+tumor draining lymph nodes,lymph node
+tumor infiltrating leukocytes,immune system
+tumor microenvironment,other
+tumor sample,other
+tumor sample from OSCC patient,mucosa
+tumor tissue,other
+tumor tissue from EMT6 tumors,other
+tumor tissue from FVB mouse mammary pad,breast
+tumor-associated neutrophils from glioblastoma patients,immune system
+tumor-distant normal lung,lung
+tumor-draining lymph node (inguinal),lymph node
+tumor-infiltrating lymphocytes,immune system
+tumor-infiltrating lymphocytes (TIL),immune system
+tumor-infiltrating lymphocytes (TIL) from NSCLC patients,immune system
+tumor-infiltrating primary human CAR T cells,immune system
+"tumor, CD45+ cells",immune system
+tumour,other
+tumour graft,other
+tumour-infiltrating immune cells,immune system
+turbinate,nose
+umbilical cord,placenta
+umbilical cord blood,blood
+umbilical vein endothelial cell,vasculature
+umbilical vein endothelial cell (HUVEC),vasculature
+undifferentiated pleomorphic sarcoma,other
+unguided neural organoid,brain
+unsure,other
+urine,urinary bladder
+"urine-derived cells, peripheral blood mononuclear cells, tumor cells",other
+urogenital sinus,reproductive system
+uterine cells,uterus
+uterine tissues,uterus
+uterus,uterus
+uterus (endometrium),uterus
+uterus (myometrium),uterus
+vagal ganglia,peripheral nervous system
+vagus nerve ganglion,peripheral nervous system
+vascular,vasculature
+vascular allografts,vasculature
+vastus lateralis,musculature
+veingraft,vasculature
+venous blood,blood
+ventral lobe of the prostate,prostate gland
+ventral midbrain,brain
+ventral thalamic organoid,brain
+ventricle,heart
+ventricular cardiac fibroblasts,heart
+ventricular tissue,heart
+vestibular schwannoma,peripheral nervous system
+vestibular schwannoma tumor,peripheral nervous system
+villi,small intestine
+visceral adipose tissue,adipose tissue
+visual cortex,brain
+visual cortex (VIS),brain
+visual cortex (VISp),brain
+vomeronasal neuroepithelium,sensory system
+vomeronasal organ,sensory system
+white adipose tissue,adipose tissue
+white blood cells,blood
+white matter,brain
+white matter from frozen brain tissue,brain
+white matter of the brain,brain
+white matter tissues (corpus callosum and external capsules),brain
+whole blood,blood
+whole bone marrow cells,bone marrow
+whole brain,brain
+whole colon tumor,colon
+whole cortex,brain
+whole embryo,embryo
+whole ileum,small intestine
+"whole inner ear, only membranous labyrinth",sensory system
+whole lung,lung
+whole meniscus,skeletal system
+whole pelvic ganglion,peripheral nervous system
+whole placenta,placenta
+whole skin,skin of body
+whole testis,testis
+whole uterus,uterus
+whole-blood,blood
+xenograft from murine bone marrow,bone marrow
+yolk sac,yolk sac
+yolk sac and placenta,yolk sac
+2-cell mouse embryo,embryo
+"3 layer spheroid channel 1, epithelial",other
+3D co-cultured,other
+3T3-L1 cell line (fibroblasts),other
+"3T3-L1 cells (Immature adipocytes, adipocytes)",adipose tissue
+Adult human dermal fibroblasts,skin of body
+Area Postrema/NTS (Brain),brain
+B cell,immune system
+B cells from healthy controls,immune system
+B cells from peripheral blood,blood
+B-lymphoblastoid cell line,immune system
+B16 tumors,skin of body
+B16 tumour,skin of body
+B16-F10 allografts,skin of body
+BA9,brain
+BA9+BA20+H,brain
+BCC Tumor,skin of body
+BM-MNCs,bone marrow
+BM-MNCs (Bone Marrow Mononuclear Cells),bone marrow
+Bone Marrow Derived Macrophages,bone marrow
+Bone Marrow Derived Macrophages (BMDMs),bone marrow
+Bone Marrow HSPC (CD34+),bone marrow
+Bone Marrow Mononuclear Cells (BM-MNCs),bone marrow
+Bone Marrow-Derived Macrophages (BMDMs),bone marrow
+Brain (right hemisphere minus olfactory bulb and cerebellum),brain
+C2C12,musculature
+CAR T cells,immune system
+CD11c+ bronchoalveolar lavage fluid (BALF),lung
+CD34+ hematopoietic stem and progenitor cells,bone marrow
+CD4+ and CD4+CD8+ T cells from B16 melanoma,immune system
+CD45+ cells (from PBMC),blood
+CD45+ cells from tumors of orthotopic PDAC bearing mice,immune system
+"CD45+ cells, PBMC",blood
+CD8+ OTI T cells,immune system
+CML,bone marrow
+CT26 control cells challenged with Anti-CTLA4,colon
+CT26 flavopiridol treated cells,colon
+CTC-derived xenograft tumor,blood
+"Cortex, Hippocampus",brain
+Cranial Region,head
+D4 aggregate (derived from human embryonic stem cells),embryo
+DDLPS_DD (retroperitoneum),abdomen
+DDLPS_DDK,abdomen
+DDLPS_sWD,abdomen
+Dorsal Root Ganglion,peripheral nervous system
+E10.5 yolk sac,yolk sac
+E17.5 chimeric placenta,placenta
+E7.5 Decidua,uterus
+E7.5 Myometrium,uterus
+E7.5 embryo,embryo
+E8.5 embryo,embryo
+EMT-6 breast cancer,breast
+ES cell line-derived retinal organoid,eye
+Embroid Body,embryo
+Femur & Tibia,skeletal system
+GBM Tissue,brain
+GBM cells,brain
+GBM tissue,brain
+GEMM,other
+GEMM (Genetically Engineered Mouse Model),other
+GEMM and human biopsy tissue,other
+GEMM tissue,other
+"GEMM, PbCre_Pten/Rb 30 Weeks",other
+"GEMM, PbCre_Pten/Rb/P53 12 Weeks",other
+Galea+,scalp
+"HCT116 CRC cells, NHLF, and EPC",colon
+HEI-193 cells,other
+Human Metastatic CRPC Biopsy,prostate gland
+Human RA gastruloid,embryo
+Islet of Langerhans,pancreas
+Jurkat T cell line,immune system
+K562,bone marrow
+KPC46 tumors,pancreas
+LNCaP cells,prostate gland
+LNCaP cells (prostate cancer cell line),prostate gland
+Lumbosacral spinal cord white matter,spinal cord
+Ly6G+ tumor infiltrating myeloid cells,immune system
+Lymph Node,lymph node
+MC38 tumor,colon
+MC38-OVA colon carcinoma,colon
+MDA-MB-231 human breast cancer mouse model,breast
+MEF (Mouse Embryonic Fibroblasts),embryo
+Med411FH group 3 medulloblastoma PDX line,brain
+Mesenteric Lymph Node (MLN),lymph node
+NK cells,immune system
+NKTs from patients,immune system
+NPSCC (Non-keratinizing squamous cell carcinoma),respiratory system
+NPSCC lymph node,lymph node
+NRAS-mutated melanoma PDX in mice,skin of body
+NT+ fraction,other
+Natural Killer T cells,immune system
+Neural Stem Cells (NSCs),central nervous system
+NonAE liver explant,liver
+Npm1c/Flt3ITD leukemia model,bone marrow
+PDAC tissue,pancreas
+Peripheral B cells (CD3-CD14-CD15-CD56-CD19+IgD-),blood
+Peripheral Blood (PB),blood
+Peripheral Retina,eye
+Peripheral blood (Monocyte-derived macrophages),blood
+Peripheral blood T cells,blood
+Peyer's patch in terminal ileum,small intestine
+Peyer's patches,small intestine
+Peyers patches,small intestine
+Pre-Frontal Cortex,brain
+Primary human CD34+ hematopoietic stem and progenitor cells,bone marrow
+Py8119 tumor,breast
+PyMT Tumor,breast
+RBC depleted UCB,blood
+Ruga tissue from anterior palate,mucosa
+SCC Tumor,skin of body
+SGBS cell line,adipose tissue
+SW480 CRC cells grown as spheroids,colon
+"SW480 CRC cells, NHLF, and EPC",colon
+Schwannoma specimens,peripheral nervous system
+"Sorted CD4+, CD8+, and CD4+CD8+ T cells from patient resections",immune system
+"Spleen, skin draining lymph node (sLN), mesenteric lymph node (mLN)",immune system
+Striatum LGE (Lateral Ganglionic Eminence),brain
+T cells/tumor,immune system
+T lymphocytes,immune system
+TILs from organoid-derived primary colorectal cancer,immune system
+TPS cell,other
+Tetramer-sorted tumor infiltrating CD8+ T cells,immune system
+Transmural LV Apex,heart
+U2OS cell lines,skeletal system
+WDLPS (Well-Differentiated Liposarcoma),adipose tissue
+ZSG+ sorted peripheral blood,blood
+adenoma,other
+adenoma (pituitary adenoma),endocrine gland
+adipose,adipose tissue
+adipose-derived regenerative cells,adipose tissue
+adjacent liver tissues,liver
+"adjacent nonmalignant tissues, thyroid carcinoma",endocrine gland
+adjacent normal tissue,other
+adjacent normal tissue from esophageal carcinoma,esophagus
+adjacent normal tissue removed from esophageal carcinoma,esophagus
+adrenal glands,adrenal gland
+adult human dermal fibroblasts,skin of body
+adult mouse dentate gyrus,brain
+adult prefrontal cortex,brain
+adult proximal small intestine,small intestine
+airway epithelium,respiratory system
+airway organoid,respiratory system
+airway organoids,respiratory system
+allograft,other
+amniotic fluid,placenta
+amygdala,brain
+anterior nares (mucus),nose
+anterior pituitary,endocrine gland
+aortas,vasculature
+aortic arch,vasculature
+aortic root,vasculature
+aortic sinus,vasculature
+aortic valve,heart
+arcuate nucleus of the hypothalamus,brain
+arterial endothelial cells,vasculature
+ascites,other
+basal cell carcinoma tumor,skin of body
+biliary organoids,liver
+bladder cancer tissues,urinary bladder
+blastoid,other
+blood cells,blood
+blood vessels,vasculature
+bone marrow (enriched for stroma markers),bone marrow
+bone marrow HSPC (CD34+),bone marrow
+bone marrow and bone,bone marrow
+bone marrow aspirates,bone marrow
+bone marrow derived macrophages,bone marrow
+bone marrow derived macrophages (BMDMs),bone marrow
+bone marrow hematopoietic stem and progenitor cells,bone marrow
+bone marrow hematopoietic stem and progenitor cells (HSPCs),bone marrow
+bone marrow mononuclear cells,bone marrow
+bone marrow mononuclear cells (BM-MNCs),bone marrow
+"bone marrow, blood",bone marrow
+"bone marrow, femur",bone marrow
+bone marrow-derived macrophages,bone marrow
+bone marrow-derived macrophages (BMDMs),bone marrow
+bone metastases,skeletal system
+brain (cerebral arteries),brain
+brain (occipital cortex),brain
+brain (parabrachial nucleus),brain
+brain (right hemisphere minus olfactory bulb and cerebellum),brain
+brain SVZ,brain
+brain and spinal cord,central nervous system
+brain cortex and subdural meninges,central nervous system
+"brain frontal cortex, parenchyma",brain
+brain lateral amygdala,brain
+brain organoids + microglia,brain
+brain regions (PrL and IL),brain
+brain striatum,brain
+brain tissue,brain
+brain tumor cell line,brain
+"brain, amygdala",brain
+"brain, lung, spleen",other
+"brain, specifically hippocampus",brain
+"brain, specifically retrograde labeled vmPFC neurons",brain
+"brain, spleen, lung, skin",other
+breast epithelial,breast
+breast milk,milk
+breast; mammary gland,breast
+cardiac biopsy,heart
+cardiac fibroblasts,heart
+cardiac progenitors and motor neuron progenitors,other
+cauda epididymidis,reproductive system
+cecum,large intestine
+celiac lymph node,lymph node
+cell line (HA1E),kidney
+cerebellar tumour tissue,brain
+cervical esophagus,esophagus
+chemoresistant tumor from MIBC recipient mice treated with E64,urinary bladder
+chemoresistant tumor from MIBC recipient mice treated with Vehicle,urinary bladder
+chorionic villi,placenta
+"chorionic villi, amniocytes",placenta
+choroid plexus,brain
+choroid plexus MHCII high BAMPs,brain
+clear cell renal cell carcinomas,kidney
+cochlear,sensory system
+cochlear duct,sensory system
+cochlear explant,sensory system
+colon adenocarcinoma,colon
+colorectal cancer cells,colon
+colorectal tumor,colon
+colorectal tumors,colon
+common bile duct,liver
+conjunctival tissue,eye
+corpus epididymidis,reproductive system
+cortex of kidney,kidney
+cortical tissue,brain
+cultured cells (human adult dermal fibroblasts - HADF),skin of body
+"cultured cells, human adult dermal fibroblasts (HADF)",skin of body
+decidua and myometrium,uterus
+decidua and placenta,placenta
+deep cervical lymph nodes MHCII high BAMPs,lymph node
+derived from human induced pluripotent stem cells,other
+derived from human pluripotent stem cells,other
+diaphragm metastasis of intestinal adenocarcinoma,intestine
+distal lung,lung
+dorsal root ganglion,peripheral nervous system
+"dorsal root ganglion, lumbar 5",peripheral nervous system
+draining lymph node and tumor,lymph node
+duodenal biopsy and peripheral blood,small intestine
+duodenal organoids,small intestine
+duodenal organoids from endoscopic biopsies,small intestine
+dural MHCII high BAMPs,central nervous system
+dural endothelial cells,central nervous system
+dural immune cells,central nervous system
+ear pinna skin,skin of body
+"ear pinna skin, healing ear punch",skin of body
+embroid body,embryo
+embryo (viscera),embryo
+embryo head,embryo
+embryo limb,embryo
+embryo trunk,embryo
+embryo viscera,embryo
+embryoid body,embryo
+embryonic cortex,brain
+embryonic distal forelimb mesenchyme,forelimb
+embryonic fibroblasts,embryo
+embryonic heart at E11.5,heart
+embryonic kidneys,kidney
+embryonic stem cells (H1 cell line),embryo
+embryonic tissue,embryo
+endometrial adenocarcinoma,uterus
+endometrial tumor,uterus
+endothelial cells (ECFC-ECs),vasculature
+epidermal skin,skin of body
+epididymal fat pad,adipose tissue
+epithelial cells,other
+esophageal biopsies,esophagus
+esophageal biopsy,esophagus
+esophageal carcinoma adjacent normal tissue,esophagus
+esophageal carcinoma adjacent tissue,esophagus
+esophageal epithelium,esophagus
+esophageal mucosal biopsy,esophagus
+esophageal squamous-cell carcinoma (ESCC) tumor and adjacent normal tissue,esophagus
+excised surgical tissue from seton intervention,other
+excitatory neurons,brain
+excitatory neurons plated on primary mouse glia,brain
+external anal sphincter,digestive system
+extraembryonic mesoderm cells,embryo
+extrahepatic cholangiocarcinoma,liver
+facial epidermis,skin of body
+fallopian tube and placenta,other
+femur & tibia,skeletal system
+fetal brain,brain
+fetal thymus,immune system
+foamy macrophage,immune system
+foreskin,skin of body
+full thickness skin,skin of body
+galea,scalp
+gastric (antrum),stomach
+gastric and gastric tumor (antrum),stomach
+gastric and gastric tumour (corpus),stomach
+"gastric stem cells, endocrine progenitors, GINS precursors/organoids",stomach
+gastric tumour,stomach
+genetically engineered mouse model,other
+giant cell tumor of bone,skeletal system
+giant papillae,eye
+gingiva,mucosa
+glioblastoma (GBM) cells,brain
+glioblastoma tissue,brain
+glomeruli,kidney
+goblet cells,mucosa
+gonad,reproductive system
+granuloma,other
+great saphenous vein,vasculature
+hESC-derived trunk neural crest cells,embryo
+hPSC derived liver organoid,liver
+hard palate soft tissue,mucosa
+healthy epidermis,skin of body
+healthy liver explant,liver
+heart allograft,heart
+heart and mediastinal lymph nodes,other
+hepatic tissue,liver
+hepatocellular carcinoma tissues,liver
+hiPSC derived spinoid,other
+hiPSC-derived microglia,brain
+high grade ovarian serous adenocarcinoma cells,ovary
+hind limb muscle,hindlimb
+hindlimb bones,hindlimb
+hippocampal formation,brain
+hippocampal microglia,brain
+human cerebral organoid transplanted into mouse brain,brain
+human embryonic stem cell derivatives,embryo
+human embryonic stem cell derived cells,embryo
+human gastruloid,embryo
+human induced pluripotent stem cells,other
+human myocardium,heart
+human pluripotent stem cells,other
+hypothalamic tissue,brain
+"hypothalamus, spleen",other
+"iPS-differentiated, in vitro cultured NGN2-induced Glutamatergic neuron",brain
+iPSC cortical organoids,brain
+"iPSC, Day 100 of in vitro differentiation",other
+iPSC-derived,other
+iPSC-derived cardiac organoids,heart
+iPSC-derived islets,pancreas
+iPSC-derived microglia cells,brain
+immortalized human cardiac fibroblasts (iHCF),heart
+immune and non-immune cells,immune system
+"in vivo, 14 days post-transplantation",other
+induced pluripotent stem cells (hiPSCs),other
+induced pluripotent stem cells (hiPSCs) at day 0,other
+induced pluripotent stem cells (iPSC),other
+inguinal subcutaneous adipose tissue,adipose tissue
+initial segment of the murine epididymis,reproductive system
+inner ear organoid,sensory system
+intermediate mesoderm cells,embryo
+interneurons,brain
+interscapular brown adipose tissue (iBAT),adipose tissue
+intestinal crypt,intestine
+intestinal epithelial cells from terminal ileum mucosal biopsies,small intestine
+intestines,intestine
+intestines (small intestine and colon),digestive system
+intrahepatic cholangiocarcinoma,liver
+intramedullary canal,bone marrow
+ischemic brain,brain
+islet of Langerhans,pancreas
+islets,pancreas
+jejunum,small intestine
+joint (infrapatellar fat pad and synovium),skeletal system
+kidney tubuloids,kidney
+knee joint cartilage,skeletal system
+large intestine lamina propria,large intestine
+laryngeal SCC,respiratory system
+lateral ganglionic eminence,brain
+leaf,other
+left ventricle apex,heart
+leiomyosarcoma,musculature
+limbal epithelium,eye
+lipoma,adipose tissue
+liver (CD3+ cells),liver
+liver allograft,liver
+liver allograft tissue,liver
+liver metastases,liver
+liver metastasis,liver
+liver with CRC metastases,liver
+lumbosacral spinal cord white matter,spinal cord
+lung and trachea,respiratory system
+lung cancer,lung
+lung carcinoma cell line,lung
+lung carcinoma cell line (A549),lung
+lung epithelial cells,lung
+lung lymph node,lymph node
+lung metastasis infiltrating cells,lung
+lung organoid,lung
+lung tumor tissue,lung
+lung tumour,lung
+"lung, BAL",lung
+"lung, BAL (Broncho-Alveolar Lavage)",lung
+lungs (from TC-1 tumor bearing mice),lung
+mammary epithelial cell,breast
+mammary gland (macrophage-depleted),breast
+mammillary body neurons,brain
+mandibular alveolar bone,skeletal system
+mandibular arch epithelium,head
+mandibular arch epithelium and mesenchyme,head
+mandibular first premolars,head
+medial habenula,brain
+medulloblastoma PDX line,brain
+melanoma PDX,skin of body
+melanoma metastasis,skin of body
+meninge,central nervous system
+meningioma,brain
+mesentery metastasis of gastric adenocarcinoma,digestive system
+mesothelioma tumor,pleura
+mesothelium,other
+metastatic CRPC biopsy,prostate gland
+microglia,brain
+midbrain dopaminergic neuron,brain
+midbrain dopaminergic neuronal differentiation,brain
+midbrain organoid,brain
+middle turbinate,nose
+milk,milk
+mitral valve,heart
+mixture of cell lines,other
+monocytes,blood
+monocytes derived macrophages,blood
+motor neuron progenitor cells,central nervous system
+motor neurons from spinal cords of E12.5 mice,spinal cord
+mouse brain (xenografted human microglia),brain
+mouse embryonic stem cell,embryo
+mouse prostate tumor,prostate gland
+mouse subcutaneous tumor,skin of body
+murine YUMMER1.7 intradermal melanoma,skin of body
+murine brain,brain
+muscle stem cells,musculature
+nasal associate lymphoid tissue and olfactory epithelium,nose
+nasal cells,nose
+nasal endothelial cells,nose
+nasal epithelium,nose
+nasal scraping,nose
+nasal scrapings,nose
+neoplasm (tumor tissue from pancreatic ductal adenocarcinoma),pancreas
+neural progenitors derived from H9 cell line,brain
+neural progenitors derived from H9 human pluripotent stem cells,brain
+neuroblastoma,peripheral nervous system
+neuroblastoma tumors,peripheral nervous system
+neuronal progenitor cells,brain
+non-malignant gastric mucosa,stomach
+non-tumour kidney,kidney
+nonlesional skin,skin of body
+normal adjacent tissues,other
+normal gland,other
+normal gland plus adenoma,other
+normal lung,lung
+normal pancreatic ducts,pancreas
+normal skin,skin of body
+olfactory neuroblastoma,nose
+oral epithelial cells,mucosa
+ovarian cancer,ovary
+ovarian cancer (cell line OVCAR3),ovary
+ovarian cancer cell line (OVCAR3),ovary
+ovarian serous adenocarcinoma,ovary
+ovarian serous adenocarcinoma cells,ovary
+ovarian tumour,ovary
+palatal shelves,mucosa
+pancreas (3D in vitro vascular network),pancreas
+pancreatic cancer,pancreas
+pancreatic cancer-associated fibroblasts,pancreas
+pancreatic ductal adenocarcinoma,pancreas
+pancreatic ductal adenocarcinoma tumor microenvironment,pancreas
+pancreatic fluid,pancreas
+pancreatic islet and duct graft,pancreas
+pancreatic islets of Langerhans,pancreas
+pancreatic tumors,pancreas
+pancreatic β-cells,pancreas
+parabrachial nucleus,brain
+parahippocampus,brain
+paraventricular thalamus,brain
+parietal bone,skeletal system
+patient-derived organoid,other
+pediatric thymus,immune system
+percutaneous tumor grafts,other
+peripheral blood T cells,blood
+peripheral blood cells,blood
+peripheral choroid,eye
+peripheral retina,eye
+peritoneal lavage,abdomen
+peritoneum metastasis,abdomen
+peritumoral brain,brain
+peritumoral fat,adipose tissue
+pigmented layer of retina,eye
+placenta/decidua,placenta
+placenta/decidua/myometrium,placenta
+plaque,other
+pluripotent stem cells,other
+popliteal lymph nodes,lymph node
+popliteal lymph nodes (PLNs),lymph node
+postnatal cortex,brain
+primary focus,other
+primary human CD34+ hematopoietic stem and progenitor cells,bone marrow
+primary placenta derived hTSC,placenta
+primary prostate cancer,prostate gland
+primary tumor from pancreatic ductal adenocarcinoma,pancreas
+primed induced pluripotent stem cells,other
+primitive heart tube,heart
+primitive heart tube and surrounding area,heart
+prostate cancer cells,prostate gland
+prostate tumor,prostate gland
+pulmonary artery,vasculature
+pulmonary immune cells,lung
+pulmonary metastases of B16 melanoma,lung
+putamen,brain
+quadriceps,hindlimb
+renal cortex,kidney
+renal glomerulus,kidney
+renal medulla,kidney
+retina endothelia cells,eye
+retinal pigment epithelial cell,eye
+retinal pigment epithelium (RPE) cells,eye
+retinal pigment epithelium and choroid,eye
+"retinal pigment epithelium, macula region",eye
+ruga tissue from anterior palate,mucosa
+sciatic nerves,peripheral nervous system
+seizure-affected brain tissue,brain
+"seizure-affected brain, frontoparietal operculum",brain
+"seizure-affected brain, left parietal lobe",brain
+"seizure-affected brain, right frontal",brain
+"seizure-affected brain, right inferior posterior frontal gyrus",brain
+"seizure-affected brain, right temporal lobe",brain
+"seizure-affected brain, right temporal lobe lateral cortex",brain
+sensory epithelium,sensory system
+skeletal muscle metastasis,musculature
+skin (3D in vitro vascular network),skin of body
+skin (derived from dermal fibroblasts),skin of body
+skin and kidney,other
+skin from mammoplasty surgery,skin of body
+skin organoid,skin of body
+"skin, tumor",skin of body
+skin/blood,other
+small intestine (jejunum),small intestine
+small intestine epithelial cell,small intestine
+"small intestine, jejunum",small intestine
+soft palate,mucosa
+somitoids,embryo
+sorted T cells from B16 melanoma resections,immune system
+sorted cells from pooled embryos,embryo
+sorted leukemic stem cells and blasts pooled,bone marrow
+spinal cord meninges,spinal cord
+spinal cord segment at T10,spinal cord
+spinal cord segment at injury epicenter (T10),spinal cord
+spinal cords,spinal cord
+spinal cords micro-dissected from E12.5 mice,spinal cord
+"spinal cords, sorted Hb9:gfp+ motor neurons",spinal cord
+spinal metastasis,spinal cord
+"spleen, colon, skin",other
+"spleen, colon, skin, small intestine",other
+"spleen, hypothalamus",other
+"spleen, liver, colon",other
+"spleen, skin draining lymph node (sLN), mesenteric lymph node (mLN)",immune system
+"spleen, skin draining lymph node, mesenteric lymph node",immune system
+"spleen, skin draining lymph nodes (sLNs), mesenteric lymph nodes (mLNs)",immune system
+stem cell,other
+stem cell-derived neurons,brain
+subcutaneous PDAC tumor,pancreas
+subcutaneous adipose tissue,adipose tissue
+"subcutaneous adipose tissue, stromal vascular cells",adipose tissue
+subdissected cardiac crescent and surrounding area,heart
+subdissected heart tube and surrounding area,heart
+subdural meninges,central nervous system
+submandibular gland,exocrine gland
+superior-medial region of the head of the middle turbinate,nose
+surgical tissue from seton intervention,other
+synthetic embryo model,embryo
+telencephalic organoid,brain
+teratomas,other
+terminal ileum mucosal biopsies,small intestine
+testicular germ cell tumor,testis
+tetramer-sorted tumor infiltrating CD8+ T cells,immune system
+thoracic and abdominal aorta,vasculature
+thoracic esophagus,esophagus
+thymic epithelial cells (TECs),immune system
+tibia,skeletal system
+tibial growth plate,skeletal system
+tibialis anterior (skeletal muscle),musculature
+tibialis anterior and gastrocnemius,musculature
+tonsillar tissue,immune system
+total colon,colon
+transmural LV apex,heart
+transmural tissue samples from the left ventricle apex,heart
+trigeminal nerve,peripheral nervous system
+trophoblast organoids,placenta
+trophoblast organoids derived from chorionic villi with trisomy 21,placenta
+trunk tissues,other
+tumefactive demyelinating lesion,brain
+tumor (Schwannoma),peripheral nervous system
+tumor (subcutaneous MC38-OVA tumor),colon
+tumor adjacent normal renal tissues,kidney
+tumor draining lymph node,lymph node
+tumor infiltrating CD4+ T cells,immune system
+tumor infiltrating CD8+ T cells,immune system
+tumor infiltrating T cells,immune system
+tumor infiltrating immune cells,immune system
+tumor tissue and flank skin,other
+tumor tissue inoculated SB28 tumors,brain
+tumor tissue inoculated with SB28 tumors,brain
+tumor tissue of esophageal carcinoma,esophagus
+"tumor, skin",skin of body
+"tumor, spleen",other
+tumor-infiltrating CD45+ cells,immune system
+tumor-infiltrating CD8+ T cells,immune system
+tumor-infiltrating immune cells,immune system
+tumor-infiltrating lymphocytes from MC38 tumors,immune system
+upper bronchial airways,respiratory system
+urinary bladder,urinary bladder
+"uterus, kidney, liver, lung, stomach",other
+utricle (inner ear),sensory system
+vascular meniscus,vasculature
+vascularized micro-tumor model,other
+vascularized micro-tumor model of human colorectal cancer,colon
+vasculature,vasculature
+ventral midbrain-hindbrain,brain
+ventral prostate lobe,prostate gland
+ventromedial prefrontal cortex,brain
+ventromedial prefrontal cortex neurons,brain
+villous tissue of fetal placenta,placenta
+"visceral adipose tissue, spleen",other
+"visceral adipose tissue, stromal vascular cells",adipose tissue
+vmPFC neurons,brain
+whole aorta,vasculature
+whole bone marrow,bone marrow
+whole brain (excluding olfactory and cerebellum),brain
+"whole embryo without tail, limbs, and liver",embryo
+whole embryos,embryo
+"whole embryos, E.8 (0-2 somites) stage",embryo
+whole heart - 14 days post MI,heart
+whole heart - 4 days post MI,heart
+whole heart - 7 days post myocardial infarction,heart
+whole heart - SHAM,heart
+whole meninges,central nervous system
+whole olfactory epithelium,nose
+xenograft,other
+xenograft tumor,other
+xenografts,other
+"AT2 YFP+ cells, 16 weeks after Ad5SPC-Cre",lung
+B16F10 Tumor,skin of body
+BA4,brain
+BA9+BA4+SC,central nervous system
+Bilateral V-SVZ of 4 littermates at postnatal day 0,brain
+Carotid Artery,vasculature
+Differentiating cells Day 14 Control,other
+ES-derived cells,embryo
+EpiSC,embryo
+EpiSC (Epiblast Stem Cells),embryo
+Gastrocnemius muscle,musculature
+Gonad and mesonephros,embryo
+H,other
+Human bronchial epithelial cells (HBE cells),lung
+Islets of Langerhans,pancreas
+LLC1 primary tumor,lung
+MDS Bone marrow,bone marrow
+NKT cells,immune system
+Oligodendrocyte Progenitor Cells,central nervous system
+Peripheral blood mononuclear Cells,blood
+Small Intestine Lamina Propria (SI LP),lamina propria
+Subcutaneous Inguinal adipose depot,adipose tissue
+Tibialis Anterior (TA),musculature
+Tibialis anterior muscle,musculature
+abdominal skin,skin of body
+anterior part of stembryo,embryo
+antral epithelium and stromal cells,stomach
+aorta and aortic sinus plaque,vasculature
+aortic arch and root,vasculature
+bilateral V-SVZ of 4 littermates,brain
+bone marrow (right hip),bone marrow
+bone marrow (tumor site),bone marrow
+bone marrow cells (tumor site),bone marrow
+brain (LHA),brain
+brain (dentate gyrus),brain
+brain (striatum),brain
+"brain tissue, including gray matter, white matter, and MS plaques",brain
+"brain tissue, white matter",brain
+"brain, striatum",brain
+breast cancer cell lines,breast
+bronchoalveolar cells,lung
+cancer cell lines,other
+cell culture,other
+corneal endothelium,eye
+coronary,vasculature
+distal thrombus from pulmonary artery,vasculature
+distal thrombus tissue,vasculature
+"ductal carcinoma, mammary gland",breast
+ear,sensory system
+ear epidermis,sensory system
+embryonic stem cells and gastruloids,embryo
+eyes,eye
+fallopian tube,fallopian tube
+fetal cardiomyocytes,heart
+fetal forelimb,forelimb
+fetal liver and bone marrow,embryo
+fetal mouse intestine,intestine
+footpad skin,skin of body
+forelimb,forelimb
+frozen brain tissue specimens,brain
+"frozen brain tissue specimens, plaque",brain
+"frozen brain tissue specimens, white matter",brain
+"frozen brain tissue, white matter",brain
+gastric antrum,stomach
+gastruloids from mouse embryonic stem cells,embryo
+gonad and mesonephros,embryo
+grey matter,brain
+grey matter from frozen brain tissue specimens,brain
+hESCs,embryo
+hindlimb skeletal muscle,musculature
+human brain organoids,brain
+human fetal mitral valve,heart
+human somatic cells,other
+human somatic cells during chemical reprogramming stage III,other
+iPSC derived cardiac cells,heart
+iPSC-derived Tenocytes (Syndetome),skeletal system
+iPSC-derived microglia-like cells,central nervous system
+ileum of small intestine,small intestine
+induced neurons from pluripotent stem cells,central nervous system
+"inner cell mass, neuronal stem cell",embryo
+kidney organoids derived from iPSCs,kidney
+lamina propria of small intestine,lamina propria
+lung (normal tissue adjacent to tumor),lung
+lung BALF,lung
+lung cancer organoid,lung
+"lung, B16-OVA tumor",lung
+"lymph node, paraaortic",lymph node
+mouse bone marrow,bone marrow
+mouse tumor,other
+mouse tumor sample,other
+"neural culture cells, with TDP-43-HA",central nervous system
+"neural culture cells, with TDP-43-HA, OFF control",central nervous system
+neural stem cells,central nervous system
+neuroblastoma O-PDX,peripheral nervous system
+non-parenchymal liver cells,liver
+ovarian cancer patient ascites cells,ovary
+pancreatic cancer cells,pancreas
+pancreatic slices,pancreas
+patient primary tumor-derived xenograft tumor,other
+perirenal brown adipose tissue,adipose tissue
+peritoneal lavage fluid,other
+pontine nuclei,brain
+primary breast cancer,breast
+primary tumor surgical resection,other
+rhabdomyosarcoma cell line,musculature
+skin (dorsal interscapular),skin of body
+skin tertiary lymphoid structure,skin of body
+skin wound,skin of body
+small intestinal LPL,small intestine
+somatic cells during chemical reprogramming stage I,other
+stembryo (posterior part),embryo
+telencephalic organoids,brain
+teratoma,other
+thymic endothelial cells,immune system
+tongue tumor,tongue
+tonsil tumor,immune system
+transplanted human intestinal organoids (tHIO),intestine
+trigeminal ganglion,peripheral nervous system
+triple-negative breast cancer,breast
+tumor (4T1 Breast Cancer),breast
+tumor (B16F10 melanoma),skin of body
+tumor graft,other
+tumor infiltrating lymphocytes,immune system
+tumor sample from 12 OSCC patients,digestive system
+tumor sample from oral squamous cell carcinoma,digestive system
+tumor sample from oral squamous cell carcinoma (OSCC) patient,digestive system
+tumor sample from oral squamous cell carcinoma (OSCC) patients,digestive system
+tumor tissue from B16-OVA melanoma cells,skin of body
+tumor tissues from patients with breast cancer,breast
+"tumor, brain metastasis",brain
+uterine smooth muscle cells,uterus
+"uterus, yolk sac, placenta",reproductive system
+various cancer cell lines,other
+visceral white adipose tissue,adipose tissue
+whole coeliac ganglion,peripheral nervous system
+whole colon,colon
+whole lumbar ganglion,peripheral nervous system
+whole sphenopalatine ganglion,peripheral nervous system
+whole stellate ganglion,peripheral nervous system
+whole ventricle,heart
+"20 days subcutaneous tumor tissues of MC38","other"
+"3 Pooled brains","brain"
+"3 layer spheroid channel 1","other"
+"AUD-TEa-PERI-ECT","brain"
+"AUD-TEa-PERI-ECT (specific brain region)","brain"
+"AnaVI back skin","skin of body"
+"Aortic root, aortic arch, BCA, carotids","vasculature"
+"B cell (from lymph nodes)","lymph node"
+"B6 left lung, 2 hours after syngeneic transplantation","lung"
+"BA4 (from autopsy tissue or surgical resections)","brain"
+"BA9 (Brodmann area 9)","brain"
+"BA9+AWS (Brain region)","brain"
+"BA9+BA4+H+SN","brain"
+"BA9+BA4+SC+SN","brain"
+"BA9+SN (Brodmann area 9 and substantia nigra)","brain"
+"BALF cells","lung"
+"BRAFV600E melanoma","skin of body"
+"BT-549 TNBC cells","breast"
+"CAR-T cells co-cultured with MEC1 cancer cells","immune system"
+"CD3+ T cells from peripheral blood","blood"
+"CD3+ T cells from peripheral blood (PBMC)","blood"
+"CD3+ T cells purified from peripheral blood (PBMC)","blood"
+"CD34+CD38- Leukemic stem cells","bone marrow"
+"CD45+ cells from autopsy tissue or surgical resections","immune system"
+"CD45neg synovial tissue","skeletal system"
+"CRC, Distal colon","colon"
+"Calvarial Periosteum and Sagittal Suture Mesenchyme","skeletal system"
+"Cingulate","brain"
+"Cortex & Hippocampus (3mm piece around the contusion)","brain"
+"Cortex, Nucleus, and Pallidum","brain"
+"Differentiated iPSC cells","other"
+"Dorsal & Lateral lobes of the prostate","prostate gland"
+"Dorsal and lateral ventricular-subventricular zones of the adult mouse brain","brain"
+"Dorsal lobe of the prostate","prostate gland"
+"E12.5 gonads","embryo"
+"ESI017 TKO8 ESO hPSC","other"
+"ESI017 WT hPSC","other"
+"Esophagus, Gastroesophageal Junction (GEJ), Stomach","digestive system"
+"Ex vivo HSC PVA culture","bone marrow"
+"FACS-enriched mature OSNs","sensory system"
+"FACS-enriched mature olfactory sensory neurons (mOSNs)","sensory system"
+"FAN-sorted nuclei","other"
+"FN","other"
+"GBM tumor tissue","brain"
+"HCC Tumor","liver"
+"HCC region","liver"
+"HEK3, scRNA gene expression","kidney"
+"HSPC (Hematopoietic Stem/Progenitor Cells)","bone marrow"
+"HY - HYa2","brain"
+"HY - HYm2 (specific brain region)","brain"
+"HY - HYpm","brain"
+"HY - MEZ-PVZ-PVR (specific brain regions)","brain"
+"HepaRG cells (Hepatocyte)","liver"
+"Human Synthetic Embryoid Model (SEMs)","embryo"
+"Human Umbilical Vein Endothelial Cells (HUVECs)","vasculature"
+"Infrapatellar Fat Pad","adipose tissue"
+"Infrapatellar Fat pad","adipose tissue"
+"KR158 cell/4T1","other"
+"Kuramochi cell line","ovary"
+"LPMC (Lamina Propria Mononuclear Cells)","lamina propria"
+"Lamina Propria Aggregate Culture (LPMC)","lamina propria"
+"MB - MRN-CUN-RN-RR-PN (specific brain region)","brain"
+"MB - MRN-CUN-RN-RR-PPN-NB-SAG-PBG (specific brain regions)","brain"
+"MB - SC","brain"
+"MC38WT Tumor","colon"
+"MCF7 breast cancer cell line","breast"
+"MCF7 cell line, late dormancy","breast"
+"MDAMB231 Cell line","breast"
+"MEF transformed cells","other"
+"MLN (Mesenteric Lymph Nodes)","lymph node"
+"MMTV-neu cells","breast"
+"MY - MYsat-MYmot","brain"
+"Medium/small size pulmonary artery","vasculature"
+"Memory CD4+ T cells","immune system"
+"Myc-CaP tumor","prostate gland"
+"NK cells (umbilical cord blood)","blood"
+"NaN","other"
+"Normal Human Astrocytes","brain"
+"Normal Human Astrocytes (Lonza, #CC-2565)","brain"
+"NrESC derived blastoids","embryo"
+"PBMC (frozen)","blood"
+"PBMC and TIL","blood"
+"PDO harvested at day 28","other"
+"PL-ILA-ORB","brain"
+"Peri-heart white adipose tissue","adipose tissue"
+"Peripheral Blood Lymphocytes","blood"
+"Peripheral Blood Mononuclear Cells","blood"
+"Peripheral Blood, Spleen, Bone Marrow, Colon","other"
+"PitNET","endocrine gland"
+"PitNET (PIT1-Tumor)","endocrine gland"
+"PitNET (Pituitary Neuroendocrine Tumor)","endocrine gland"
+"PitNET (SF1-Tumor)","endocrine gland"
+"Pituitary Neuroendocrine Tumor","endocrine gland"
+"Primary HSPC (Hematopoietic Stem and Progenitor Cells)","bone marrow"
+"Purified RPE (Retinal Pigment Epithelium)","eye"
+"RM1 tumors","prostate gland"
+"SC","spinal cord"
+"SSp (Secondary Somatosensory Cortex)","brain"
+"STR - sAMY","brain"
+"Secondary Somatosensory Cortex (SSp)","brain"
+"Somatosensory Cortex (SSp)","brain"
+"Substantia Nigra (SN)","brain"
+"T cell culture","immune system"
+"T cells from blood","blood"
+"TH - AD-AV-AM-IAD-LD (specific brain regions)","brain"
+"Tibialis Anterior","musculature"
+"VISa (Visual Association Area of the brain)","brain"
+"VISl (Visual area of the brain)","brain"
+"VISm (Visual cortex, mouse)","brain"
+"VISpos (Visual Cortex)","brain"
+"WIBR3","other"
+"abdominal aortic aneurysm tissue","vasculature"
+"adipose tissue (subcutaneous)","adipose tissue"
+"adjacent nonmalignant tissues, breast cancer","breast"
+"adrenal medullary tumor","adrenal gland"
+"adrenocortical tumor","adrenal gland"
+"adult brain (MB - SC)","brain"
+"adult brain - ACA","brain"
+"adult brain - MB - SC","brain"
+"adult mouse midbrain","brain"
+"agranular insular cortex","brain"
+"airway epithelial cells","respiratory system"
+"alveolar myofibroblasts","lung"
+"anaplastic ependymoma","brain"
+"anterior cingulate area (ACA)","brain"
+"anterior piriform cortex","brain"
+"anterior tibial artery","vasculature"
+"aortae","vasculature"
+"aortic","vasculature"
+"aortic valve structure","heart"
+"arthritic paw and ankle","skeletal system"
+"articular cartilage","skeletal system"
+"ascitic fluid","other"
+"astrocytes","brain"
+"astrocytoma","brain"
+"autopsy tissue and surgical resections","other"
+"autopsy tissue or surgical resections","other"
+"back skin","skin of body"
+"bladder cancer tissues and matched normal tissues","urinary bladder"
+"blood (neutrophils and lymphocytes)","blood"
+"blood (serum)","blood"
+"blood PBMCs","blood"
+"blood and heart","other"
+"blood, (peri)tumoral tissue","other"
+"bone callus","skeletal system"
+"bone endothelial cells","skeletal system"
+"bone flap","skeletal system"
+"bone marrow cell","bone marrow"
+"bone marrow derived","bone marrow"
+"bone marrow derived monocyte","bone marrow"
+"bone marrow stroma","bone marrow"
+"bone marrow stromal cells","bone marrow"
+"bone metastasis","skeletal system"
+"brain (basolateral amygdala - BLA)","brain"
+"brain (cortical regions)","brain"
+"brain (deep brain regions)","brain"
+"brain (medulla)","brain"
+"brain cortical tissue","brain"
+"brain hippocampal tissue","brain"
+"brain organoid cells","brain"
+"brain regions: MY - CN-DCN-ECU-NTS-SPVC-SPVI-SPVO","brain"
+"brain tissue (glial-enriched stem-cell 3D model)","brain"
+"brain tumor and non-tumor tissues","brain"
+"brain, cortex","brain"
+"brain, dorsal telencephalon","brain"
+"brain, motor cortex, cingulate cortex","brain"
+"brain: cortical regions","brain"
+"brain: deep brain regions","brain"
+"breast cancer liver metastasis","liver"
+"breast cancer tissue","breast"
+"breast cancer tissues","breast"
+"breast reduction skin","breast"
+"breast tumors","breast"
+"bronchial/tracheal epithelial cells","respiratory system"
+"callus tissue","skeletal system"
+"cancerous prostate tissue","prostate gland"
+"caput","reproductive system"
+"cardiac left ventricle","heart"
+"carotid artery plaques","vasculature"
+"cerebral cortex, hippocampus, and testis","other"
+"cerebral cortical tissues","brain"
+"cervical carcinoma","uterus"
+"cervical spinal cord","spinal cord"
+"chorionic plate placenta","placenta"
+"choroid plexus tumor","brain"
+"chronic myelogenous leukemia","bone marrow"
+"collecting lymphatic vessel in dermis","vasculature"
+"colon epithelium","colon"
+"colon mucosa","colon"
+"colon normal","colon"
+"colon solitary isolated lymphoid tissues","colon"
+"colon, small intestine","intestine"
+"colonic wounds and intact tissues","colon"
+"colonoid","colon"
+"colorectal","colon"
+"colorectal cancer AKPS organoid","colon"
+"colorectal cancer tissues and adjacent normal tissues","colon"
+"colorectal pre-malignant lesion","colon"
+"columnar epithelial cells in mouse stomach","stomach"
+"conjunctiva","eye"
+"conjunctiva organoids","eye"
+"cord blood-derived CD34+ cells","blood"
+"cortex & hippocampus (3mm piece around the contusion)","brain"
+"cortex of E12.5 and E14.5 embryos","brain"
+"cortices and hippocampi","brain"
+"cranial bone marrow","bone marrow"
+"cranial bone marrow and sutures","bone marrow"
+"cristae","sensory system"
+"cultured utricle","sensory system"
+"dentate gyri","brain"
+"derived from human iPS cells","other"
+"differentiated hESCs","other"
+"differentiated hypothalamic neurons","brain"
+"differentiated iPSC cells","other"
+"distal colon adenoma","colon"
+"distal lung tissue","lung"
+"dorsal root ganglia (L4-L6)","peripheral nervous system"
+"dorsal skin wound","skin of body"
+"dorsal spinal cord organoids","spinal cord"
+"ductal carcinoma","breast"
+"dural meninges","brain"
+"e15.5 endocrine progenitor and endocrine committed cells","embryo"
+"ectodermal and mesodermal derivatives","embryo"
+"efferent duct","reproductive system"
+"embryos","embryo"
+"endocrine progenitor and endocrine committed cells","endocrine gland"
+"endoderm","embryo"
+"endometrial biopsy","uterus"
+"endothelial cells from aorta and heart","vasculature"
+"endothelial colony-forming cells and breast stromal cells","other"
+"endothelial progenitor cells","vasculature"
+"endothelium (HUVEC)","vasculature"
+"enriched retinal ganglion cells from mouse retina","eye"
+"enteroendocrine cells","intestine"
+"epididymal adipose tissue","adipose tissue"
+"epididymal white adipose tissue (eWAT)","adipose tissue"
+"epididymal white adipose tissue (eWAT) and inguinal white adipose tissue (iWAT)","adipose tissue"
+"epithelial cells, fibroblasts","other"
+"epithelial intestinal organoids","intestine"
+"epithelial intestinal tumoroids","intestine"
+"epithelium from the ileum of the small intestine","small intestine"
+"esophageal mucosa","esophagus"
+"esophageal tissue","esophagus"
+"ex vivo HSC PVA culture","bone marrow"
+"extrahepatic biliary cells","liver"
+"exvivo HSC PVA culture","bone marrow"
+"eye cup","eye"
+"eyelid","eye"
+"fascia, peripheral nerves","peripheral nervous system"
+"femur","skeletal system"
+"femurs and tibiae","skeletal system"
+"fetal forelimbs","forelimb"
+"fetal lung cells","lung"
+"fetal lung xenograft","lung"
+"fetal osteoblasts","skeletal system"
+"fetal pancreas","pancreas"
+"fine needle aspiration","other"
+"flank bearing tumor tissue","other"
+"flank tumor (subQ)","skin of body"
+"follicles","other"
+"forelimbs","forelimb"
+"fracture callus","skeletal system"
+"frozen pituitary","endocrine gland"
+"fundus (corpus)","stomach"
+"gastric adenocarcinoma","stomach"
+"gastric body (antrum)","stomach"
+"gastric body (corpus)","stomach"
+"gastric fundus (corpus)","stomach"
+"gastrocnemius","musculature"
+"gastrocnemius (skeletal muscle)","musculature"
+"gastrocnemius muscle","musculature"
+"glia-enriched cultures derived from iPSCs","brain"
+"hCOs from Human Embryonic Stem Cell (hESCs)","other"
+"hESC (human embryonic stem cells)","other"
+"hESC-derived cardiac progenitor cells","heart"
+"hESC-derived lung organoid","lung"
+"hESC-derived mature trunk neural crest derivatives","peripheral nervous system"
+"hESC-derived transitional lung organoids","lung"
+"hPSC-based somite formation model","other"
+"hPSC-derived monocyte/macrophages","immune system"
+"head","head"
+"heart mitral valve","heart"
+"heart, kidney, liver, spleen","other"
+"hematopoietic stem cells","bone marrow"
+"hemiforebrain","brain"
+"hepatoblastoma","liver"
+"hepatoblastoma tissue","liver"
+"hepatoblastoma tumoroid","liver"
+"hepatocellular carcinoma cells","liver"
+"hepatocyte","liver"
+"herniated nucleus pulposus","skeletal system"
+"heterogeneous differentiating cultures","other"
+"hiPSC H9","other"
+"hiPSCs","other"
+"hind paw/ankle joint, skin from hind paws","hindlimb"
+"hindbrain neuroepithelial stem cells","brain"
+"hindlimb muscle","hindlimb"
+"hippocampal tissue","brain"
+"hippocampus - CA","brain"
+"hippocampus and cortex","brain"
+"human ES-derived DA neuron","brain"
+"human embryonic kidney","kidney"
+"human fetal osteoblasts (hFOB 1.19 cells)","skeletal system"
+"human induced pluripotent stem cells (hIPSCs)","other"
+"human sensory organoids (hSeO)","sensory system"
+"iBAT Adipose (Interscapular Brown Adipose Tissue)","adipose tissue"
+"iPS-derived Embryoid Body cells","other"
+"iPSC-derived cerebral organoid","brain"
+"iPSC-derived neural graft","brain"
+"iPSC/SEAM_week0","other"
+"iPSC/SEAM_week12","other"
+"iWAT Adipose","adipose tissue"
+"ileum LPL","small intestine"
+"induced from skin fibroblasts","skin of body"
+"induced pluripotent stem cells (hiPSC-CMs)","other"
+"infrapatellar fat pad","adipose tissue"
+"interscapular brown adipose tissue (BAT)","adipose tissue"
+"intestinal epithelia","intestine"
+"intestinal tract","intestine"
+"intracranial tissue","brain"
+"intratumoral T cells","immune system"
+"islet","pancreas"
+"joints","skeletal system"
+"kidney (cortex)","kidney"
+"kidney glomeruli","kidney"
+"kidney medulla","kidney"
+"kidney papilla","kidney"
+"kidney, specifically the renal capsule","kidney"
+"knee joint synovium","skeletal system"
+"lateral lobe of the prostate","prostate gland"
+"lateral septum","brain"
+"leukemia","bone marrow"
+"limb buds from E10.75 mouse embryos","embryo"
+"limb skeletal muscles","musculature"
+"liver + tumor","liver"
+"liver normal","liver"
+"liver organoid","liver"
+"liver organoid co-cultured with macrophage","liver"
+"liver, biliary tract","liver"
+"liver, colorectal cancer","liver"
+"locus coeruleus","brain"
+"long bone","skeletal system"
+"lower trunk","abdomen"
+"lower trunk, E8.5 tdTomato-gRNA-virus (NT2)","embryo"
+"lumbar spinal cord","spinal cord"
+"lung mesenchyme","lung"
+"lung, epithelial","lung"
+"lymph nodes (non-draining)","lymph node"
+"lymphatic endothelial cells","vasculature"
+"mESC (mouse embryonic stem cells)","other"
+"mTBLC","other"
+"macrophage","immune system"
+"main olfactory epithelium","nose"
+"mammary artery","vasculature"
+"mammary gland epithelial cell","breast"
+"mammary tumour","breast"
+"medial ganglionic eminence","brain"
+"medulloblastoma tissue","brain"
+"melanocytes","skin of body"
+"melanoma model","skin of body"
+"mesenteric lymph nodes (MesLN)","lymph node"
+"mesentery","digestive system"
+"metaphysis of distal femur and proximal tibia","skeletal system"
+"metastatic ovarian tumor","ovary"
+"metastatic tumor in the liver, cervical carcinoma","liver"
+"metastatic tumor in the liver, thyroid carcinoma","liver"
+"micro-dissected graft","other"
+"micro-patterned alveolar epithelial cells","lung"
+"midbrain - intercalated (MB - IC)","brain"
+"midbrain - ventral tegmental area - substantia nigra","brain"
+"mixed sample (JN-DSRCT-1, BER-DSRCT)","other"
+"mononuclear cells","immune system"
+"motor neuron","brain"
+"mouse ESC-derived PTG","other"
+"mouse brain","brain"
+"mouse cristae","sensory system"
+"mouse lungs","lung"
+"mouse primary neural stem cells","brain"
+"murine epithelium from the ileum of the small intestine","small intestine"
+"muscle spindle macrophages","musculature"
+"myometrium/endometrium","uterus"
+"myxofibrosarcoma tumor","musculature"
+"nasal mucosa, lateral nasal gland","nose"
+"nasal mucosa, olfactory mucosa","nose"
+"nasal polyp","nose"
+"nasopharyngeal carcinoma","nose"
+"nasopharynx","respiratory system"
+"neocortex","brain"
+"neural progenitor","brain"
+"neural progenitor cells and neurons","brain"
+"neuroblastoma tumor","adrenal gland"
+"neutrophil (BM-derived neutrophil)","bone marrow"
+"neutrophil (BM-derived)","bone marrow"
+"normal colon","colon"
+"normal colon tissue","colon"
+"ocular tissue","eye"
+"olfactory areas of the brain","brain"
+"olfactory bulb - anterior olfactory nucleus - tectal dorsal pathway","brain"
+"olfactory region (OLF - AON-TT-DP)","brain"
+"olfactory sensory neurons and cortical neurons","brain"
+"optic nerve","eye"
+"oral carcinoma","digestive system"
+"orthotopic liver tumors (Hepa1-6)","liver"
+"ovarian tumor","ovary"
+"p53/MCA sarcoma","musculature"
+"p53/MCA sarcoma treated with Grp 2-RT+Iso OX40+Ctrl CpG+Iso PD-1","musculature"
+"p53/MCA sarcoma treated with Grp 4-NO RT+Iso for OX40+Ctrl CpG+Iso PD-1","musculature"
+"p53/MCA sarcoma treated with Grp 8-RT+iso for OX40+CpG+iso for PD-1","musculature"
+"pPir - C57Bl/6 mice","brain"
+"pancreas primary tumor","pancreas"
+"pancreatic cancer cell line (BxPC3, T3M4)","pancreas"
+"papillary thyroid cancer","endocrine gland"
+"parathyroid","endocrine gland"
+"parathyroid gland","endocrine gland"
+"perfused liver","liver"
+"periosteum, hematoma","skeletal system"
+"peripheral nerves","peripheral nervous system"
+"peripheric blood","blood"
+"perirenal white adipose tissue","adipose tissue"
+"peritoneal cavity","abdomen"
+"placental chorionic plate arteries","placenta"
+"pluripotent stem cell-derived islets","pancreas"
+"pons - pmot-psat ant","brain"
+"pooled brains","brain"
+"popliteal lymphatic vessels","vasculature"
+"posterior piriform cortex","brain"
+"postmortem brain","brain"
+"pregnant uterus","uterus"
+"preretinal fibrovascular membrane","eye"
+"primary cells (mixed)","other"
+"primary human airway epithelial cells","respiratory system"
+"primary normal human melanocytes (HEMn-MP, Gibco, C1025C)","skin of body"
+"primary somatosensory cortex","brain"
+"primary tumor biopsy","other"
+"primary villous cytotrophoblast","placenta"
+"prostate (anterior lobe)","prostate gland"
+"prostate (dorsal lobe)","prostate gland"
+"prostate (lateral lobe)","prostate gland"
+"prostate and seminal vesicle","prostate gland"
+"prostate tissue","prostate gland"
+"prostate tumor tissue","prostate gland"
+"prostate, lateral lobe","prostate gland"
+"prostate, ventral lobe","prostate gland"
+"proximal small intestine","small intestine"
+"pubic symphysis","skeletal system"
+"pulmonary epithelial cells","lung"
+"purified RPE (Retinal Pigment Epithelium)","eye"
+"renal (kidney)","kidney"
+"retina + choroid","eye"
+"retina and choroid","eye"
+"retinal photoreceptors","eye"
+"retinal sheet","eye"
+"rostral ventromedial medulla","brain"
+"sAMY (Subregion of the Amygdala)","brain"
+"salivary glands","exocrine gland"
+"sarcoma","other"
+"secondary somatosensory cortex","brain"
+"sensory epithelia","sensory system"
+"sensory organoids","sensory system"
+"serotonin neurons","brain"
+"single cell","other"
+"skeletal muscle stem cells (MuSCs)","musculature"
+"skeletal muscle, tibialis anterior","musculature"
+"skeletal muscle; tibialis anterior","musculature"
+"skin fibroblasts","skin of body"
+"skin organoids","skin of body"
+"skin organoids (hESC-derived)","skin of body"
+"small intestinal epithelial crypts","small intestine"
+"small intestinal organoids","small intestine"
+"small intestine crypt","small intestine"
+"small intestine epithelium","small intestine"
+"somitic gastruloids","embryo"
+"spinal cord, dorsal horn","spinal cord"
+"spleen, brain","other"
+"spleen, lung, lymph node, jejunum, mesenteric lymph node","other"
+"splenic germinal center B cells","spleen"
+"striatum - substantia amygdala","brain"
+"subependymal zone (SEZ)","brain"
+"subfornical organ","brain"
+"subpallial telencephalic organoids","brain"
+"sympathetic ganglion","peripheral nervous system"
+"syngeneic MC38 CRC implanted ectopic tumors","other"
+"synovial fluid and synovial tissue","skeletal system"
+"synovial joints","skeletal system"
+"synovial stromal cells","skeletal system"
+"tail vertebrae","skeletal system"
+"telencephalon","brain"
+"teratoma (derived from H1 stem cells)","other"
+"testes, cKIT(+) differentiating spermatogonia","testis"
+"thalamic and cortical organoids","brain"
+"thoracic vertebrae","skeletal system"
+"thymus cells","immune system"
+"thyroid cancer tissue","endocrine gland"
+"thyroid cancer tissues","endocrine gland"
+"thyroid carcinoma","endocrine gland"
+"tibial nerves","peripheral nervous system"
+"tonsil and PBMC","immune system"
+"total heart cells","heart"
+"tumor (Hepatoblastoma)","liver"
+"tumor (hepatoblastoma)","liver"
+"tumor (hepatocellular carcinoma - HCC)","liver"
+"tumor adjacent tissue","other"
+"tumor biopsies and peripheral blood","other"
+"tumor biopsy and resection samples","other"
+"tumor infiltrating cells","immune system"
+"tumor sub-ventricular zone (SVZ)","brain"
+"tumor suspension","other"
+"tumor tissue (Hepatoblastoma tumoroid)","liver"
+"tumor tissue from hepatoblastoma","liver"
+"tumor tissue from syngeneic MC38 CRC implanted ectopic tumors","other"
+"tumor tissues from DMP1-Cre Mfn2-/- and Rhot1-/- mice","other"
+"tumor tissues from DMP1-Cre PhAM mice","other"
+"tumor, CD11b+","immune system"
+"tumor, CD45+ sorted cells","immune system"
+"tumor-draining lymph nodes","lymph node"
+"tumor-draining lymph nodes (tdLN)","lymph node"
+"tumor-infiltrating","immune system"
+"tumor-infiltrating Treg","immune system"
+"tumor-infiltrating lymphocytes from melanoma patients","immune system"
+"tumor-infiltrating tissue","other"
+"tumoroid","other"
+"tumoroid (HB4 hepatoblastoma)","liver"
+"tumoroid derived from hepatoblastoma","liver"
+"tumour-draining lymph node","lymph node"
+"tumour-infiltrating","immune system"
+"unwounded back skin","skin of body"
+"upper right brain quadrant","brain"
+"uterine fibroblasts (KCO2s)","uterus"
+"uterine leiomyosarcoma tumor","uterus"
+"uterine serous carcinoma","uterus"
+"uterine tube (oviduct)","fallopian tube"
+"uterine tube (oviduct), distal section","fallopian tube"
+"uterine tube (oviduct), proximal section","fallopian tube"
+"utero-placental tissue, myometrial strips","uterus"
+"utricle","sensory system"
+"vagal neural crest","peripheral nervous system"
+"vascular endothelial cells (HUVEC)","vasculature"
+"ventral hippocampus","brain"
+"ventral hippocampus, D1-expressing nuclei","brain"
+"visceral adipose tissue (VAT)","adipose tissue"
+"whole embryonic nose","nose"
+"whole heart","heart"
+"whole kidney","kidney"
+"whole lung cells","lung"
+"whole tumors","other"
+"wounded back skin, 1 day post-wounding","skin of body"
+"wrist joint","skeletal system"
+"xenograft OS tumor","skeletal system"
+"xenograft bone marrow","bone marrow"
+"xenograft tissue","other"
+"yolk sac, placenta","yolk sac"
+"3D organoid culture","other"
+"8553_BR_R_sec3_S1_L002","other"
+"8718_BR_L_sec1_S2_L002","other"
+"ACA (Anterior Cingulate Area)","brain"
+"ASO3","other"
+"Adult brain (VISp1)","brain"
+"B-lymphoid cells","immune system"
+"BA9+BA4+SC (brain regions)","brain"
+"BA9+TH+Lesion+AWS","brain"
+"C2C12 myoblasts","musculature"
+"CB - VERM-CBN","brain"
+"CN6 e11.5 GFP-positive and negative","brain"
+"CNU - PAL (Cortex Nucleus - Pallidum)","brain"
+"CTXsp - CLA-EP-LA-BLA-BMA-PA (adult mouse brain)","brain"
+"CTXsp - CLA-EP-LA-BLA-BMA-PA (specific brain regions)","brain"
+"Caco2 cells","other"
+"Caco2 cells expressing mCD300lf","other"
+"Caecum epithelium","large intestine"
+"Ctrl3-sup","other"
+"GABAergic Cortical Neurons","brain"
+"HT29 cells","other"
+"HashTagOligo","other"
+"Hematopoietic Stem and Progenitor Cells","bone marrow"
+"Intestinal tract","intestine"
+"Intestinal tract and surrounding tissues","intestine"
+"K7M2 flank tumor","other"
+"LLC tumor (Lewis Lung Carcinoma)","lung"
+"Ligamentum Flavum","skeletal system"
+"Liver N","liver"
+"MB - IC (Mouse Brain - Intercalated)","brain"
+"MB - MRN-CUN-RN-RR-PPN-PRT (specific brain regions)","brain"
+"MB-PONS - DR-PPN-SOC-V","brain"
+"MDAMB361 Cell line","other"
+"PDX","other"
+"PDX (Patient-Derived Xenograft)","other"
+"PTLp (Posterior Thalamic Lateral Nucleus)","brain"
+"Pancreatic Islets","pancreas"
+"Payer's patches","immune system"
+"Pig embryo (D7)","embryo"
+"Posterior intestinal tract and surrounding tissues","intestine"
+"Pre-manufacture T cells","immune system"
+"RPE1-hTert cells","other"
+"Skin of body","skin of body"
+"Skin of body (dorsal skin biopsies)","skin of body"
+"Substantia Nigra","brain"
+"Substantia nigra pars compacta (SNpc)","brain"
+"TH - MH-LH-LP (specific brain regions)","brain"
+"TH - PF-SPA-SPFm-VPMpc-VPLpc-RT","brain"
+"TH - VAL-VPM-VPL-VM (specific brain regions)","brain"
+"Thalamic and Cortical Organoids","brain"
+"Vagus nerve ganglion","peripheral nervous system"
+"adjacent nonmalignant tissues, nasopharyngeal carcinoma","respiratory system"
+"adult mouse brain regions","brain"
+"ankle ulcer","skin of body"
+"anterior tibial arteries","vasculature"
+"axillary and inguinal lymph node, right flank","lymph node"
+"back skin and matched livers","other"
+"blood (term cord blood)","blood"
+"blood, specifically Peripheral Blood Mononuclear Cells (PBMC)","blood"
+"bone marrow-derived monocytes (BMDMs)","bone marrow"
+"brain (excluding olfactory bulbs, cerebellum, pons, and medulla)","brain"
+"brain (prefrontal cortex white matter)","brain"
+"brain regions: TH - AD-AV-AM-IAD-LD","brain"
+"brain, cerebellum","brain"
+"brain, medial prefrontal cortex","brain"
+"brain, specifically cortical regions","brain"
+"brain, specifically neocortical and hippocampal regions","brain"
+"brain, specifically the cerebellum","brain"
+"breast cancer biopsies","breast"
+"bronchoalveolar lavage (BAL) cells","lung"
+"caecum epithelium","large intestine"
+"cerebellum - cerebellar nuclei","brain"
+"cerebellum hemispheres","brain"
+"colon tissue, colorectal pre-malignant lesions, malignant lesions","colon"
+"colorectal lesions","colon"
+"coronary vessels","vasculature"
+"cranial motor neurons (cMNs) from embryonic mouse (e10.5 and e11.5)","brain"
+"decidual immune cells","immune system"
+"distal ileum","small intestine"
+"e14.5 liver","liver"
+"ear and tail","other"
+"embryo, 24 hpf, endothelial cell","embryo"
+"embryo, tail bud prominent stage","embryo"
+"embryonic tissue (D7 pig embryo)","embryo"
+"endodermal and gut tissues","digestive system"
+"endometrial fibroblasts","uterus"
+"epigalea","other"
+"gallbladder","gallbladder"
+"gastric fundus","stomach"
+"head and neck squamous cell carcinoma","neck"
+"hepatic fibroblasts","liver"
+"human cardiac myxoma","heart"
+"human immortalized endothelial cells","vasculature"
+"iPSC-derived endothelial cells","vasculature"
+"iPSC-derived macrophage","immune system"
+"iPSC-derived macrophages","immune system"
+"iPSC/SEAM_week1","other"
+"iPSC/SEAM_week10","other"
+"iPSC/SEAM_week2","other"
+"iPSC/SEAM_week4","other"
+"iPSC/SEAM_week6","other"
+"iPSC/SEAM_week8","other"
+"iWAT (Inguinal White Adipose Tissue)","adipose tissue"
+"intestinal crypt epithelial cells","intestine"
+"jaw","head"
+"lPRAT Adipose","adipose tissue"
+"ligamentum flavum","skeletal system"
+"lower small intestine","small intestine"
+"lymph nodes (tumor-draining)","lymph node"
+"macrophages","immune system"
+"medial temporal lobe","brain"
+"megakaryblast MEG01 cells","bone marrow"
+"meningeal dura","brain"
+"mesenchymal glioma stem cells","brain"
+"mesenteric lymph nodes (MLNs)","lymph node"
+"midbrain - paraventricular nucleus","brain"
+"miracidium larva","other"
+"mouse embryonic stem cells (mESC)","embryo"
+"nasal turbinates","nose"
+"nasal-associated lymph nodes","lymph node"
+"neurons derived from iPSCs","brain"
+"neutrophils from bone marrow, spleen, blood, and pancreatic tumor","immune system"
+"non-mobilized HSCPs","bone marrow"
+"occipital cortex","brain"
+"olfactory piriform cortex","brain"
+"ovarian surface epithelium","ovary"
+"pair of forelimbs","forelimb"
+"pancreatic ductal adenocarcinoma organoids","pancreas"
+"peripheral blood mononuclear cells (PBMC) and tumor biopsies","other"
+"peripheral blood, PBMC","blood"
+"placenta villi, early pregnancy","placenta"
+"popliteal lymphatic and blood vessels","vasculature"
+"posterior intestinal tract and surrounding tissues","intestine"
+"prefrontal cortex white matter","brain"
+"primary (from medulloblastoma)","brain"
+"primary HSPC","bone marrow"
+"primary cells (mixed), tumor","other"
+"primary decidual immune cells","immune system"
+"primary human airway epithelial cultures","respiratory system"
+"primary human breast cancer","breast"
+"prostate tumor, pelvic mass","prostate gland"
+"rostral ventrolateral medulla","brain"
+"sarcoma tissue","other"
+"skin (anterior chest)","skin of body"
+"skin (back skin and matched livers)","skin of body"
+"skin (dorsal skin biopsies)","skin of body"
+"skin biopsy","skin of body"
+"skin cells","skin of body"
+"substantia nigra - amygdala","brain"
+"synovial","skeletal system"
+"teratoma-mTBLC","other"
+"terminal ileum and ascending colon","intestine"
+"thymocytes","immune system"
+"tumor mass","other"
+"tumor mass sample of glioblastoma patient","brain"
+"tumor mass sample of glioblastoma patient 20","brain"
+"tumor mass sample of glioblastoma patient mis3","brain"
+"tumor or spleen","other"
+"umbilical vein endothelial cells","vasculature"
+"ureter","ureter"
+"vascular tissue","vasculature"
+"whole organism (embryo stage)","embryo"

@@ -1,0 +1,176 @@
+organism	tissue	count
+Callithrix jacchus	Brodmann (1909) area 19	0
+Callithrix jacchus	Brodmann (1909) area 23	21148
+Callithrix jacchus	Brodmann (1909) area 25	31538
+Callithrix jacchus	amygdala	0
+Callithrix jacchus	anterior cingulate cortex	0
+Callithrix jacchus	cerebellar vermis	0
+Callithrix jacchus	cerebrocerebellum	0
+Callithrix jacchus	corpus callosum	0
+Callithrix jacchus	dorsolateral prefrontal cortex	208814
+Callithrix jacchus	entorhinal cortex	0
+Callithrix jacchus	head of caudate nucleus	0
+Callithrix jacchus	hippocampal formation	0
+Callithrix jacchus	inferior parietal cortex	0
+Callithrix jacchus	inferior temporal gyrus	0
+Callithrix jacchus	islet of Langerhans	0
+Callithrix jacchus	lateral geniculate body	0
+Callithrix jacchus	medial dorsal nucleus of thalamus	0
+Callithrix jacchus	medulla oblongata	0
+Callithrix jacchus	midbrain	0
+Callithrix jacchus	middle temporal gyrus	0
+Callithrix jacchus	nucleus accumbens	0
+Callithrix jacchus	parietal cortex	25291
+Callithrix jacchus	perirhinal cortex	0
+Callithrix jacchus	pons	0
+Callithrix jacchus	prefrontal cortex	121494
+Callithrix jacchus	primary auditory cortex	41007
+Callithrix jacchus	primary motor cortex	46837
+Callithrix jacchus	primary somatosensory cortex	32265
+Callithrix jacchus	primary visual cortex	27419
+Callithrix jacchus	secondary visual cortex	25182
+Callithrix jacchus	superior parietal cortex	0
+Callithrix jacchus	superior temporal sulcus	0
+Callithrix jacchus	temporal cortex	10727
+Callithrix jacchus	temporal lobe	37849
+Callithrix jacchus	ventral lateral nucleus of thalamus	0
+Gorilla gorilla	Brodmann (1909) area 19	0
+Gorilla gorilla	Brodmann (1909) area 23	0
+Gorilla gorilla	Brodmann (1909) area 25	0
+Gorilla gorilla	amygdala	0
+Gorilla gorilla	anterior cingulate cortex	0
+Gorilla gorilla	cerebellar vermis	0
+Gorilla gorilla	cerebrocerebellum	0
+Gorilla gorilla	corpus callosum	0
+Gorilla gorilla	dorsolateral prefrontal cortex	0
+Gorilla gorilla	entorhinal cortex	0
+Gorilla gorilla	head of caudate nucleus	0
+Gorilla gorilla	hippocampal formation	0
+Gorilla gorilla	inferior parietal cortex	0
+Gorilla gorilla	inferior temporal gyrus	0
+Gorilla gorilla	islet of Langerhans	0
+Gorilla gorilla	lateral geniculate body	0
+Gorilla gorilla	medial dorsal nucleus of thalamus	0
+Gorilla gorilla	medulla oblongata	0
+Gorilla gorilla	midbrain	0
+Gorilla gorilla	middle temporal gyrus	139945
+Gorilla gorilla	nucleus accumbens	0
+Gorilla gorilla	parietal cortex	0
+Gorilla gorilla	perirhinal cortex	0
+Gorilla gorilla	pons	0
+Gorilla gorilla	prefrontal cortex	0
+Gorilla gorilla	primary auditory cortex	0
+Gorilla gorilla	primary motor cortex	0
+Gorilla gorilla	primary somatosensory cortex	0
+Gorilla gorilla	primary visual cortex	0
+Gorilla gorilla	secondary visual cortex	0
+Gorilla gorilla	superior parietal cortex	0
+Gorilla gorilla	superior temporal sulcus	0
+Gorilla gorilla	temporal cortex	0
+Gorilla gorilla	temporal lobe	0
+Gorilla gorilla	ventral lateral nucleus of thalamus	0
+Macaca mulatta	Brodmann (1909) area 19	52109
+Macaca mulatta	Brodmann (1909) area 23	0
+Macaca mulatta	Brodmann (1909) area 25	0
+Macaca mulatta	amygdala	33794
+Macaca mulatta	anterior cingulate cortex	73359
+Macaca mulatta	cerebellar vermis	208013
+Macaca mulatta	cerebrocerebellum	205169
+Macaca mulatta	corpus callosum	44225
+Macaca mulatta	dorsolateral prefrontal cortex	229011
+Macaca mulatta	entorhinal cortex	74504
+Macaca mulatta	head of caudate nucleus	44569
+Macaca mulatta	hippocampal formation	49702
+Macaca mulatta	inferior parietal cortex	70069
+Macaca mulatta	inferior temporal gyrus	169621
+Macaca mulatta	islet of Langerhans	0
+Macaca mulatta	lateral geniculate body	16873
+Macaca mulatta	medial dorsal nucleus of thalamus	31215
+Macaca mulatta	medulla oblongata	9822
+Macaca mulatta	midbrain	169814
+Macaca mulatta	middle temporal gyrus	89136
+Macaca mulatta	nucleus accumbens	36987
+Macaca mulatta	parietal cortex	0
+Macaca mulatta	perirhinal cortex	61454
+Macaca mulatta	pons	44905
+Macaca mulatta	prefrontal cortex	297201
+Macaca mulatta	primary auditory cortex	103945
+Macaca mulatta	primary motor cortex	83766
+Macaca mulatta	primary somatosensory cortex	85268
+Macaca mulatta	primary visual cortex	313628
+Macaca mulatta	secondary visual cortex	0
+Macaca mulatta	superior parietal cortex	148422
+Macaca mulatta	superior temporal sulcus	26820
+Macaca mulatta	temporal cortex	0
+Macaca mulatta	temporal lobe	0
+Macaca mulatta	ventral lateral nucleus of thalamus	35571
+Pan troglodytes	Brodmann (1909) area 19	0
+Pan troglodytes	Brodmann (1909) area 23	0
+Pan troglodytes	Brodmann (1909) area 25	0
+Pan troglodytes	amygdala	0
+Pan troglodytes	anterior cingulate cortex	0
+Pan troglodytes	cerebellar vermis	0
+Pan troglodytes	cerebrocerebellum	0
+Pan troglodytes	corpus callosum	0
+Pan troglodytes	dorsolateral prefrontal cortex	158099
+Pan troglodytes	entorhinal cortex	0
+Pan troglodytes	head of caudate nucleus	0
+Pan troglodytes	hippocampal formation	0
+Pan troglodytes	inferior parietal cortex	0
+Pan troglodytes	inferior temporal gyrus	0
+Pan troglodytes	islet of Langerhans	0
+Pan troglodytes	lateral geniculate body	0
+Pan troglodytes	medial dorsal nucleus of thalamus	0
+Pan troglodytes	medulla oblongata	0
+Pan troglodytes	midbrain	0
+Pan troglodytes	middle temporal gyrus	112929
+Pan troglodytes	nucleus accumbens	0
+Pan troglodytes	parietal cortex	0
+Pan troglodytes	perirhinal cortex	0
+Pan troglodytes	pons	0
+Pan troglodytes	prefrontal cortex	0
+Pan troglodytes	primary auditory cortex	0
+Pan troglodytes	primary motor cortex	0
+Pan troglodytes	primary somatosensory cortex	0
+Pan troglodytes	primary visual cortex	0
+Pan troglodytes	secondary visual cortex	0
+Pan troglodytes	superior parietal cortex	0
+Pan troglodytes	superior temporal sulcus	0
+Pan troglodytes	temporal cortex	0
+Pan troglodytes	temporal lobe	0
+Pan troglodytes	ventral lateral nucleus of thalamus	0
+Sus scrofa	Brodmann (1909) area 19	0
+Sus scrofa	Brodmann (1909) area 23	0
+Sus scrofa	Brodmann (1909) area 25	0
+Sus scrofa	amygdala	0
+Sus scrofa	anterior cingulate cortex	0
+Sus scrofa	cerebellar vermis	0
+Sus scrofa	cerebrocerebellum	0
+Sus scrofa	corpus callosum	0
+Sus scrofa	dorsolateral prefrontal cortex	0
+Sus scrofa	entorhinal cortex	0
+Sus scrofa	head of caudate nucleus	0
+Sus scrofa	hippocampal formation	0
+Sus scrofa	inferior parietal cortex	0
+Sus scrofa	inferior temporal gyrus	0
+Sus scrofa	islet of Langerhans	22056
+Sus scrofa	lateral geniculate body	0
+Sus scrofa	medial dorsal nucleus of thalamus	0
+Sus scrofa	medulla oblongata	0
+Sus scrofa	midbrain	0
+Sus scrofa	middle temporal gyrus	0
+Sus scrofa	nucleus accumbens	0
+Sus scrofa	parietal cortex	0
+Sus scrofa	perirhinal cortex	0
+Sus scrofa	pons	0
+Sus scrofa	prefrontal cortex	0
+Sus scrofa	primary auditory cortex	0
+Sus scrofa	primary motor cortex	0
+Sus scrofa	primary somatosensory cortex	0
+Sus scrofa	primary visual cortex	0
+Sus scrofa	secondary visual cortex	0
+Sus scrofa	superior parietal cortex	0
+Sus scrofa	superior temporal sulcus	0
+Sus scrofa	temporal cortex	0
+Sus scrofa	temporal lobe	0
+Sus scrofa	ventral lateral nucleus of thalamus	0
