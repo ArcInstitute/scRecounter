@@ -231,15 +231,15 @@ process XSRA {
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 6
     memory { 16.GB * task.attempt }
-    time { (10.h + (sra_file_size_gb * 0.8).h) * task.attempt }
+    time { (4.h + (sra_file_size_gb * 0.8).h) * task.attempt }
     disk { 
         def disk_size = 
-            sra_file_size_gb > 260 ? 2625.GB :
-            sra_file_size_gb > 220 ? 2250.GB :
-            sra_file_size_gb > 170 ? 1875.GB :
-            sra_file_size_gb > 120 ? 1500.GB :
-            sra_file_size_gb > 60 ? 1125.GB :
-            sra_file_size_gb > 30 ? 750.GB :
+            sra_file_size_gb > 360 ? 7 * 375.GB :
+            sra_file_size_gb > 300 ? 6 * 375.GB :
+            sra_file_size_gb > 240 ? 5 * 375.GB :
+            sra_file_size_gb > 180 ? 4 * 375.GB :
+            sra_file_size_gb > 120 ? 3 * 375.GB :
+            sra_file_size_gb > 50 ? 2 * 375.GB :
             375.GB
         disk_size = disk_size + (375 * (task.attempt - 1)).GB
         [request: disk_size, type: 'local-ssd'] 
