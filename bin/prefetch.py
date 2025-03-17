@@ -168,7 +168,8 @@ def write_log(logF, sample: str, accession: str, step: str, msg: str) -> None:
     logF.write(','.join([sample, accession, step, msg]) + '\n')
 
 def prefetch_workflow(sample: str, accession: str, log_df: pd.DataFrame, outdir:str, 
-                      gcp_download: bool=False, tries: int=3, max_size_gb: float=1000) -> Optional[str]:
+                      gcp_download: bool=False, tries: int=3, max_size_gb: float=1000
+                      ) -> Optional[str]:
     """
     Run prefetch workflow.
     Args:
@@ -179,6 +180,8 @@ def prefetch_workflow(sample: str, accession: str, log_df: pd.DataFrame, outdir:
         gcp_download: Use GCP mirror
         tries: Number of tries
         max_size_gb: Max file size in Gb
+    Returns:
+        Output file path or None
     """
     # check for prefetch in path
     for exe in ['prefetch', 'vdb-dump']:
@@ -206,12 +209,12 @@ def prefetch_workflow(sample: str, accession: str, log_df: pd.DataFrame, outdir:
         return None
 
     # print output file size
-    sra_file = os.path.join(outdir, accession)
+    sra_file = os.path.join(outdir, accession,  f"{accession}.sra")
     if not os.path.exists(sra_file):
         logging.warning(f'File not found: {sra_file}')
         return None
     file_size = os.path.getsize(sra_file)
-    logging.info(f"SRA file size: {file_size / 1e9:.3f} GB")
+    logging.info(f"SRA file size: {file_size / 1e9:.5f} GB")
 
     # return output file
     return sra_file

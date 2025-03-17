@@ -13,8 +13,8 @@ workflow STAR_FULL_WF{
         ch_star_params.map{ it[0] }.unique(), by: 0
     )
 
-    // fasterq-dump to download all reads
-    ch_fastq = FASTERQ_DUMP(ch_accessions_filt)
+    // Use xsra to download all reads
+    ch_fastq = XSRA(ch_accessions_filt)
     ch_fastq = joinReads(ch_fastq.R1, ch_fastq.R2)
 
     // For accessions lacking paired reads from fasterq-dump, fallback to fastq-dump
@@ -55,6 +55,7 @@ workflow STAR_FULL_WF{
         STAR_FULL.out.velocyto_summary
     )
 }
+
 
 process STAR_FULL_SUMMARY {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsSTAR(sample, filename) }
@@ -220,6 +221,57 @@ process FASTQ_DUMP {
     """
     mkdir -p reads
     touch reads/read_1.fastq reads/read_2.fastq ${task.process}.log
+    """
+}
+
+process XSRA {
+    publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
+    label "download_env"
+    maxRetries 1
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    cpus 6
+    memory { 16.GB * task.attempt }
+    time { (10.h + (sra_file_size_gb * 0.8).h) * task.attempt }
+    disk { 
+        def disk_size = 
+            sra_file_size_gb > 260 ? 2625.GB :
+            sra_file_size_gb > 220 ? 2250.GB :
+            sra_file_size_gb > 170 ? 1875.GB :
+            sra_file_size_gb > 120 ? 1500.GB :
+            sra_file_size_gb > 60 ? 1125.GB :
+            sra_file_size_gb > 30 ? 750.GB :
+            375.GB
+        disk_size = disk_size + (375 * (task.attempt - 1)).GB
+        [request: disk_size, type: 'local-ssd'] 
+    }
+    machineType { 
+        def options = ['n2-*', 'c2-*', 'n2d-*', 'c2d-*']
+        return options[new Random().nextInt(options.size())]
+    }
+    
+    input:
+    tuple val(sample), val(accession), val(metadata), val(sra_file_size_gb)
+
+    output:
+    tuple val(sample), val(accession), val(metadata), path("reads/read_1.fastq"), emit: "R1"
+    tuple val(sample), val(accession), val(metadata), path("reads/read_2.fastq"), emit: "R2", optional: true
+    path "${task.process}.log",                                                   emit: "log"
+
+    script:
+    """
+    export GCP_SQL_DB_HOST="${params.db_host}"
+    export GCP_SQL_DB_NAME="${params.db_name}"
+    export GCP_SQL_DB_USERNAME="${params.db_username}"
+
+    echo "Downloading ${accession} for ${sample}" > ${task.process}.log
+    echo "sra-stat file size: ${sra_file_size_gb} GB" >> ${task.process}.log
+
+    xsra.py \\
+      --sample ${sample} \\
+      --threads ${task.cpus} \\
+      --min-read-length ${params.min_read_len} \\
+      --outdir reads \\
+      ${accession}
     """
 }
 
