@@ -58,7 +58,7 @@ def read_seqkit_stats(stats_file: str, sample: str, accession: str) -> pd.DataFr
     # read in as pandas dataframe
     DF = pd.read_csv(stats_file, sep='\t')
     DF["accession"] = accession
-    DF["read"] =  "read" + DF["file"].str.extract(r'read_([12]).fastq$') + "_length"
+    DF["read"] =  "read" + DF["file"].str.extract(r'read_([12]).fa.zst$') + "_length"
     DF = DF[["accession", "read", "avg_len"]]
     # convert avg_len to int
     DF["avg_len"] = DF["avg_len"].astype(int)

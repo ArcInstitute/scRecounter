@@ -9,16 +9,16 @@ workflow STAR_PARAMS_WF{
 
     main:
     //-- Download subset of reads reads --//    
-    // Run fastq-dump; only testing on subset of SRR accessions, if many
-    ch_fqdump = FASTQ_DUMP(
+    // Run `xsra dump --limit`; only testing on subset of SRR accessions
+    XSRA(
         subsampleByGroup(ch_accessions, params.max_accessions, 23482)
     )
     
     // Join R1 and R2 channels, which will filter out empty R2 records
-    ch_fastq = joinReads(ch_fqdump.R1, ch_fqdump.R2)
+    ch_fasta = joinReads(XSRA.out.R1, XSRA.out.R2)
 
     // Get read lengths
-    SEQKIT_STATS(ch_fastq)
+    SEQKIT_STATS(ch_fasta)
 
     //-- STAR param search on subsampled reads --//
 
@@ -29,7 +29,7 @@ workflow STAR_PARAMS_WF{
     ch_star_indices = loadStarIndices(params)
 
     // Pairwise combine samples with barcodes, strand, and star index
-    ch_params = makeParamSets(ch_fastq, ch_barcodes, ch_star_indices)
+    ch_params = makeParamSets(ch_fasta, ch_barcodes, ch_star_indices)
 
     // Run STAR on subsampled reads, for all pairwise parameter combinations
     STAR_PARAM_SEARCH(ch_params)
@@ -54,7 +54,7 @@ workflow STAR_PARAMS_WF{
         }
 
     // Extract selected parameters from the JSON files
-    ch_star_params = expandStarParams(ch_fastq, ch_star_params_json)
+    ch_star_params = expandStarParams(ch_fasta, ch_star_params_json)
 
     // Merge STAR parameters to a single set for each sample
     def majorityRule = { list ->
@@ -141,7 +141,7 @@ process STAR_SELECT_PARAMS {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsParams(sample, accession, filename) }
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "star_env"
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
     input:
@@ -215,7 +215,7 @@ process STAR_PARAM_SEARCH {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "star_env"
     label "process_medium"
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
     input:
@@ -240,7 +240,6 @@ process STAR_PARAM_SEARCH {
       --soloUMIlen ${params.umi_length} \\
       --soloStrand ${params.strand} \\
       --soloType CB_UMI_Simple \\
-      --clipAdapterType CellRanger4 \\
       --outFilterScoreMin 30 \\
       --soloCBmatchWLtype 1MM_multi_Nbase_pseudocounts \\
       --soloCellFilter EmptyDrops_CR \\
@@ -251,6 +250,7 @@ process STAR_PARAM_SEARCH {
       --outSAMtype None \\
       --soloBarcodeReadLength 0 \\
       --outFileNamePrefix results \\
+      --readFilesCommand zstd -dcf \\
       2>&1 | tee ${task.process}:\${STAR_INDEX}:\${BARCODES_FILE}:${params.strand}.log
     
     # rename output
@@ -266,7 +266,6 @@ process STAR_PARAM_SEARCH {
 // Get read lengths via `seqkit stats`
 process SEQKIT_STATS {
     label "download_env"
-    label "process_low"
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
@@ -278,8 +277,7 @@ process SEQKIT_STATS {
 
     script:
     """
-    seqkit -j $task.cpus stats -T \\
-      $fastq_1 $fastq_2 \\
+    seqkit stats -T $fastq_1 $fastq_2 \\
       > ${sample}_${accession}_stats.tsv
     """
 
@@ -289,6 +287,42 @@ process SEQKIT_STATS {
     """
 }
 
+process XSRA {
+    publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
+    label "download_env"
+    maxRetries 1
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' } 
+    cpus 4
+    memory { 4.GB * task.attempt }
+    disk 10.GB
+ 
+    input:
+    tuple val(sample), val(accession), val(metadata), val(sra_file_size_gb)
+
+    output:
+    tuple val(sample), val(accession), val(metadata), path("reads/read_1.fa.zst"), emit: "R1"
+    tuple val(sample), val(accession), val(metadata), path("reads/read_2.fa.zst"), emit: "R2", optional: true
+    path "${task.process}.log",                                                    emit: "log"
+
+    script:
+    """
+    export GCP_SQL_DB_HOST="${params.db_host}"
+    export GCP_SQL_DB_NAME="${params.db_name}"
+    export GCP_SQL_DB_USERNAME="${params.db_username}"
+
+    xsra.py \\
+      --sample ${sample} \\
+      --threads ${task.cpus} \\
+      --min-read-length ${params.min_read_len} \\
+      --max-spot-id ${params.max_spots} \\
+      --outdir reads \\
+      --out-format fasta \\
+      ${accession} \\
+      2>&1 | tee ${task.process}.log
+    """
+}
+
+/*
 process FASTQ_DUMP {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "download_env"
@@ -336,3 +370,4 @@ process FASTQ_DUMP {
     touch reads/read1.fastq reads/read_2.fastq ${task.process}.log
     """
 }
+*/
