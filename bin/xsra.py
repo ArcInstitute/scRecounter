@@ -38,7 +38,7 @@ def parse_args():
                         help='Temporary directory')
     parser.add_argument('--max-spot-id', type=int, default=None,
                         help='Maximum reads to write')
-    parser.add_argument('--outdir', type=str, default='prefetch_out',
+    parser.add_argument('--output-dir', type=str, default='prefetch_out',
                         help='Output directory')
     parser.add_argument('--min-read-length', type=int, default=28,
                         help='Minimum read length')  
@@ -73,7 +73,7 @@ def run_cmd(cmd: str) -> Tuple[int, bytes, bytes]:
         logging.error(f"Error running command: {str(e)}")
         return 1, b"", str(e).encode()
 
-def rename_read_files(read_lens_filt: Dict[str, int], outdir: str) -> Dict[str, str]:
+def rename_read_files(read_lens_filt: Dict[str, int], output_dir: str) -> Dict[str, str]:
     """
     Rename reads in `read_lens_filt` to:
     - 'read_1.fa.zstd' if there's only one file.
@@ -90,7 +90,7 @@ def rename_read_files(read_lens_filt: Dict[str, int], outdir: str) -> Dict[str, 
     if num_files == 1:
         logging.info("Only one read file found; renaming to read_1.fa.zstd")
         old_name = list(read_lens_filt.keys())[0]
-        new_name = os.path.join(outdir, "read_1.fa.zstd")
+        new_name = os.path.join(output_dir, "read_1.fa.zstd")
 
         if old_name == new_name:
             raise ValueError(f"New fasta name is the same as old name: {new_name}")
@@ -116,7 +116,7 @@ def rename_read_files(read_lens_filt: Dict[str, int], outdir: str) -> Dict[str, 
         #  - first becomes read_1.fa.zstd
         #  - second becomes read_2.fa.zstd
         for i, (old_name, _) in enumerate(top_two, start=1):
-            new_name = os.path.join(outdir, f"read_{i}.fa.zstd")
+            new_name = os.path.join(output_dir, f"read_{i}.fa.zstd")
             if old_name == new_name:
                 raise ValueError(f"New fasta name is the same as old name: {new_name}")
             os.rename(old_name, new_name)
@@ -127,7 +127,7 @@ def rename_read_files(read_lens_filt: Dict[str, int], outdir: str) -> Dict[str, 
         # Assign read_2 to the largest read, read_1 to the second largest
         for i, (old_name, _) in enumerate(top_two, start=1):
             read_num = 2 if i == 1 else 1
-            new_name = os.path.join(outdir, f"read_{read_num}.fa.zstd")
+            new_name = os.path.join(output_dir, f"read_{read_num}.fa.zstd")
 
             if old_name == new_name:
                 raise ValueError(f"New fasta name is the same as old name: {new_name}")
@@ -200,12 +200,12 @@ def xsra_describe(sra_file: str, min_read_length: int) -> Tuple[Optional[List[Li
         [f"seg_{top_two[0][0]}.fa.zst", "read_2.fa.zst"],
     ],"Successfully found paired-end reads via: xsra describe"
 
-def xsra_dump(sra_file: str, outdir: str, output_format: str, threads: int=1, max_spot_id: Optional[int]=None) -> Tuple[str, str]:
+def xsra_dump(sra_file: str, output_dir: str, output_format: str, threads: int=1, max_spot_id: Optional[int]=None) -> Tuple[str, str]:
     """
     Run `xsra dump` to dump the reads.
     Params:
         sra_file: SRA file or accession
-        outdir: Output directory
+        output_dir: Output directory
         output_format: Output format
         threads: Number of threads
         max_spot_id: Maximum spot ID
@@ -227,7 +227,7 @@ def xsra_dump(sra_file: str, outdir: str, output_format: str, threads: int=1, ma
             "--compression", "z",
             "--format", output_format,
             "--threads", threads,
-            "--outdir", outdir,
+            "--outdir", output_dir,
         ]
     if max_spot_id and max_spot_id > 0:
         cmd += ["--limit", str(max_spot_id)]
@@ -247,26 +247,26 @@ def xsra_dump(sra_file: str, outdir: str, output_format: str, threads: int=1, ma
     status = "Success" if returncode == 0 else "Failure"
     return status, msg
 
-def check_output(read_names: List[str], accession: str, outdir: str) -> Tuple[str, str]:
+def check_output(read_names: List[str], accession: str, output_dir: str) -> Tuple[str, str]:
     """
     Check the output of xsra dump.
     Args:
         read_names: List of read names
         accession: SRA accession
-        outdir: Output directory
+        output_dir: Output directory
     Returns:
         Tuple of (status, message)
     """
     logging.info(f"Checking output for {accession}")
 
-    # list all files in outdir
-    out_files_str = ", ".join(glob(os.path.join(outdir, "*")))
-    logging.info(f"Files in outdir: {out_files_str}")
+    # list all files in output_dir
+    out_files_str = ", ".join(glob(os.path.join(output_dir, "*")))
+    logging.info(f"Files in output_dir: {out_files_str}")
 
     # rename the output files
     for old_name, new_name in read_names:
-        old_path = os.path.join(outdir, old_name)
-        new_path = os.path.join(outdir, new_name)
+        old_path = os.path.join(output_dir, old_name)
+        new_path = os.path.join(output_dir, new_name)
         if not os.path.exists(old_path):
             msg = f"Read file not found: {old_path}"
             logging.warning(msg)
@@ -280,7 +280,7 @@ def check_output(read_names: List[str], accession: str, outdir: str) -> Tuple[st
             return "Failure", msg
 
     # list output files
-    read_files = glob(os.path.join(outdir, f"read_*.fa.zst"))
+    read_files = glob(os.path.join(output_dir, f"read_*.fa.zst"))
     if not read_files:
         msg = f"No target read files found; files present: {out_files_str}"
         logging.warning(msg)
@@ -296,26 +296,26 @@ def check_output(read_names: List[str], accession: str, outdir: str) -> Tuple[st
     # return success if all files are present and not empty
     return "Success","xsra dump successful"
 
-def xsra_prefetch(accession: str, outdir: str, threads: int) -> Tuple[str, str]:
+def xsra_prefetch(accession: str, output_dir: str, threads: int) -> Tuple[str, str]:
     """
     Run `xsra prefetch` to prefetch the reads.
     Args:
         accession: SRA accession
-        outdir: Output directory
+        output_dir: Output directory
         threads: Number of threads
     Returns:
         Tuple of (status, message)
     """
     logging.info(f"Prefetching {accession}")
-    cmd = f"xsra prefetch {accession} -o {outdir} -p -t {threads}"
+    cmd = f"xsra prefetch {accession} -o {output_dir} -p -t {threads}"
     return run_cmd(cmd)
 
-def xsra_all(sra_file: str, outdir: str, output_format: str, threads: int) -> Tuple[str, str]:
+def xsra_all(sra_file: str, output_dir: str, output_format: str, threads: int) -> Tuple[str, str]:
     """
     Run `xsra dump` to dump the reads.
     Args:
         sra_file: SRA file
-        outdir: Output directory
+        output_dir: Output directory
         output_format: Output format
         threads: Number of threads
     Returns:
@@ -335,26 +335,26 @@ def xsra_all(sra_file: str, outdir: str, output_format: str, threads: int) -> Tu
     #     return None
 
     # prefetch via `xsra prefetch`
-    status,msg = xsra_prefetch(sra_file, outdir, threads=threads)
+    status,msg = xsra_prefetch(sra_file, output_dir, threads=threads)
     add_to_log(log_df, args.sample, args.accession, "xsra", "prefetch", status, msg)
 
     # run `xsra dump` to dump the reads
-    status,msg = xsra_dump(sra_file, args.outdir, output_format=output_format, threads=args.threads)
+    status,msg = xsra_dump(sra_file, output_dir, output_format=output_format, threads=threads)
     add_to_log(log_df, args.sample, args.accession, "xsra", "dump", status, msg)
 
-def xsra_limit(sra_file: str, outdir: str, output_format: str, threads: int, max_spot_id: int) -> Tuple[str, str]:
+def xsra_limit(sra_file: str, output_dir: str, output_format: str, threads: int, max_spot_id: int) -> Tuple[str, str]:
     """
     Run `xsra dump` to dump the reads with a limit on the number of spots.
     Args:
         sra_file: SRA file
-        outdir: Output directory
+        output_dir: Output directory
         threads: Number of threads
         max_spot_id: Maximum spot ID
     Returns:
         Tuple of (status, message)
     """
     accession = os.path.splitext(os.path.basename(sra_file))[0]
-    status,msg = xsra_dump(accession, outdir, threads=threads, max_spot_id=max_spot_id)
+    status,msg = xsra_dump(accession, output_dir, output_format=output_format, threads=threads, max_spot_id=max_spot_id)
 
 def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
     # check for executables
@@ -371,12 +371,12 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
 
     # if args.max_spot_id, just dump reads
     if args.max_spot_id:
-        xsra_limit(args.accession, args.outdir, args.output_format, args.threads, args.max_spot_id)
+        xsra_limit(args.accession, args.output_dir, args.output_format, args.threads, args.max_spot_id)
     else:
-        xsra_all(args.accession, args.outdir, args.output_format, args.threads)
+        xsra_all(args.accession, args.output_dir, args.output_format, args.threads)
 
     # Check the xsra output and rename the files appropriately
-    status,msg = check_output(read_names, args.accession, outdir=args.outdir)
+    status,msg = check_output(read_names, args.accession, output_dir=args.output_dir)
     add_to_log(log_df, args.sample, args.accession, "xsra", "dump-check", status, msg)
 
     # remove temp files
@@ -387,7 +387,7 @@ if __name__ == '__main__':
     args = parse_args()
 
     # setup
-    os.makedirs(args.outdir, exist_ok=True)
+    os.makedirs(args.output_dir, exist_ok=True)
     log_df = pd.DataFrame(
         columns=["sample", "accession", "process", "step", "status", "message"]
     )
@@ -396,8 +396,8 @@ if __name__ == '__main__':
     main(args, log_df)
 
     # write log to file
-    log_df.to_csv(os.path.join(args.outdir, "xsra.log"), index=False)
+    log_df.to_csv(os.path.join(args.output_dir, "xsra.log"), index=False)
     
     # upsert log to database
     with db_connect() as conn:
-       db_upsert(log_df, "screcounter_log", conn)
+       db_upsert(log_df, "screcounter_log", conn)   
