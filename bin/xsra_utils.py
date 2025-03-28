@@ -221,13 +221,16 @@ def xsra_dump(
     status = "Success" if returncode == 0 else "Failure"
     return status, msg
 
-def check_output(read_names: List[str], accession: str, output_dir: str) -> Tuple[str, str]:
+def check_output(
+    read_names: List[str], accession: str, output_dir: str, append: bool=False
+    ) -> Tuple[str, str]:
     """
     Check the output of xsra dump.
     Args:
         read_names: List of read names
         accession: SRA accession
         output_dir: Output directory
+        append: Append files instead of renaming
     Returns:
         Tuple of (status, message)
     """
@@ -237,7 +240,7 @@ def check_output(read_names: List[str], accession: str, output_dir: str) -> Tupl
     out_files_str = ", ".join(glob(os.path.join(output_dir, "*")))
     logging.info(f"Files in output_dir: {out_files_str}")
 
-    # rename the output files
+    # rename/append the output files
     for old_name, new_name in read_names:
         old_path = os.path.join(output_dir, old_name)
         new_path = os.path.join(output_dir, new_name)
@@ -246,15 +249,21 @@ def check_output(read_names: List[str], accession: str, output_dir: str) -> Tupl
             logging.warning(msg)
             return "Failure", msg
         try:
-            logging.info(f"Renaming {old_path} to {new_path}")  
-            os.rename(old_path, new_path)
+            if append:
+                logging.info(f"Appending {old_path} to {new_path}")
+                with open(old_path, 'rb') as f:
+                    with open(new_path, 'ab') as out:
+                        out.write(f.read())
+            else:
+                logging.info(f"Renaming {old_path} to {new_path}")  
+                os.rename(old_path, new_path)
         except OSError as e:
             msg = f"Error renaming {old_path} to {new_path}: {str(e)}"
             logging.error(msg)
             return "Failure", msg
 
     # list output files
-    read_files = glob(os.path.join(output_dir, f"read_*.fa.zst"))
+    read_files = glob(os.path.join(output_dir, f"read_*.zst"))
     if not read_files:
         msg = f"No target read files found; files present: {out_files_str}"
         logging.warning(msg)
