@@ -54,17 +54,21 @@ def xsra_prefetch(accessions: List[str], output_dir: str, threads: int) -> Tuple
     """
     logging.info(f"Prefetching {', '.join(accessions)}")
 
+    # use gcp or https provider?
     project_id = os.getenv("GCP_PROJECT_ID")
-    if not project_id:
-        return "Failure", "GCP_PROJECT_ID environment variable not set"  
-    cmd = [
-        "xsra", "prefetch", 
-        "--gcp-project-id", project_id, 
-        "--provider", "gcp", 
-        "--output", output_dir,
-    ] + accessions
+    if project_id:
+        cmd = [
+            "xsra", "prefetch", 
+            "--gcp-project-id", project_id, 
+            "--provider", "gcp", 
+            "--retry-limit", "10",
+            "--retry-delay", "1000",
+            "--output", output_dir,
+        ] + accessions
+    else:
+        cmd = ["xsra", "prefetch", "--provider", "https", "--output", output_dir] + accessions
     
-    #cmd = ["xsra", "prefetch", "--full-quality", "--output", output_dir] + accessions
+    ## run command
     returncode, output, err = run_cmd(cmd)
     if returncode != 0:
         return "Failure", f"xsra prefetch failed: {err}"
