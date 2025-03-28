@@ -35,8 +35,6 @@ def parse_args():
                         help='Sample name')
     parser.add_argument('--threads', type=int, default=4,
                         help='Number of threads')
-    parser.add_argument('--max-spot-id', type=int, default=None,
-                        help='Maximum reads to write')
     parser.add_argument('--output-dir', type=str, default='prefetch_out',
                         help='Output directory')
     parser.add_argument('--min-read-length', type=int, default=28,
@@ -61,7 +59,7 @@ def xsra_prefetch(accessions: List[str], output_dir: str, threads: int) -> Tuple
     #     return "Failure", "GCP_PROJECT_ID environment variable not set"  
     # "xsra", "prefetch", "--gcp-project-id", project_id, "--provider", "gcp", "--full-quality", str(threads)
     
-    cmd = ["xsra", "prefetch", "--full-quality"] + accessions
+    cmd = ["xsra", "prefetch", "--full-quality", "--output", output_dir] + accessions
     returncode, output, err = run_cmd(cmd)
     if returncode != 0:
         return "Failure", f"xsra prefetch failed: {err}"
@@ -135,20 +133,27 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
     for accession in args.accessions:
         add_to_log(log_df, args.sample, accession, "xsra", "prefetch", status, msg)
 
-    # run `xsra dump` to dump the reads
+    # process each accession
     for accession in args.accessions:
-        status,msg = xsra_dump(f"{accession}.sra", args.output_dir, output_format="fastq", threads=args.threads)
+        # dump reads
+        sra_file = os.path.join(args.output_dir, f"{accession}.sra")
+        status,msg = xsra_dump(sra_file, args.output_dir, output_format="fastq", threads=args.threads)
         add_to_log(log_df, args.sample, accession, "xsra", "dump", status, msg)
 
-        # get read names
+        # delete temp sra file
+        logging.info(f"Deleting temp sra file: {sra_file}")
+        os.remove(sra_file)
+
+        # rename read files
         read_names = [read_names for accession, read_names, _ in read_idx if accession == accession][0]
         check_output(read_names, accession, output_dir=args.output_dir, append=True)
         add_to_log(log_df, args.sample, accession, "xsra", "dump-check", status, msg)
 
-        # delete {output_dir}/seg*.fq.zst files
+        # delete temp readfiles
         logging.info(f"Deleting temp read files")
         for file in glob(os.path.join(args.output_dir, f"seg*.fq.zst")):
             os.remove(file)
+
 
 ## script main
 if __name__ == '__main__':

@@ -249,7 +249,7 @@ def check_output(
             logging.warning(msg)
             return "Failure", msg
         try:
-            if append:
+            if append and not os.path.exists(new_path):
                 logging.info(f"Appending {old_path} to {new_path}")
                 with open(old_path, 'rb') as f:
                     with open(new_path, 'ab') as out:
