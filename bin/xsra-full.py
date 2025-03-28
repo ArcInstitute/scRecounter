@@ -54,12 +54,17 @@ def xsra_prefetch(accessions: List[str], output_dir: str, threads: int) -> Tuple
     """
     logging.info(f"Prefetching {', '.join(accessions)}")
 
-    # project_id = os.getenv("GCP_PROJECT_ID")
-    # if not project_id:
-    #     return "Failure", "GCP_PROJECT_ID environment variable not set"  
-    # "xsra", "prefetch", "--gcp-project-id", project_id, "--provider", "gcp", "--full-quality", str(threads)
+    project_id = os.getenv("GCP_PROJECT_ID")
+    if not project_id:
+        return "Failure", "GCP_PROJECT_ID environment variable not set"  
+    cmd = [
+        "xsra", "prefetch", 
+        "--gcp-project-id", project_id, 
+        "--provider", "gcp", 
+        "--output", output_dir,
+    ] + accessions
     
-    cmd = ["xsra", "prefetch", "--full-quality", "--output", output_dir] + accessions
+    #cmd = ["xsra", "prefetch", "--full-quality", "--output", output_dir] + accessions
     returncode, output, err = run_cmd(cmd)
     if returncode != 0:
         return "Failure", f"xsra prefetch failed: {err}"
