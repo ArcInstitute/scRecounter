@@ -42,15 +42,7 @@ def parse_args():
     parser.add_argument('--min-read-length', type=int, default=28,
                         help='Minimum read length')  
     parser.add_argument('--output-format', type=str, choices=['fasta', 'fastq'], default='fastq',
-                        help='Output format')  
-    # prefetch parser
-    # prefetch_parser = parser.add_argument_group('prefetch')
-    # prefetch_parser.add_argument('--max-size-gb', type=int, default=300,
-    #                     help='Max file size in Gb')
-    # prefetch_parser.add_argument('--tries', type=int, default=3,
-    #                     help='Number of tries to download')
-    # prefetch_parser.add_argument('--gcp-download', action='store_true', default=False,
-    #                     help='Obtain sequence data from SRA GCP mirror')
+                        help='Output format') 
     return parser.parse_args()
 
 # functions
@@ -154,7 +146,7 @@ def write_log(logF, sample: str, accession: str, step: str, success: bool, msg: 
 
 def xsra_describe(
     accession: str, min_read_length: int, output_format: str
-) -> Tuple[Optional[List[List[str]]], str]:
+    ) -> Tuple[Optional[List[List[str]]], str]:
     """
     Run`xsra describe` to determine which, if any, of the reads are correct R1 and R2.
     Params:
@@ -211,7 +203,8 @@ def xsra_describe(
     ]},"Successfully found paired-end reads via: xsra describe"
 
 def xsra_dump(
-    accession: str, output_dir: str, output_format: str, threads: int=1, max_spot_id: Optional[int]=None
+    accession: str, output_dir: str, output_format: str, 
+    threads: int=1, max_spot_id: Optional[int]=None
     ) -> Tuple[str, str]:
     """
     Run `xsra dump` to dump the reads.
@@ -323,36 +316,42 @@ def xsra_prefetch(accessions: List[str], output_dir: str, threads: int) -> Tuple
     if not project_id:
         return "Failure", "GCP_PROJECT_ID environment variable not set"
     cmd = [
-        "xsra", "prefetch", "--gcp-project-id", project_id, "--provider", "gcp", "--full-quality", str(threads)
+        #"xsra", "prefetch", "--gcp-project-id", project_id, "--provider", "gcp", "--full-quality", str(threads)
+        "xsra", "prefetch", "--full-quality", str(threads)
     ] + accessions
     returncode, output, err = run_cmd(cmd)
     if returncode != 0:
         return "Failure", f"xsra prefetch failed: {err}"
     return "Success", f"xsra prefetch successful: {output}"
     
-
-def xsra_all(accessions: List[str], output_dir: str, output_format: str, threads: int) -> Tuple[str, str]:
+def xsra_all(
+    accessions: List[str], sample: str, output_dir: str, output_format: str, threads: int, log_df: pd.DataFrame
+    ) -> Tuple[str, str]:
     """
     Run `xsra dump` to dump the reads.
     Args:
         accessions: List of SRA accessions
+        sample: Sample name
         output_dir: Output directory
         output_format: Output format
         threads: Number of threads
+        log_df: Log DataFrame
     Returns:
         Tuple of (status, message)
     """
     # prefetch via `xsra prefetch`
     status,msg = xsra_prefetch(accessions, output_dir, threads=threads)
-    exit();
-    add_to_log(log_df, args.sample, args.accession, "xsra", "prefetch", status, msg)
+    for accession in accessions:
+        add_to_log(log_df, sample, accession, "xsra", "prefetch", status, msg)
 
     # run `xsra dump` to dump the reads
-    status,msg = xsra_dump(accessions, output_dir, output_format=output_format, threads=threads)
-    add_to_log(log_df, args.sample, args.accession, "xsra", "dump", status, msg)
+    for accession in accessions:
+        status,msg = xsra_dump(f"{accession}.sra", output_dir, output_format=output_format, threads=threads)
+        add_to_log(log_df, sample, accession, "xsra", "dump", status, msg)
 
 def xsra_limit(
-    accessions: List[str], output_dir: str, output_format: str, threads: int, max_spot_id: int
+    accessions: List[str], sample: str, output_dir: str, output_format: str, 
+    log_df: pd.DataFrame, threads: int, max_spot_id: int
     ) -> Tuple[str, str]:
     """
     Run `xsra dump` to dump the reads with a limit on the number of spots.
@@ -361,6 +360,7 @@ def xsra_limit(
         output_dir: Output directory
         output_format: Output format
         threads: Number of threads
+        log_df: Log DataFrame
         max_spot_id: Maximum spot ID
     Returns:
         Tuple of (status, message)
@@ -372,20 +372,21 @@ def xsra_limit(
             threads=threads, 
             max_spot_id=max_spot_id
         )
+        add_to_log(log_df, sample, accession, "xsra", "dump", status, msg)
 
-def describe_accessions(accessions: List[str], min_read_length: int, output_format: str, 
-                           threads: int, sample: str, log_df: pd.DataFrame) -> Optional[List[Tuple]]:
+def describe_accessions(
+    accessions: List[str], sample: str, min_read_length: int, output_format: str, threads: int, log_df: pd.DataFrame
+    ) -> Optional[List[Tuple]]:
     """
     Process multiple accessions in parallel using ThreadPoolExecutor.
     
     Args:
         accessions: List of SRA accessions to process
+        sample: Sample name for logging
         min_read_length: Minimum read length
         output_format: Output format (fastq or fasta)
         threads: Number of threads to use
-        sample: Sample name for logging
         log_df: DataFrame to log results
-        
     Returns:
         List of tuples (accession, read_names, msg) or None if all failed
     """
@@ -427,12 +428,12 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
             raise OSError(f'{exe} not found in PATH')
             
     # Run `xsra describe` on accessions in parallel
-    results = describe_accessions(
+    read_idx = describe_accessions(
         args.accessions,
+        args.sample,
         args.min_read_length,
         args.output_format,
         args.threads,
-        args.sample,
         log_df
     )
 
@@ -441,21 +442,26 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
         # if args.max_spot_id, just dump reads
         xsra_limit(
             args.accessions, 
+            sample=args.sample,
             output_dir=args.output_dir, 
             output_format=args.output_format, 
             threads=args.threads, 
-            max_spot_id=args.max_spot_id
+            max_spot_id=args.max_spot_id,
+            log_df=log_df,
         )
     else:
         xsra_all(
             args.accessions, 
+            sample=args.sample,
             output_dir=args.output_dir, 
             output_format=args.output_format, 
-            threads=args.threads
+            read_idx=read_idx,
+            log_df=log_df,
+            threads=args.threads,
         )
 
     # Check the xsra output and rename the files appropriately for each successful accession
-    for accession, read_names, _ in results:
+    for accession, read_names, _ in read_idx:
         status, msg = check_output(read_names, accession, output_dir=args.output_dir)
         add_to_log(log_df, args.sample, accession, "xsra", "dump-check", status, msg)
 
