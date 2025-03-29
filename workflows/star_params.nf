@@ -266,7 +266,6 @@ process STAR_PARAM_SEARCH {
 // Get read lengths via `seqkit stats`
 process SEQKIT_STATS {
     label "download_env"
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
     input:
@@ -291,7 +290,7 @@ process XSRA {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "download_env"
     maxRetries 1
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' } 
+    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' } 
     cpus 4
     memory { 4.GB * task.attempt }
     disk 10.GB
@@ -310,13 +309,12 @@ process XSRA {
     export GCP_SQL_DB_NAME="${params.db_name}"
     export GCP_SQL_DB_USERNAME="${params.db_username}"
 
-    xsra.py \\
+    xsra-limit.py \\
       --sample ${sample} \\
       --threads ${task.cpus} \\
       --min-read-length ${params.min_read_len} \\
-      --max-spot-id ${params.max_spots} \\
-      --outdir reads \\
-      --out-format fasta \\
+      --limit ${params.max_spots} \\
+      --output-dir reads \\
       ${accession} \\
       2>&1 | tee ${task.process}.log
     """
