@@ -45,14 +45,14 @@ def main(args):
 
     # read in all summary csv files and concatenate
     df = []
-    regex = re.compile(r"_summary.csv$")
+    regex = re.compile(r".csv$")
     for infile in args.summary_csv:
         x = pd.read_csv(infile, header=None)
         x.columns = ["category", "value"]
         x["feature"] = regex.sub("", os.path.basename(infile))
         df.append(x)
     df = pd.concat(df)
-
+    
     # status
     logging.info(f"Number of rows in the raw table: {df.shape[0]}")
 

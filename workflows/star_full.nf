@@ -34,13 +34,12 @@ workflow STAR_FULL_WF{
     // run STAR
     STAR_FULL(ch_fastq)
 
+    //STAR_FULL.out.gene_raw.view()
+    //STAR_FULL.out.gene_filt.view()
+
     // summarize the STAR results
     STAR_FULL_SUMMARY(
-        STAR_FULL.out.gene_summary,
-        STAR_FULL.out.gene_full_summary,
-        STAR_FULL.out.gene_ex50_summary,
-        STAR_FULL.out.gene_ex_int_summary,
-        STAR_FULL.out.velocyto_summary
+        STAR_FULL.out.summary
     )
 }
 
@@ -49,18 +48,18 @@ process STAR_FULL_SUMMARY {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsSTAR(sample, filename) }
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "star_env"
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
     input:
-    tuple val(sample), path("gene_summary.csv")
-    tuple val(sample), path("gene_full_summary.csv")
-    tuple val(sample), path("gene_ex50_summary.csv")
-    tuple val(sample), path("gene_ex_int_summary.csv")
-    tuple val(sample), path("velocyto_summary.csv")
+    tuple val(sample), path(summary_csv)
+    //tuple val(sample), path("gene_full_summary.csv")
+    //tuple val(sample), path("gene_ex50_summary.csv")
+    //tuple val(sample), path("gene_ex_int_summary.csv")
+    //tuple val(sample), path("velocyto_summary.csv")
 
     output:
-    tuple val(sample), path("Summary.csv"), emit: "csv"
+    tuple val(sample), path("summary.csv"), emit: "csv"
     path "${task.process}.log",             emit: "log"
 
     script:
@@ -71,11 +70,7 @@ process STAR_FULL_SUMMARY {
 
     star-summary.py \\
       --sample ${sample} \\
-      gene_summary.csv \\
-      gene_full_summary.csv \\
-      gene_ex50_summary.csv \\
-      gene_ex_int_summary.csv \\
-      velocyto_summary.csv \\
+      ${summary_csv} \\
       2>&1 | tee ${task.process}.log
     """
 }
@@ -98,13 +93,17 @@ process STAR_FULL {
           val(cell_barcode_length), val(umi_length), val(strand)
 
     output: 
-    tuple val(sample), path("resultsSolo.out/Gene/Summary.csv"),                    emit: gene_summary
-    tuple val(sample), path("resultsSolo.out/GeneFull/Summary.csv"),                emit: gene_full_summary
-    tuple val(sample), path("resultsSolo.out/GeneFull_Ex50pAS/Summary.csv"),        emit: gene_ex50_summary
-    tuple val(sample), path("resultsSolo.out/GeneFull_ExonOverIntron/Summary.csv"), emit: gene_ex_int_summary
-    tuple val(sample), path("resultsSolo.out/Velocyto/Summary.csv"),                emit: velocyto_summary
-    tuple val(sample), path("resultsSolo.out/*/raw/*"),                             emit: raw
-    tuple val(sample), path("resultsSolo.out/*/filtered/*"),                        emit: filt, optional: true
+    tuple val(sample), path("summary/*.csv"),                                       emit: summary
+    tuple val(sample), path("resultsSolo.out/Gene/raw/*"),                          emit: gene_raw
+    tuple val(sample), path("resultsSolo.out/Gene/filtered/*"),                     emit: gene_filt
+    tuple val(sample), path("resultsSolo.out/GeneFull/raw/*"),                      emit: gene_full_raw
+    tuple val(sample), path("resultsSolo.out/GeneFull/filtered/*"),                 emit: gene_full_filt
+    tuple val(sample), path("resultsSolo.out/GeneFull_Ex50pAS/raw/*"),              emit: gene_full_ex50_raw
+    tuple val(sample), path("resultsSolo.out/GeneFull_Ex50pAS/filtered/*"),         emit: gene_full_ex50_filt
+    tuple val(sample), path("resultsSolo.out/GeneFull_ExonOverIntron/raw/*"),       emit: gene_full_ex_int_raw
+    tuple val(sample), path("resultsSolo.out/GeneFull_ExonOverIntron/filtered/*"),  emit: gene_full_ex_int_filt
+    tuple val(sample), path("resultsSolo.out/Velocyto/raw/*"),                      emit: velocyto_raw
+    tuple val(sample), path("resultsSolo.out/Velocyto/filtered/*"),                 emit: velocyto_filt
     tuple val(sample), path("resultsSolo.out/*/*.stats.gz"),                        emit: stats, optional: true
     tuple val(sample), path("resultsSolo.out/*/*.txt.gz"),                          emit: txt, optional: true
     path "${task.process}.log",                                                     emit: "log"
@@ -140,6 +139,14 @@ process STAR_FULL {
       --readFilesCommand zstd -dcf \\
       2>&1 | tee -a ${task.process}.log
 
+    # rename the summary files
+    mkdir -p summary/
+    mv resultsSolo.out/Gene/Summary.csv summary/Gene.csv
+    mv resultsSolo.out/GeneFull/Summary.csv summary/GeneFull.csv
+    mv resultsSolo.out/GeneFull_Ex50pAS/Summary.csv summary/GeneFull_Ex50pAS.csv
+    mv resultsSolo.out/GeneFull_ExonOverIntron/Summary.csv summary/GeneFull_ExonOverIntron.csv
+    mv resultsSolo.out/Velocyto/Summary.csv summary/Velocyto.csv
+
     # gzip the results
     mkdir -p resultsSolo.out
     find resultsSolo.out -type f -name "*.stats" | xargs -P ${task.cpus} gzip
@@ -150,7 +157,8 @@ process STAR_FULL {
 }
 
 def saveAsSTAR(sample, filename) {
-    def extensions = [".mtx.gz", ".tsv.gz", ".txt.gz", ".stats.gz", ".csv"]
+    //def extensions = [".mtx.gz", ".tsv.gz", ".txt.gz", ".stats.gz", ".csv"]
+    def extensions = [".txt.gz", ".stats.gz", ".csv"]
     if (extensions.any { filename.endsWith(it) }) {
         def parts = filename.tokenize("/")
         if (parts.size() > 1) {
