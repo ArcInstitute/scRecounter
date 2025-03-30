@@ -15,8 +15,10 @@ from typing import Optional, List, Tuple, Dict, TextIO, Union
 import numpy as np
 import pandas as pd
 import scanpy as sc
+        
 import anndata
 from scipy import sparse
+from scipy.io import mmread
 from pypika import Query, Table
 ## package
 from db_utils import db_connect, db_upsert
@@ -289,6 +291,7 @@ def build_gene_anndata(
     logging.info("Adding multi-mapper count matrices as layers...")
     for matrix_type in ['UniqueAndMult-Uniform', 'UniqueAndMult-EM']:
         logging.info(f"Filtering {matrix_type} matrix...")
+        # filter barcodes
         match_barcodes(
             barcode_file = barcode_raw,
             matrix_file = mtx_raw[matrix_type],
@@ -296,7 +299,13 @@ def build_gene_anndata(
             out_cb_file = f'barcodes_{matrix_type}_filtered.tsv',
             out_mat_file = f'{matrix_type}_filtered.mtx'
         )
-        adata.layers[matrix_type] = sc.read_mtx(f'{matrix_type}_filtered.mtx').X.transpose()
+        # add to anndata
+        X = mmread(f'{matrix_type}_filtered.mtx').astype('float32')
+        adata.layers[matrix_type] = sparse.csr_matrix(X).transpose()
+        # delete filtered files
+        os.remove(f'{matrix_type}_filtered.mtx')
+        os.remove(f'barcodes_{matrix_type}_filtered.tsv')
+        
     return adata
 
 def load_matrix_as_anndata(
@@ -330,9 +339,10 @@ def load_matrix_as_anndata(
     elif 'matrix' in mtx_filt:
         logging.info("Building gene anndata...")
         adata = build_gene_anndata(mtx_filt['matrix'], feat_filt, barcode_filt, mtx_raw, barcode_raw)
-
     else:
         raise ValueError("Invalid matrix_paths")
+
+    exit();
 
     # drop 'feature_types' column in var
     adata.var.drop(columns=['feature_types'], inplace=True)
