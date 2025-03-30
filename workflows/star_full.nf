@@ -48,7 +48,7 @@ process STAR_FULL_SUMMARY {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsSTAR(sample, filename) }
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "star_env"
-    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
     input:
@@ -77,7 +77,7 @@ process STAR_FULL {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "star_env"
     label "process_high"
-    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk { [request: (375 * (task.attempt > 1 ? 2 : 1)).GB, type: 'local-ssd'] }
     machineType { 
         def options = ['n2-*', 'n2d-*']
@@ -157,7 +157,6 @@ process STAR_FULL {
 }
 
 def saveAsSTAR(sample, filename) {
-    //def extensions = [".mtx.gz", ".tsv.gz", ".txt.gz", ".stats.gz", ".csv"]
     def extensions = [".h5ad", ".txt.gz", ".stats.gz", ".csv"]
     if (extensions.any { filename.endsWith(it) }) {
         def parts = filename.tokenize("/")
@@ -173,25 +172,11 @@ def saveAsSTAR(sample, filename) {
 process XSRA {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "download_env"
-    maxRetries 1
-    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }   // TODO: uncomment this
-    cpus 6
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    maxRetries 2
+    cpus 8
     memory { 12.GB * task.attempt }
-    /*
-    time { (4.h + (sra_file_size_gb * 0.8).h) * task.attempt }
-    disk { 
-        def disk_size = 
-            sra_file_size_gb > 360 ? 7 * 375.GB :
-            sra_file_size_gb > 300 ? 6 * 375.GB :
-            sra_file_size_gb > 240 ? 5 * 375.GB :
-            sra_file_size_gb > 180 ? 4 * 375.GB :
-            sra_file_size_gb > 120 ? 3 * 375.GB :
-            sra_file_size_gb > 50 ? 2 * 375.GB :
-            375.GB
-        disk_size = disk_size + (375 * (task.attempt - 1)).GB
-        [request: disk_size, type: 'local-ssd'] 
-    }
-    */
+    disk { [request: (375 * task.attempt).GB, type: 'local-ssd'] }
     machineType { 
         def options = ['n2-*', 'c2-*', 'n2d-*', 'c2d-*']
         return options[new Random().nextInt(options.size())]
@@ -218,6 +203,7 @@ process XSRA {
       --sample ${sample} \\
       --threads ${task.cpus} \\
       --min-read-length ${params.min_read_len} \\
+      --provider ${params.sra_provider} \\
       --output-dir reads \\
       ${accessions} \\
       2>&1 | tee ${task.process}.log

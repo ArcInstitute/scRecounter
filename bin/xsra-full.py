@@ -39,6 +39,9 @@ def parse_args():
                         help='Output directory')
     parser.add_argument('--min-read-length', type=int, default=28,
                         help='Minimum read length')  
+    parser.add_argument('--provider', type=str, default='https',
+                        choices=['https', 'gcp'],
+                        help='Provider for xsra: https or gcp')
     parser.add_argument('--use-database', action='store_true',
                         help='Use database to store STAR parameters')
     return parser.parse_args()
@@ -148,7 +151,12 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
     for accession in args.accessions:
         # dump reads
         sra_file = os.path.join(args.output_dir, f"{accession}.sra")
-        status,msg = xsra_dump(sra_file, args.output_dir, output_format="fastq", threads=args.threads)
+        status,msg = xsra_dump(
+            sra_file, args.output_dir, 
+            provider=args.provider, 
+            output_format="fastq", 
+            threads=args.threads
+        )
         add_to_log(log_df, args.sample, accession, "xsra", "dump", status, msg)
 
         # delete temp sra file

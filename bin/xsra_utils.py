@@ -173,7 +173,7 @@ def xsra_describe(
 
 def xsra_dump(
     accession: str, output_dir: str, output_format: str, 
-    threads: int=1, limit: Optional[int]=None
+    provider: str="https", threads: int=1, limit: Optional[int]=None
     ) -> Tuple[str, str]:
     """
     Run `xsra dump` to dump the reads.
@@ -181,6 +181,7 @@ def xsra_dump(
         accession: SRA accession
         output_dir: Output directory
         output_format: Output format
+        provider: Provider for xsra: https or gcp
         threads: Number of threads
         limit: Maximum spot ID
     Returns:
@@ -194,13 +195,19 @@ def xsra_dump(
     else:
         logging.warning(f"Invalid output format: {output_format}")
         return "Failure", f"Invalid output format: {output_format}"
+    
+    if provider not in ["https", "gcp"]:
+        logging.warning(f"Invalid provider: {provider}")
+        return "Failure", f"Invalid provider: {provider}"
 
+    # create subprocess command
     cmd = [
             "xsra", "dump",
             "--split", 
             "--compression", "z",
             "--format", output_format,
             "--threads", threads,
+            "--provider", provider,
             "--outdir", output_dir,
         ]
     if limit and limit > 0:

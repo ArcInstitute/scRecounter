@@ -142,7 +142,7 @@ process STAR_SELECT_PARAMS {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsParams(sample, accession, filename) }
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "star_env"
-    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
     input:
@@ -217,7 +217,7 @@ process STAR_PARAM_SEARCH {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "star_env"
     label "process_medium"
-    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
     input:
@@ -288,11 +288,12 @@ process SEQKIT_STATS {
     """
 }
 
+// Dump a subset of reads from the SRA
 process XSRA {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "download_env"
     maxRetries 1
-    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' } 
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' } 
     cpus 4
     memory { 4.GB * task.attempt }
     disk 10.GB
@@ -322,53 +323,3 @@ process XSRA {
       2>&1 | tee ${task.process}.log
     """
 }
-
-/*
-process FASTQ_DUMP {
-    publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
-    label "download_env"
-    maxRetries 1
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' } 
-    cpus 4
-    memory { 4.GB * task.attempt }
-    disk 10.GB
-
-    input:
-    tuple val(sample), val(accession), val(metadata), val(sra_file_size_gb)
-
-    output:
-    tuple val(sample), val(accession), val(metadata), path("reads/read_1.fastq"), emit: "R1"
-    tuple val(sample), val(accession), val(metadata), path("reads/read_2.fastq"), emit: "R2", optional: true
-    path "${task.process}.log",                                                   emit: "log"
-
-    script:
-    """
-    export GCP_SQL_DB_HOST="${params.db_host}"
-    export GCP_SQL_DB_NAME="${params.db_name}"
-    export GCP_SQL_DB_USERNAME="${params.db_username}"
-
-    fq-dump.py \\
-      --sample ${sample} \\
-      --accession ${accession} \\
-      --threads ${task.cpus} \\
-      --bufsize 10MB \\
-      --curcache 50MB \\
-      --mem 5GB \\
-      --temp TMP_FILES \\
-      --min-read-length ${params.min_read_len} \\
-      --maxSpotId ${params.max_spots} \\
-      --outdir reads \\
-      ${accession} \\
-      2>&1 | tee ${task.process}.log
-
-    # remove the temporary files
-    rm -rf TMP_FILES
-    """
-
-    stub:
-    """
-    mkdir -p reads
-    touch reads/read1.fastq reads/read_2.fastq ${task.process}.log
-    """
-}
-*/
