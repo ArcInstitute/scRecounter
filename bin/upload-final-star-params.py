@@ -38,6 +38,8 @@ parser.add_argument('--strand', type=str, default=None,
                     help='Strandness')
 parser.add_argument('--outfile', type=str, default="star_params.csv",
                     help='Output file path')
+parser.add_argument('--use-database', action='store_true',
+                    help='Use database to store STAR parameters')
 
 # functions
 def main(args):
@@ -61,20 +63,22 @@ def main(args):
     df.to_csv(args.outfile, index=False)
 
     # upload to the scRecounter database
-    with db_connect() as conn:
-        db_upsert(df, "screcounter_star_params", conn)
+    if args.use_database:
+        with db_connect() as conn:
+            db_upsert(df, "screcounter_star_params", conn)
 
     # update screcounter log
-    log_df = pd.DataFrame({
-        "sample": [args.sample],
-        "accession": [""],
-        "process": ["STAR save params"],
-        "step": ["Final"],
-        "status": ["Success"],
-        "message": ["STAR final parameters saved to database"],
-    })
-    with db_connect() as conn:
-        db_upsert(log_df, "screcounter_log", conn)
+    if args.use_database:
+        log_df = pd.DataFrame({
+            "sample": [args.sample],
+            "accession": [""],
+            "process": ["STAR save params"],
+            "step": ["Final"],
+            "status": ["Success"],
+            "message": ["STAR final parameters saved to database"],
+        })
+        with db_connect() as conn:
+            db_upsert(log_df, "screcounter_log", conn)
    
 
 ## script main

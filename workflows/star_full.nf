@@ -53,22 +53,19 @@ process STAR_FULL_SUMMARY {
 
     input:
     tuple val(sample), path(summary_csv)
-    //tuple val(sample), path("gene_full_summary.csv")
-    //tuple val(sample), path("gene_ex50_summary.csv")
-    //tuple val(sample), path("gene_ex_int_summary.csv")
-    //tuple val(sample), path("velocyto_summary.csv")
 
     output:
-    tuple val(sample), path("summary.csv"), emit: "csv"
+    tuple val(sample), path("Summary.csv"), emit: "csv"
     path "${task.process}.log",             emit: "log"
 
     script:
+    def use_database = params.use_database ? "--use-database" : ""
     """
     export GCP_SQL_DB_HOST="${params.db_host}"
     export GCP_SQL_DB_NAME="${params.db_name}"
     export GCP_SQL_DB_USERNAME="${params.db_username}"
 
-    star-summary.py \\
+    star-summary.py ${use_database} \\
       --sample ${sample} \\
       ${summary_csv} \\
       2>&1 | tee ${task.process}.log
@@ -93,29 +90,28 @@ process STAR_FULL {
           val(cell_barcode_length), val(umi_length), val(strand)
 
     output: 
-    tuple val(sample), path("summary/*.csv"),                                       emit: summary
-    tuple val(sample), path("resultsSolo.out/Gene/raw/*"),                          emit: gene_raw
-    tuple val(sample), path("resultsSolo.out/Gene/filtered/*"),                     emit: gene_filt
-    tuple val(sample), path("resultsSolo.out/GeneFull/raw/*"),                      emit: gene_full_raw
-    tuple val(sample), path("resultsSolo.out/GeneFull/filtered/*"),                 emit: gene_full_filt
-    tuple val(sample), path("resultsSolo.out/GeneFull_Ex50pAS/raw/*"),              emit: gene_full_ex50_raw
-    tuple val(sample), path("resultsSolo.out/GeneFull_Ex50pAS/filtered/*"),         emit: gene_full_ex50_filt
-    tuple val(sample), path("resultsSolo.out/GeneFull_ExonOverIntron/raw/*"),       emit: gene_full_ex_int_raw
-    tuple val(sample), path("resultsSolo.out/GeneFull_ExonOverIntron/filtered/*"),  emit: gene_full_ex_int_filt
-    tuple val(sample), path("resultsSolo.out/Velocyto/raw/*"),                      emit: velocyto_raw
-    tuple val(sample), path("resultsSolo.out/Velocyto/filtered/*"),                 emit: velocyto_filt
-    tuple val(sample), path("resultsSolo.out/*/*.stats.gz"),                        emit: stats, optional: true
-    tuple val(sample), path("resultsSolo.out/*/*.txt.gz"),                          emit: txt, optional: true
-    path "${task.process}.log",                                                     emit: "log"
+    tuple val(sample), path("summary/*.csv"),                 emit: summary
+    tuple val(sample), path("h5ad/*.h5ad"),                   emit: h5ad
+    tuple val(sample), path("resultsSolo.out/*/*.stats.gz"),  emit: stats, optional: true
+    tuple val(sample), path("resultsSolo.out/*/*.txt.gz"),    emit: txt, optional: true
+    path "${task.process}.log",                               emit: "log"
 
     script:
+    def use_database = params.use_database ? "--use-database" : ""
     """
-    echo "Running STAR for ${sample}" > ${task.process}.log
+    echo "# Running STAR for ${sample}" | tee -a ${task.process}.log
 
+    # Format R1 and R2 file paths for STAR
     R1=\$(printf "%s," input*_R1.fq.zst)
     R1=\${R1%,} 
     R2=\$(printf "%s," input*_R2.fq.zst)
     R2=\${R2%,}
+    
+    # Define feature types as an array
+    FEATURE_TYPES=("Gene" "GeneFull" "GeneFull_ExonOverIntron" "GeneFull_Ex50pAS" "Velocyto")
+    FEATURE_STR=\$(printf "%s " "\${FEATURE_TYPES[@]}")
+    
+    # Run STAR
     STAR \\
       --readFilesIn \$R2 \$R1 \\
       --runThreadN ${task.cpus} \\
@@ -131,7 +127,7 @@ process STAR_FULL {
       --soloCellFilter EmptyDrops_CR \\
       --soloUMIfiltering MultiGeneUMI_CR \\
       --soloUMIdedup 1MM_CR \\
-      --soloFeatures Gene GeneFull GeneFull_ExonOverIntron GeneFull_Ex50pAS Velocyto \\
+      --soloFeatures \${FEATURE_STR} \\
       --soloMultiMappers EM Uniform \\
       --outSAMtype None \\
       --soloBarcodeReadLength 0 \\
@@ -139,26 +135,30 @@ process STAR_FULL {
       --readFilesCommand zstd -dcf \\
       2>&1 | tee -a ${task.process}.log
 
-    # rename the summary files
+    echo "# Renaming the summary files" | tee -a ${task.process}.log
     mkdir -p summary/
-    mv resultsSolo.out/Gene/Summary.csv summary/Gene.csv
-    mv resultsSolo.out/GeneFull/Summary.csv summary/GeneFull.csv
-    mv resultsSolo.out/GeneFull_Ex50pAS/Summary.csv summary/GeneFull_Ex50pAS.csv
-    mv resultsSolo.out/GeneFull_ExonOverIntron/Summary.csv summary/GeneFull_ExonOverIntron.csv
-    mv resultsSolo.out/Velocyto/Summary.csv summary/Velocyto.csv
+    for feature in "\${FEATURE_TYPES[@]}"; do
+        mv resultsSolo.out/\${feature}/Summary.csv summary/\${feature}.csv
+    done
 
-    # gzip the results
-    mkdir -p resultsSolo.out
-    find resultsSolo.out -type f -name "*.stats" | xargs -P ${task.cpus} gzip
-    find resultsSolo.out -type f -name "*.txt" | xargs -P ${task.cpus} gzip
-    find resultsSolo.out -type f -name "*.tsv" | xargs -P ${task.cpus} gzip
+    echo "# Compressing the output for the sake of scanpy" | tee -a ${task.process}.log
     find resultsSolo.out -type f -name "*.mtx" | xargs -P ${task.cpus} gzip
+    find resultsSolo.out -type f -name "*.tsv" | xargs -P ${task.cpus} gzip
+
+    echo "# Converting mtx to h5ad" | tee -a ${task.process}.log
+    export GCP_SQL_DB_HOST="${params.db_host}"
+    export GCP_SQL_DB_NAME="${params.db_name}"
+    export GCP_SQL_DB_USERNAME="${params.db_username}"
+    mtx-to-h5ad.py ${use_database} \\
+      --sample ${sample} \\
+      resultsSolo.out 2>&1 | \\
+      tee -a ${task.process}.log 
     """
 }
 
 def saveAsSTAR(sample, filename) {
     //def extensions = [".mtx.gz", ".tsv.gz", ".txt.gz", ".stats.gz", ".csv"]
-    def extensions = [".txt.gz", ".stats.gz", ".csv"]
+    def extensions = [".h5ad", ".txt.gz", ".stats.gz", ".csv"]
     if (extensions.any { filename.endsWith(it) }) {
         def parts = filename.tokenize("/")
         if (parts.size() > 1) {
@@ -189,8 +189,7 @@ process XSRA {
             sra_file_size_gb > 50 ? 2 * 375.GB :
             375.GB
         disk_size = disk_size + (375 * (task.attempt - 1)).GB
-        [re
-        quest: disk_size, type: 'local-ssd'] 
+        [request: disk_size, type: 'local-ssd'] 
     }
     */
     machineType { 
@@ -208,13 +207,14 @@ process XSRA {
 
     script:
     accessions = accessions.join(" ")
+    def use_database = params.use_database ? "--use-database" : ""
     """
     export GCP_SQL_DB_HOST="${params.db_host}"
     export GCP_SQL_DB_NAME="${params.db_name}"
     export GCP_SQL_DB_USERNAME="${params.db_username}"
     export GCP_PROJECT_ID="${params.gcp_project_id}"
 
-    xsra-full.py \\
+    xsra-full.py ${use_database} \\
       --sample ${sample} \\
       --threads ${task.cpus} \\
       --min-read-length ${params.min_read_len} \\

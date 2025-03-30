@@ -41,6 +41,8 @@ def parse_args():
                         help='Output directory')
     parser.add_argument('--min-read-length', type=int, default=26,
                         help='Minimum read length') 
+    parser.add_argument('--use-database', action='store_true',
+                        help='Use database to store STAR parameters')
     return parser.parse_args()
 
 # functions
@@ -90,5 +92,6 @@ if __name__ == '__main__':
     log_df.to_csv(os.path.join(args.output_dir, "xsra.log"), index=False)
     
     # upsert log to database
-    with db_connect() as conn:
-       db_upsert(log_df, "screcounter_log", conn)   
+    if args.use_database:
+        with db_connect() as conn:
+            db_upsert(log_df, "screcounter_log", conn)   

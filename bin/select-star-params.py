@@ -40,6 +40,8 @@ parser.add_argument('--accession', type=str, default="",
                     help='SRA accession')
 parser.add_argument('--reads_with_barcodes_cutoff', type=float, default=0.3,
                     help='Minimum fraction of reads with valid barcodes')
+parser.add_argument('--use-database', action='store_true',
+                    help='Use database to store STAR parameters')
 
 # functions
 def read_seqkit_stats(stats_file: str, sample: str, accession: str) -> pd.DataFrame:
@@ -289,5 +291,6 @@ if __name__ == '__main__':
     #logging.info(f'Log written to: {log_file}')
     
     # upsert log to database
-    with db_connect() as conn:
-        db_upsert(log_df, "screcounter_log", conn)
+    if args.use_database:
+        with db_connect() as conn:
+            db_upsert(log_df, "screcounter_log", conn)

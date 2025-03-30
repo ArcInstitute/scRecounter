@@ -2,6 +2,7 @@
 # import
 ## batteries
 import os
+import gc
 import sys
 import gzip
 import json
@@ -27,12 +28,11 @@ logging.getLogger("psycopg2").setLevel(logging.CRITICAL)
 logging.getLogger("google.auth.transport.requests").setLevel(logging.CRITICAL)
 logging.getLogger("urllib3").setLevel(logging.CRITICAL)
 logging.getLogger("google.auth").setLevel(logging.CRITICAL)
+logging.getLogger("scanpy").setLevel(logging.CRITICAL)
 
 
 # argparse
 FEATURE_TYPES = ["Gene", "GeneFull", "GeneFull_Ex50pAS", "GeneFull_ExonOverIntron", "Velocyto"]
-#MTX_TYPES = ["Unique", "EM", "Uniform", "Veloc"
-
 def parse_args():
     class CustomFormatter(argparse.ArgumentDefaultsHelpFormatter,
                           argparse.RawDescriptionHelpFormatter):    
@@ -45,28 +45,34 @@ def parse_args():
     parser = argparse.ArgumentParser(description=desc, epilog=epi,
                                     formatter_class=CustomFormatter)
     parser.add_argument('star_output', type=str, help='STARsolo output directory')
-    parser.add_argument('--sample', type=str, required=True,
-                        help='Sample name')
-    parser.add_argument('--output-dir', type=str, default='mtx2h5ad_out',
-                        help='Output directory')
-    parser.add_argument('--feature-types', type=str, nargs="+",
-                        default=FEATURE_TYPES, choices=FEATURE_TYPES, 
-                        help='Feature types to include')
     parser.add_argument(
-        '--missing-metadata', type=str, default="error", 
-        choices=["error", "skip", "allow"],
-        help="How do handle missing metadata?"
+        '--sample', type=str, required=True,
+        help='Sample name'
     )
     parser.add_argument(
-        '--update-database', action="store_true", default=False, 
-        help="Update the database?"
+        '--output-dir', type=str, default='mtx2h5ad_out',
+        help='Output directory'
+    )
+    parser.add_argument(
+        '--feature-types', type=str, nargs="+",
+        default=FEATURE_TYPES, choices=FEATURE_TYPES,
+        help='Feature types to include'
+    )
+    parser.add_argument(
+        '--use-database', action="store_true", default=False, 
+        help="Use the scRecounter SQL database?"
     )
     return parser.parse_args()
 
 # functions
-def get_metadata(srx_id: str, missing_metadata: str="error") -> Optional[pd.DataFrame]:
+def get_metadata(srx_id: str) -> Optional[pd.DataFrame]:
     """
     Get metadata for an SRX accession.
+    Args:
+        srx_id: SRX accession
+        use_database: Use the scRecounter SQL database?
+    Returns:
+        pd.DataFrame: Metadata for the SRX accession
     """
     logging.info("Obtaining srx_metadata...")
 
@@ -95,29 +101,11 @@ def get_metadata(srx_id: str, missing_metadata: str="error") -> Optional[pd.Data
     with db_connect() as conn:
         metadata = pd.read_sql(str(stmt), conn)
 
-    ## if metadata is not found, return None
+    ## check metadata
     if metadata is None or metadata.shape[0] == 0:
-        if missing_metadata == "allow":
-            logging.warning(
-                f"    Metadata not found for SRX accession {srx_id}, but `--missing-metadata allow` used"
-            )
-            pass
-        elif missing_metadata == "skip":
-            logging.warning(
-                f"    Metadata not found for SRX accession {srx_id}, but `--missing-metadata skip` used"
-            )
-            return None
-        elif missing_metadata == "error":
-            raise ValueError(f"    Metadata not found for SRX accession {srx_id}")
-        else:
-            raise ValueError(f"    Invalid value for `--missing-metadata`")
+        raise ValueError(f"Metadata not found for SRX accession {srx_id}")
     if metadata.shape[0] > 1:
         raise ValueError(f"Multiple metadata entries found for SRX accession {srx_id}")
-    elif metadata.shape[0] == 1:
-        # lib_prep should be "10x_Genomics"
-        if metadata["lib_prep"].values[0] != "10x_Genomics":
-            metadata["lib_prep"] = "10x_Genomics"
-            metadata["tech_10x"] = "other"
     return metadata
 
 def build_velocyto_anndata(matrix_paths: Dict[str,str], feature_paths: str, barcode_paths: str) -> sc.AnnData:
@@ -161,8 +149,10 @@ def build_velocyto_anndata(matrix_paths: Dict[str,str], feature_paths: str, barc
 
     # Remove index column name to make it compliant with the anndata format
     obs.index.name = None
-    var = pd.read_csv(feature_paths, sep='\t', names = ('gene_ids', 'feature_types'), index_col = 1)
-  
+    var = pd.read_csv(
+        feature_paths, sep='\t', names = ('gene_symbols', 'feature_types'), index_col = 0
+    )
+
     # Build AnnData object to be used with ScanPy and ScVelo
     adata = anndata.AnnData(
         X = X, obs = obs, var = var,
@@ -193,13 +183,7 @@ def match_barcodes(
         target_barcode_file: Path to target barcodes file
         out_cb_file: Path to output barcodes file
         out_mat_file: Path to output matrix file
-    """
-    
-    logging.info(f"Starting barcode matching")
-    logging.info(f"  Input barcode file: {barcode_file}")
-    logging.info(f"  Input matrix file: {matrix_file}")
-    logging.info(f"  Target barcodes file: {target_barcode_file}")
-    
+    """    
     # Read original barcodes and create mapping
     barcode_to_index = {}
     with open_file(barcode_file) as f:
@@ -299,9 +283,7 @@ def build_gene_anndata(
     adata = sc.read_10x_mtx(
         os.path.dirname(mtx_filt),
         var_names="gene_ids",
-        make_unique=True,
-        cache=False,
-        gex_only=True
+        make_unique=True
     )  
     # filtering multi-mapper count matrices
     logging.info("Adding multi-mapper count matrices as layers...")
@@ -326,7 +308,7 @@ def load_matrix_as_anndata(
         mtx_filt: Dict[str, str],
         feat_filt: str,
         barcode_filt: str,
-        update_database: bool = False
+        use_database: bool = False
     ) -> None:
     """
     Load a matrix.mtx file as an AnnData object.
@@ -339,7 +321,7 @@ def load_matrix_as_anndata(
         mtx_filt: Path to filtered matrix file
         feat_filt: Path to filtered feature file
         barcode_filt: Path to filtered barcode file
-        update_database: bool
+        use_database: bool
     """
     # build anndata
     if all(x in mtx_filt for x in ["spliced", "unspliced", "ambiguous"]):
@@ -348,9 +330,13 @@ def load_matrix_as_anndata(
     elif 'matrix' in mtx_filt:
         logging.info("Building gene anndata...")
         adata = build_gene_anndata(mtx_filt['matrix'], feat_filt, barcode_filt, mtx_raw, barcode_raw)
+
     else:
         raise ValueError("Invalid matrix_paths")
-    
+
+    # drop 'feature_types' column in var
+    adata.var.drop(columns=['feature_types'], inplace=True)
+
     # calculate total counts
     if sparse.issparse(adata.X):
         adata.obs["gene_count"] = (adata.X > 0).sum(axis=1).A1
@@ -362,13 +348,10 @@ def load_matrix_as_anndata(
     # add metadata to adata
     adata.obs["SRX_accession"] = srx_id
 
-    # add obs_count to metadata
-    metadata["obs_count"] = adata.shape[0]
-
     ## write to h5ad
-    outdir = os.path.join("h5ad", feature_type, metadata["organism"].values[0].replace(" ", "_"))
+    outdir = "h5ad"
     os.makedirs(outdir, exist_ok=True)
-    outfile = os.path.join(outdir, f"{srx_id}.h5ad")
+    outfile = os.path.join(outdir, f"{feature_type}.h5ad")
     logging.info(f"Writing to {outfile}...")
     adata.write_h5ad(outfile, compression="gzip")
 
@@ -376,15 +359,18 @@ def load_matrix_as_anndata(
     os.makedirs("metadata", exist_ok=True)
     outfile = os.path.join("metadata", f"{srx_id}.csv")
     adata.obs["cell_barcode"] = adata.obs.index
-    adata.obs["organism"] = metadata["organism"].values[0]
+    if use_database:
+        adata.obs["organism"] = metadata["organism"].values[0]
     adata.obs.to_csv(outfile, index=False)
-
-    # add feature type
-    metadata["feature_type"] = feature_type
-
+    
     # upsert metadata to postgresql database
-    if update_database:
+    if use_database:
         logging.info(f"Upserting metadata for SRX accession {srx_id}...")
+        # add feature type
+        metadata["feature_type"] = feature_type
+        # add obs_count to metadata
+        metadata["obs_count"] = adata.shape[0]
+        # upsert metadata
         with db_connect() as conn:
             db_upsert(metadata, "scbasecamp_metadata_tmp", conn)
     else:
@@ -398,26 +384,23 @@ def get_basename(path: str) -> str:
 
 def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
     # get metadata
-    metadata = get_metadata(args.sample, args.missing_metadata)
-    if metadata is None:
-        return None
-    ## add tissue category to metadata
-    #metadata = add_tissue_category(metadata, args.tissue_categories)
+    if args.use_database:
+        metadata = get_metadata(args.sample)
+    else:
+        metadata = None
 
     # find target files
     for feat_type in args.feature_types:
+        # matrices
         p = os.path.join(args.star_output, f"{feat_type}", "raw", "*.mtx.gz")
         mtx_raw = {get_basename(x): x for x in glob(p)}
         p = os.path.join(args.star_output, f"{feat_type}", "filtered", "*.mtx.gz")
         mtx_filt = {get_basename(x): x for x in glob(p)}
-
-        #barcode_raw = {get_basename(x): x for x in glob(p)}
+        # barcodes
         barcode_raw = os.path.join(args.star_output, f"{feat_type}", "raw", "barcodes.tsv.gz")
-        feat_filt = os.path.join(args.star_output, f"{feat_type}", "filtered", "features.tsv.gz")
-        #feat_filt = {get_basename(x): x for x in glob(p)}
         barcode_filt = os.path.join(args.star_output, f"{feat_type}", "filtered", "barcodes.tsv.gz")
-        #barcode_filt = {get_basename(x): x for x in glob(p)}
-        
+        # features
+        feat_filt = os.path.join(args.star_output, f"{feat_type}", "filtered", "features.tsv.gz")
 
         # Convert to h5ad
         load_matrix_as_anndata(
@@ -429,8 +412,12 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
             mtx_filt = mtx_filt,
             feat_filt = feat_filt,
             barcode_filt = barcode_filt,
-            update_database = args.update_database
+            use_database = args.use_database
         )
+
+        # garbage collect
+        del mtx_raw, mtx_filt, barcode_raw, barcode_filt, feat_filt
+        gc.collect()
 
 
 ## script main

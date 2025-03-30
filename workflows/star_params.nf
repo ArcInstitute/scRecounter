@@ -107,12 +107,13 @@ process STAR_SAVE_FINAL_PARAMS {
     path "${task.process}.log", emit: "log"
 
     script:
+    def use_database = params.use_database ? "--use-database" : ""
     """
     export GCP_SQL_DB_HOST="${params.db_host}"
     export GCP_SQL_DB_NAME="${params.db_name}"
     export GCP_SQL_DB_USERNAME="${params.db_username}"
 
-    upload-final-star-params.py \\
+    upload-final-star-params.py ${use_database} \\
       --sample ${sample} \\
       --barcodes ${barcodes} \\
       --star-index ${star_index} \\
@@ -153,12 +154,13 @@ process STAR_SELECT_PARAMS {
     path "${task.process}.log",  emit: "log"
     
     script:
+    def use_database = params.use_database ? "--use-database" : ""
     """
     export GCP_SQL_DB_HOST="${params.db_host}"
     export GCP_SQL_DB_NAME="${params.db_name}"
     export GCP_SQL_DB_USERNAME="${params.db_username}"
     
-    select-star-params.py \\
+    select-star-params.py ${use_database} \\
       --sample ${sample} \\
       --accession ${accession} \\
       $read_stats $sra_stats star_params*.csv \\
@@ -304,12 +306,13 @@ process XSRA {
     path "${task.process}.log",                                                    emit: "log"
 
     script:
+    def use_database = params.use_database ? "--use-database" : ""
     """
     export GCP_SQL_DB_HOST="${params.db_host}"
     export GCP_SQL_DB_NAME="${params.db_name}"
     export GCP_SQL_DB_USERNAME="${params.db_username}"
 
-    xsra-limit.py \\
+    xsra-limit.py ${use_database} \\
       --sample ${sample} \\
       --threads ${task.cpus} \\
       --min-read-length ${params.min_read_len} \\

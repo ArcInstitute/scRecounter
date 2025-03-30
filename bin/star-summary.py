@@ -27,14 +27,17 @@ alignment statistics. The script reads in all summary files and
 concatenates them into a single table. The table is then written to
 a file and upserted into the database.
 """
-parser = argparse.ArgumentParser(description=desc, epilog=epi,
-                                 formatter_class=CustomFormatter)
+parser = argparse.ArgumentParser(
+    description=desc, epilog=epi, formatter_class=CustomFormatter
+)
 parser.add_argument('summary_csv', type=str, nargs='+',
                     help='STAR summary csv file(s)')
 parser.add_argument('--sample', type=str, default="",
                     help='Sample name')
 parser.add_argument('--outfile', type=str, default="Summary.csv",
                     help='Output file')
+parser.add_argument('--use-database', action='store_true',
+                    help='Use the scRecounter SQL database')
          
 # functions
 def main(args):
@@ -85,9 +88,10 @@ def main(args):
     logging.info(f"Number of rows after formattings: {df.shape[0]}")
 
     # upsert results to database
-    logging.info("Updating screcounter_star_results...")
-    with db_connect() as conn:
-        db_upsert(df, "screcounter_star_results", conn)
+    if args.use_database:
+        logging.info("Updating screcounter_star_results...")
+        with db_connect() as conn:
+            db_upsert(df, "screcounter_star_results", conn)
 
     # write output table
     outdir = os.path.dirname(args.outfile)
@@ -96,17 +100,18 @@ def main(args):
     df.to_csv(args.outfile, index=False)
 
     # update screcounter log
-    logging.info("Updating screcounter_log...")
-    log_df = pd.DataFrame({
-        "sample": [args.sample],
-        "accession": [""],
-        "process": ["STAR-full"],
-        "step": ["Final"],
-        "status": ["Success"],
-        "message": ["STAR summary table generated"]
-    })
-    with db_connect() as conn:
-        db_upsert(log_df, "screcounter_log", conn)
+    if args.use_database:
+        logging.info("Updating screcounter_log...")
+        log_df = pd.DataFrame({
+            "sample": [args.sample],
+            "accession": [""],
+            "process": ["STAR-full"],
+            "step": ["Final"],
+            "status": ["Success"],
+            "message": ["STAR summary table generated"]
+        })
+        with db_connect() as conn:
+            db_upsert(log_df, "screcounter_log", conn)
 
 
 ## script main

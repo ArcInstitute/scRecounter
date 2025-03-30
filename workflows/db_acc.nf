@@ -3,6 +3,11 @@ include { readAccessions } from '../lib/download.groovy'
 
 workflow DB_ACC_WF {
     main:
+    // throw error if --use-database is false
+    if (!params.use_database) {
+        throw new Exception("--use-database is required to obtain accessions from the scRecounter SQL database")
+    }
+
     // obtain accessions from the database
     ch_accessions = GET_DB_ACCESSIONS()
     ch_accessions.csv.ifEmpty { println 'No accessions found in the scRecounter database' }

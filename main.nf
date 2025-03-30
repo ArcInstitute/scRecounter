@@ -9,8 +9,8 @@ include { readAccessions; addStats; } from './lib/utils.groovy'
 // Main workflow
 workflow { 
     if (params.accessions == "" || params.accessions == true) {
-        // Obtain accessions from SRA
-        println "No accessions provided. Accessions will be obtained from SRA."
+        // Obtain accessions from the scRecoutner SQL database
+        println "No accessions provided. Accessions will be obtained from the scRecounter database"
         ch_accessions = DB_ACC_WF()
     } else {
         // Use the provided accessions
