@@ -256,12 +256,14 @@ def check_output(
             logging.warning(msg)
             return "Failure", msg
         try:
-            if append and not os.path.exists(new_path):
+            if append and os.path.exists(new_path):
+                # append to existing file
                 logging.info(f"Appending {old_path} to {new_path}")
                 with open(old_path, 'rb') as f:
                     with open(new_path, 'ab') as out:
                         out.write(f.read())
             else:
+                # rename file
                 logging.info(f"Renaming {old_path} to {new_path}")  
                 os.rename(old_path, new_path)
         except OSError as e:
