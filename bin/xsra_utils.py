@@ -245,7 +245,7 @@ def check_output(
 
     # list all files in output_dir
     out_files_str = ", ".join(glob(os.path.join(output_dir, "*")))
-    logging.info(f"Files in output_dir: {out_files_str}")
+    logging.info(f"  Files in output_dir: {out_files_str}")
 
     # rename/append the output files
     for old_name, new_name in read_names:
@@ -258,13 +258,16 @@ def check_output(
         try:
             if append and os.path.exists(new_path):
                 # append to existing file
-                logging.info(f"Appending {old_path} to {new_path}")
+                logging.info(f"  Appending {old_path} to {new_path}")
                 with open(old_path, 'rb') as f:
                     with open(new_path, 'ab') as out:
                         out.write(f.read())
+                # delete old file
+                logging.info(f"  Deleting {old_path}")
+                os.remove(old_path)
             else:
                 # rename file
-                logging.info(f"Renaming {old_path} to {new_path}")  
+                logging.info(f"  Renaming {old_path} to {new_path}")  
                 os.rename(old_path, new_path)
         except OSError as e:
             msg = f"Error renaming {old_path} to {new_path}: {str(e)}"

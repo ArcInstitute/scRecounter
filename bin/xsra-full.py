@@ -168,11 +168,6 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
         check_output(read_names, accession, output_dir=args.output_dir, append=True)
         add_to_log(log_df, args.sample, accession, "xsra", "dump-check", status, msg)
 
-        # delete temp readfiles
-        logging.info(f"Deleting temp read files")
-        for file in glob(os.path.join(args.output_dir, f"seg*.fq.zst")):
-            os.remove(file)
-
 
 ## script main
 if __name__ == '__main__':

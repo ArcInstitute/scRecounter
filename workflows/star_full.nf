@@ -183,9 +183,8 @@ process XSRA {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "download_env"
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
-    maxRetries 2
-    cpus 8
-    memory { 12.GB * task.attempt }
+    cpus 6
+    memory { 8.GB * task.attempt }
     disk { [request: (375 * task.attempt).GB, type: 'local-ssd'] }
     machineType { 
         def options = ['n2-*', 'c2-*', 'n2d-*', 'c2d-*']
@@ -201,7 +200,7 @@ process XSRA {
     path "${task.process}.log",                     emit: "log"
 
     script:
-    accessions = accessions.join(" ")
+    def accessions_str = accessions.join(" ")
     def use_database = params.use_database ? "--use-database" : ""
     """
     export GCP_SQL_DB_HOST="${params.db_host}"
@@ -215,7 +214,7 @@ process XSRA {
       --min-read-length ${params.min_read_len} \\
       --provider ${params.sra_provider} \\
       --output-dir reads \\
-      ${accessions} \\
+      ${accessions_str} \\
       2>&1 | tee ${task.process}.log
     """
 }
