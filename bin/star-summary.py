@@ -34,7 +34,7 @@ parser.add_argument('summary_csv', type=str, nargs='+',
                     help='STAR summary csv file(s)')
 parser.add_argument('--sample', type=str, default="",
                     help='Sample name')
-parser.add_argument('--outfile', type=str, default="Summary.csv",
+parser.add_argument('--outfile', type=str, default="combined.csv",
                     help='Output file')
 parser.add_argument('--use-database', action='store_true',
                     help='Use the scRecounter SQL database')

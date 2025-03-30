@@ -34,9 +34,6 @@ workflow STAR_FULL_WF{
     // run STAR
     STAR_FULL(ch_fastq)
 
-    //STAR_FULL.out.gene_raw.view()
-    //STAR_FULL.out.gene_filt.view()
-
     // summarize the STAR results
     STAR_FULL_SUMMARY(
         STAR_FULL.out.summary
@@ -55,7 +52,7 @@ process STAR_FULL_SUMMARY {
     tuple val(sample), path(summary_csv)
 
     output:
-    tuple val(sample), path("Summary.csv"), emit: "csv"
+    tuple val(sample), path("combined.csv"), emit: "csv"
     path "${task.process}.log",             emit: "log"
 
     script:
@@ -161,10 +158,23 @@ def saveAsSTAR(sample, filename) {
     if (extensions.any { filename.endsWith(it) }) {
         def parts = filename.tokenize("/")
         if (parts.size() > 1) {
-            return "STAR/${sample}/" + parts[1..-1].join('/')
-        } else {
-            return "STAR/${sample}/" + parts[0]
-        }
+            //remove initial part
+            parts = parts[1..-1]
+        } 
+        def org_part = null
+        if (filename.endsWith(".h5ad")) {
+            org_part = "h5ad"
+        } else if (filename.endsWith(".csv")) {
+            org_part = "summary"
+        } 
+        if (org_part != null) {
+            if (parts.size() > 1) {
+                parts = parts[0..-2] + [org_part] + [parts[-1]]
+            } else {
+                parts = [org_part] + parts
+            }
+        }   
+        return "STAR/${sample}/" + parts.join('/')
     } 
     return null
 }
