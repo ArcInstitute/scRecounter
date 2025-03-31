@@ -158,7 +158,6 @@ def saveAsSTAR(sample, filename) {
     if (extensions.any { filename.endsWith(it) }) {
         def parts = filename.tokenize("/")
         if (parts.size() > 1) {
-            //remove initial part
             parts = parts[1..-1]
         } 
         def org_part = null

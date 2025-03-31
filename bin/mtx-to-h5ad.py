@@ -342,8 +342,6 @@ def load_matrix_as_anndata(
     else:
         raise ValueError("Invalid matrix_paths")
 
-    exit();
-
     # drop 'feature_types' column in var
     adata.var.drop(columns=['feature_types'], inplace=True)
 

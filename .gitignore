@@ -16,6 +16,7 @@ ignore/
 screenlog.*
 *.pyc
 SRAgent/
+runs/
 scripts/db_utils.py
 notebooks/tiledb/
 docker/sc-recounter-run/db_utils.py
