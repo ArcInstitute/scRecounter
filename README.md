@@ -19,8 +19,9 @@ A Nextflow pipeline to re-process single-cell RNA-seq data from the Sequence Rea
       * Parameters: version of cell barcodes, cell barcode length, UMI length, strand, STAR reference index
       * The STAR parameters are selected based on the fraction of valid barcodes
     * Download all reads with `fasterq-dump`
-      * If download fails, try again with `fastq-dump` using a max of `fallback_max_spots` reads (see `nextflow.config`).
     * Map the reads with STARsolo using the "best" STAR parameters
+
+TODO: update to `xsra`
 
 # Manuscript
 
@@ -93,8 +94,8 @@ Example:
 
 | sample      | accession   | organism |
 |-------------|-------------|----------|
-| SRX22716300 | SRR27024456 | human    |
-| SRX25994842 | SRR30571763 | mouse    |
+| SRX22716300 | SRR27024456 | Homo sapiens |
+| SRX25994842 | SRR30571763 | Mus musculus |
 
 > `organism` is optional. It will determine the STAR index to use for mapping. Otherwise all indexes will be used for parameter selection.
 
@@ -119,8 +120,8 @@ Example:
 
 | Organism | Star Index Path                                                                   |
 |----------|-----------------------------------------------------------------------------------|
-| human    | /large_storage/goodarzilab/public/scRecount/genomes/star_refData_2020_hg38        |
-| mouse    | /large_storage/goodarzilab/public/scRecount/genomes/star2.7.11_refData_2020_mm10  |
+| Homo sapiens | /large_storage/goodarzilab/public/scRecount/genomes/star_refData_2020_hg38        |
+| Mus musculus | /large_storage/goodarzilab/public/scRecount/genomes/star2.7.11_refData_2020_mm10  |
 
 
 > If `organism` is provided in the `Accessions` table, the STAR index will be selected based on the `organism` column.

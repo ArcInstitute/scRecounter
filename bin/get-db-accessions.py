@@ -40,7 +40,7 @@ parser.add_argument('--max-srx', type=int, default=5,
                     help='Max number of srx records to return')
 parser.add_argument('--database', type=str, default=["sra", "gds"], nargs="+",
                     help='Only return records from these databases')
-parser.add_argument('--organisms', type=str, default="human,mouse", 
+parser.add_argument('--organisms', type=str, default="Homo sapiens,Mus musculus", 
                     help='Organisms to filter by; comma-separated list')
 parser.add_argument('--outfile', type=str, default="accessions.csv",
                     help='Output file name')
@@ -51,7 +51,7 @@ def db_get_unprocessed_records(
     process: str,
     database: List[str], 
     max_srx: int=3,
-    organisms: List[str] = ["human", "mouse"]
+    organisms: List[str] = ["Homo sapiens", "Mus musculus"]
     ) -> pd.DataFrame:
     """
     Get all suitable unprocessed SRX records, limiting by unique srx_accession values.

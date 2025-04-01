@@ -111,7 +111,7 @@ gcloud beta run jobs update ${JOB_NAME} \
   --args="docker","gcp","report","trace"
 ```
 
-Non-human/mouse genomes
+Organisms other than human/mouse
 
 ```bash
 JOB_NAME="${IMG_NAME}-all-org"
@@ -125,6 +125,6 @@ gcloud beta run jobs update ${JOB_NAME} \
   --memory=2Gi \
   --task-timeout=4320m \
   --max-retries=0 \
-  --args="docker","gcp","all_org","report","trace"
+  --args="docker","gcp","other_org","report","trace"
 ```
 
