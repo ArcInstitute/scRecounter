@@ -12,7 +12,7 @@ micromamba run -n sc-recounter-run \
     -profile $PROFILE_LIST \
     -name $RUN_NAME \
     -work-dir "gs://arc-ctc-nextflow/scRecounter/prod/work/${RUN_NAME}" \
-    --output_dir "gs://arc-ctc-screcounter/prod3/${RUN_NAME}" \
+    --output_dir "gs://arc-ctc-screcounter/prod4/${RUN_NAME}" \
     -ansi-log false "$@"
 
 # Delete output directory if only nf-report and nf-trace

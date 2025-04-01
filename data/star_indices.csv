@@ -1,6 +1,6 @@
 organism,star_index
-Homo sapiens,/large_storage/goodarzilab/public/scRecount/genomes/star_refData_2020_hg38
-Mus musculus,/large_storage/goodarzilab/public/scRecount/genomes/star2.7.11_refData_2020_mm10
+Homo_sapiens,/large_storage/goodarzilab/public/scRecount/genomes/star_refData_2020_hg38
+Mus_musculus,/large_storage/goodarzilab/public/scRecount/genomes/star2.7.11_refData_2020_mm10
 Macaca_mulatta,/large_storage/goodarzilab/public/scRecount/genomes/MMUL-10_scRecount/MMUL-10_scRecount
 Anopheles_gambiae,/scratch/multiomics/nickyoungblut/star_refs/Anopheles_gambiae/star
 Arabidopsis_thaliana,/scratch/multiomics/nickyoungblut/star_refs/Arabidopsis_thaliana/star

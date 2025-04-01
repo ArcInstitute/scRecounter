@@ -1,6 +1,6 @@
 organism,star_index
-Homo sapiens,gs://arc-ctc-references/STAR/star_refData_2020_hg38/
-Mus musculus,gs://arc-ctc-references/STAR/star_refData_2020_mm10/
+Homo_sapiens,gs://arc-ctc-references/STAR/star_refData_2020_hg38/
+Mus_musculus,gs://arc-ctc-references/STAR/star_refData_2020_mm10/
 Macaca_mulatta,gs://arc-ctc-references/STAR/star_refData_2019_mmul10/MMUL-10_scRecount/
 Anopheles_gambiae,gs://arc-ctc-references/STAR/Anopheles_gambiae/AgamP4/
 Arabidopsis_thaliana,gs://arc-ctc-references/STAR/Arabidopsis_thaliana/TAIR10/
