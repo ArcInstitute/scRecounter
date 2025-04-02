@@ -53,7 +53,7 @@ process STAR_FULL_SUMMARY {
 
     output:
     tuple val(sample), path("combined.csv"), emit: "csv"
-    path "${task.process}.log",             emit: "log"
+    path "${task.process}.log",              emit: "log"
 
     script:
     def use_database = params.use_database ? "--use-database" : ""
@@ -74,7 +74,7 @@ process STAR_FULL {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "star_env"
     label "process_high"
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk { [request: (375 * (task.attempt > 1 ? 2 : 1)).GB, type: 'local-ssd'] }
     machineType { 
         def options = ['n2-*', 'n2d-*']
@@ -87,11 +87,11 @@ process STAR_FULL {
           val(cell_barcode_length), val(umi_length), val(strand)
 
     output: 
-    tuple val(sample), path("summary/*.csv"),                 emit: summary
-    tuple val(sample), path("h5ad/*.h5ad"),                   emit: h5ad
-    tuple val(sample), path("resultsSolo.out/*/*.stats.gz"),  emit: stats, optional: true
-    tuple val(sample), path("resultsSolo.out/*/*.txt.gz"),    emit: txt, optional: true
-    path "${task.process}.log",                               emit: "log"
+    tuple val(sample), path("summary/*.csv"),                  emit: summary
+    tuple val(sample), path("mtx-to-h5ad_out/h5ad/*/*.h5ad"),  emit: h5ad
+    tuple val(sample), path("resultsSolo.out/*/*.stats.gz"),   emit: stats, optional: true
+    tuple val(sample), path("resultsSolo.out/*/*.txt.gz"),     emit: txt, optional: true
+    path "${task.process}.log",                                emit: "log"
 
     script:
     def use_database = params.use_database ? "--use-database" : ""
@@ -161,9 +161,7 @@ def saveAsSTAR(sample, filename) {
             parts = parts[1..-1]
         } 
         def org_part = null
-        if (filename.endsWith(".h5ad")) {
-            org_part = "h5ad"
-        } else if (filename.endsWith(".csv")) {
+        if (filename.endsWith(".csv")) {
             org_part = "summary"
         } 
         if (org_part != null) {
