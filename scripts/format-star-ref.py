@@ -51,6 +51,26 @@ bird_biotypes = {
     "TR_C_pseudogene"
 }
 
+reptile_biotypes = {
+    "protein_coding",
+    "protein_coding_LoF",
+    "lncRNA",
+    "IG_V_gene",
+    "IG_J_gene",
+    "IG_V_pseudogene",
+    "IG_J_pseudogene",
+    "IG_C_gene",
+    "IG_C_pseudogene",
+    "IG_D_gene",
+    "TR_V_gene",
+    "TR_J_gene",
+    "TR_V_pseudogene",
+    "TR_J_pseudogene",
+    "TR_C_gene",
+    "TR_D_gene",
+    "TR_C_pseudogene"
+}
+
 amphibian_biotypes = {
    "protein_coding",
    "lncRNA",
@@ -120,12 +140,37 @@ biotype_index = {
     "Sus scrofa" : mammal_biotypes,
     "Heterocephalus glaber" : mammal_biotypes,
     "Oryctolagus cuniculus" : mammal_biotypes,
+    "Felis catus" : mammal_biotypes,
+    "Pan paniscus" : mammal_biotypes,
+    "Chlorocebus aethiops" : mammal_biotypes,
+    "Monodelphis domestica" : mammal_biotypes,
+    "Chlorocebus pygerythrus" : mammal_biotypes,
+    "Capra aegagrus" : mammal_biotypes,
+    "Vicugna pacos" : mammal_biotypes,
+    "Chinchilla lanigera" : mammal_biotypes,
+    "Cavia porcellus" : mammal_biotypes,
+    "Mesocricetus auratus" : mammal_biotypes,
+    "Erinaceus europaeus" : mammal_biotypes,
+    "Neovison vison" : mammal_biotypes,
+    "Macropus rufogriseus" : mammal_biotypes,
+    "Manis javanica" : mammal_biotypes,
+    "Ornithorhynchus anatinus" : mammal_biotypes,
+    "Mustela putorius" : mammal_biotypes,
+    "Tupaia belangeri" : mammal_biotypes,
     ## birds
     "Gallus gallus" : bird_biotypes,
+    "Taeniopygia guttata" : bird_biotypes,
+    "Anser cygnoides" : bird_biotypes,
+    "Anas platyrhynchos" : bird_biotypes,
+    ## reptiles
+    "Trachemys scripta" : reptile_biotypes,
     ## amphibians
     "Xenopus tropicalis" : amphibian_biotypes,
+    "Ambystoma mexicanum" : amphibian_biotypes,
     ## fish
     "Danio rerio" : fish_biotypes,
+    "Salmo salar" : fish_biotypes,
+    "Gasterosteus aculeatus" : fish_biotypes,
     ## invertebrates
     "Drosophila melanogaster" : invertebrate_biotypes,
     "Caenorhabditis elegans" : invertebrate_biotypes,
