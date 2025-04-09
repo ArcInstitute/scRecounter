@@ -58,6 +58,10 @@ def parse_args():
         help='Output directory'
     )
     parser.add_argument(
+        '--keep-raw-h5ad', action="store_true", default=False,
+        help='Keep raw h5ad files'
+    )
+    parser.add_argument(
         '--feature-types', type=str, nargs="+",
         default=FEATURE_TYPES, choices=FEATURE_TYPES,
         help='Feature types to include'
@@ -483,6 +487,9 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
         gc.collect()
         
         # convert raw matrices to h5ad
+        if not args.keep_raw_h5ad:
+            continue
+        
         load_matrix_as_anndata(
             srx_id = args.sample, 
             metadata = metadata,
