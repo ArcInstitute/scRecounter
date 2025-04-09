@@ -1,5 +1,5 @@
-include { joinReads; saveAsLog; subsampleByGroup; } from '../lib/utils.groovy'
-include { makeParamSets; validateRequiredColumns; loadBarcodes; loadStarIndices; expandStarParams } from '../lib/star_params.groovy'
+include { joinReads; saveAsLog; subsampleByGroup; } from '../lib/utils.nf'
+include { makeParamSets; validateRequiredColumns; loadBarcodes; loadStarIndices; expandStarParams } from '../lib/star_params.nf'
 
 // Workflow to run STAR alignment on scRNA-seq data
 workflow STAR_PARAMS_WF{
@@ -203,7 +203,7 @@ process STAR_FORMAT_PARAMS {
       --star-index ${params.star_index} \\
       --outfile star_params.csv \\
       $star_summary \\
-      2>&1 | tee ${task.process}:\${STAR_INDEX}:\${BARCODES_FILE}:${params.strand}.log
+      2>&1 | tee "${task.process}:\${STAR_INDEX}:\${BARCODES_FILE}:${params.strand}.log"
     """
 }
 
@@ -217,7 +217,7 @@ process STAR_PARAM_SEARCH {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "star_env"
     label "process_medium"
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
     input:
@@ -253,7 +253,7 @@ process STAR_PARAM_SEARCH {
       --soloBarcodeReadLength 0 \\
       --outFileNamePrefix results \\
       --readFilesCommand zstd -dcf \\
-      2>&1 | tee ${task.process}:\${STAR_INDEX}:\${BARCODES_FILE}:${params.strand}.log
+      2>&1 | tee "${task.process}:\${STAR_INDEX}:\${BARCODES_FILE}:${params.strand}.log"
     
     # rename output
     mv -f resultsSolo.out/GeneFull/Summary.csv star_summary.csv
@@ -292,11 +292,11 @@ process SEQKIT_STATS {
 process XSRA {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "download_env"
-    maxRetries 1
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' } 
+    maxRetries 4
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 4
-    memory { 4.GB * task.attempt }
-    disk 10.GB
+    memory { 4.GB * (task.attempt > 2 ? task.attempt - 1 : 1) }
+    disk { 10.GB * (task.attempt > 2 ? task.attempt - 1 : 1) }
  
     input:
     tuple val(sample), val(accession), val(metadata), val(sra_file_size_gb)

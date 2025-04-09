@@ -1,4 +1,4 @@
-include { joinReads; saveAsLog; } from '../lib/utils.groovy'
+include { joinReads; saveAsLog; } from '../lib/utils.nf'
 
 // Workflow to run STAR alignment on scRNA-seq data
 workflow STAR_FULL_WF{
@@ -73,11 +73,14 @@ process STAR_FULL {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsSTAR(sample, filename) }
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "star_env"
-    label "process_high"
-    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
-    disk { [request: (375 * (task.attempt > 1 ? 2 : 1)).GB, type: 'local-ssd'] }
+    maxRetries 3
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    cpus 8
+    memory { 72.GB * task.attempt }
+    time { 10.h * task.attempt }
+    disk { [request: (375 * task.attempt).GB, type: 'local-ssd'] }
     machineType { 
-        def options = ['n2-*', 'n2d-*']
+        def options = ['n2-*', 'c2-*', 'n2d-*', 'c2d-*']
         return options[new Random().nextInt(options.size())]
     }
 
@@ -87,14 +90,16 @@ process STAR_FULL {
           val(cell_barcode_length), val(umi_length), val(strand)
 
     output: 
-    tuple val(sample), path("summary/*.csv"),                  emit: summary
-    tuple val(sample), path("mtx-to-h5ad_out/h5ad/*/*.h5ad"),  emit: h5ad
-    tuple val(sample), path("resultsSolo.out/*/*.stats.gz"),   emit: stats, optional: true
-    tuple val(sample), path("resultsSolo.out/*/*.txt.gz"),     emit: txt, optional: true
-    path "${task.process}.log",                                emit: "log"
+    tuple val(sample), path("summary/*.csv"),                        emit: summary
+    tuple val(sample), path("mtx-to-h5ad_out/h5ad/filtered/*.h5ad"), emit: h5ad_filtered
+    tuple val(sample), path("mtx-to-h5ad_out/h5ad/raw/*.h5ad"),      emit: h5ad_raw, optional: true
+    tuple val(sample), path("resultsSolo.out/*/*.stats.gz"),         emit: stats, optional: true
+    tuple val(sample), path("resultsSolo.out/*/*.txt.gz"),           emit: txt, optional: true
+    path "${task.process}.log",                                      emit: "log"
 
     script:
     def use_database = params.use_database ? "--use-database" : ""
+    def keep_raw_h5ad = params.keep_raw_h5ad ? "--keep-raw-h5ad" : ""
     """
     echo "# Running STAR for ${sample}" | tee -a ${task.process}.log
 
@@ -146,7 +151,7 @@ process STAR_FULL {
     export GCP_SQL_DB_HOST="${params.db_host}"
     export GCP_SQL_DB_NAME="${params.db_name}"
     export GCP_SQL_DB_USERNAME="${params.db_username}"
-    mtx-to-h5ad.py ${use_database} \\
+    mtx-to-h5ad.py ${use_database} ${keep_raw_h5ad} \\
       --sample ${sample} \\
       resultsSolo.out 2>&1 | \\
       tee -a ${task.process}.log 
@@ -179,10 +184,11 @@ def saveAsSTAR(sample, filename) {
 process XSRA {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "download_env"
+    maxRetries 4
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 6
-    memory { 8.GB * task.attempt }
-    disk { [request: (375 * task.attempt).GB, type: 'local-ssd'] }
+    memory { 8.GB * (task.attempt > 2 ? task.attempt - 1 : 1) }
+    disk { [request: (375 * (task.attempt > 2 ? task.attempt - 1 : 1)).GB, type: 'local-ssd'] }
     machineType { 
         def options = ['n2-*', 'c2-*', 'n2d-*', 'c2d-*']
         return options[new Random().nextInt(options.size())]
