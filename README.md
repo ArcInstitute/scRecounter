@@ -136,7 +136,7 @@ Local run with provided accessions:
 ```bash
 nextflow run main.nf \
   -work-dir tmp/work \
-  -profile conda,trace,report,vm,vm_dev,dev,acc_dev
+  -profile conda,trace,report,vm,dev,acc_dev
 ```
 
 Local run with provided accessions (problematic datasets)
@@ -144,7 +144,7 @@ Local run with provided accessions (problematic datasets)
 ```bash
 nextflow run main.nf \
   -work-dir tmp/work \
-  -profile conda,trace,report,vm,vm_dev,dev,acc_dev_problems
+  -profile conda,trace,report,vm,dev,acc_dev_problems
 ```
 
 With conda, accessions pulled from scRecounter database:
@@ -152,7 +152,7 @@ With conda, accessions pulled from scRecounter database:
 ```bash
 nextflow run main.nf \
   -work-dir tmp/work \
-  -profile conda,trace,report,vm,vm_dev,dev,no_acc_dev
+  -profile conda,trace,report,vm,dev,no_acc_dev
 ```
 
 GCP run with provided accessions:
@@ -166,7 +166,7 @@ GCP run with accessions pulled from scRecounter SQL database:
 
 ```bash
 nextflow run main.nf \
-  -profile docker,trace,report,gcp,gcp_dev,dev,no_acc_dev
+  -profile docker,trace,report,gcp,gcp_dev,dev,gcp_no_acc_dev
 ```
 
 ### Characterize datasets
