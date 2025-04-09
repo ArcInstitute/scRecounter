@@ -12,6 +12,7 @@ from typing import Dict, Optional, List, Tuple
 from subprocess import Popen, PIPE
 import pandas as pd
 from db_utils import db_connect, db_upsert, add_to_log
+import time
 
 
 # functions
@@ -114,24 +115,35 @@ def write_log(logF, sample: str, accession: str, step: str, success: bool, msg: 
     logF.write(','.join([sample, accession, step, str(success), msg]) + '\n')
 
 def xsra_describe(
-    accession: str, min_read_length: int, output_format: str
+    accession: str, min_read_length: int, output_format: str,
+    retries: int=3, backoff: int=3
     ) -> Tuple[Optional[List[List[str]]], str]:
     """
     Run`xsra describe` to determine which, if any, of the reads are correct R1 and R2.
     Params:
         accession: SRA accession
         min_read_length: Minimum read length
+        output_format: Output format
+        retries: Number of retry attempts
+        backoff: Initial backoff time in seconds
     Returns:
         A list of lists with the R1 and R2 read names, or None if no reads are correct
     """
     # xsra describe
     cmd = ["xsra", "describe", "--limit", "10000", accession]
 
-    ## run command
-    returncode, output, err = run_cmd(cmd)
-    if returncode != 0:
-        logging.warning(err)
-        return None, "xsra describe command failed"
+    ## run command with retries
+    for attempt in range(retries + 1):
+        returncode, output, err = run_cmd(cmd)
+        if returncode == 0:
+            break
+        elif attempt < retries:
+            wait_time = backoff * (2 ** attempt)
+            logging.warning(f"Attempt {attempt + 1} failed. Retrying in {wait_time} seconds...")
+            time.sleep(wait_time)
+        else:
+            logging.warning(err)
+            return None, "xsra describe command failed"
 
     # parse json output to access the stats field
     try:
@@ -173,7 +185,8 @@ def xsra_describe(
 
 def xsra_dump(
     accession: str, output_dir: str, output_format: str, 
-    provider: str="https", threads: int=1, limit: Optional[int]=None
+    provider: str="https", threads: int=1, limit: Optional[int]=None,
+    retries: int=3, backoff: int=3
     ) -> Tuple[str, str]:
     """
     Run `xsra dump` to dump the reads.
@@ -184,6 +197,8 @@ def xsra_dump(
         provider: Provider for xsra: https or gcp
         threads: Number of threads
         limit: Maximum spot ID
+        retries: Number of retry attempts
+        backoff: Initial backoff time in seconds
     Returns:
         Tuple of (status, message)
     """
@@ -214,13 +229,21 @@ def xsra_dump(
         cmd += ["--limit", str(limit)]
     cmd += [accession]
 
-    ## run command
-    returncode, output, err = run_cmd(cmd)
-    if returncode == 0:
-        msg = output.decode().split('\n')
-    else:
-        logging.warning(err)
-        msg = err.decode().split('\n')
+    ## run command with retries
+    for attempt in range(retries + 1):
+        returncode, output, err = run_cmd(cmd)
+        if returncode == 0:
+            msg = output.decode().split('\n')
+            break
+        elif attempt < retries:
+            wait_time = backoff * (2 ** attempt)
+            logging.warning(f"Attempt {attempt + 1} failed. Retrying in {wait_time} seconds...")
+            time.sleep(wait_time)
+            msg = err.decode().split('\n')
+        else:
+            logging.warning(err)
+            msg = err.decode().split('\n')
+    
     msg = "; ".join([x for x in msg if x])        
     if msg == "":
         msg = "No output from xsra dump"

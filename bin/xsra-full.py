@@ -164,7 +164,7 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
         os.remove(sra_file)
 
         # rename read files
-        read_names = [read_names for accession, read_names, _ in read_idx if accession == accession][0]
+        read_names = [pair_read_names for acc, pair_read_names, _ in read_idx if acc == accession][0]
         check_output(read_names, accession, output_dir=args.output_dir, append=True)
         add_to_log(log_df, args.sample, accession, "xsra", "dump-check", status, msg)
 
