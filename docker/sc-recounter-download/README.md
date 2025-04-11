@@ -25,6 +25,17 @@ docker build \
   .
 ```
 
+Run
+
+```bash
+docker run -it --rm \
+  -u $(id -u):$(id -g) \
+  -v ${PWD}:/data \
+  -v ${HOME}/.gcp/:/.gcp \
+  --platform linux/amd64 \
+  ${IMG_NAME}:${IMG_VERSION}
+```
+
 Push
 
 ```bash
