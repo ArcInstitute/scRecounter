@@ -6,7 +6,7 @@ sc-recounter-star container
 Env vars
 
 ```bash
-IMG_NAME=sc-recounter-download
+IMG_NAME=sc-recounter-star
 IMG_VERSION=0.1.0
 REGION="us-east1"
 PROJECT="c-tc-429521"
