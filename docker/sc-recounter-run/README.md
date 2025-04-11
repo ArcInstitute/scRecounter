@@ -94,7 +94,46 @@ docker tag ${IMG_NAME}:${IMG_VERSION} \
 
 ### GCP Cloud Run Jobs
 
-Create/update the job
+#### TEST
+
+human/mouse
+
+```bash
+JOB_NAME="${IMG_NAME}-test"
+gcloud beta run jobs update ${JOB_NAME} \
+  --service-account=${SERVICE_ACCOUNT_EMAIL} \
+  --project=${GCP_PROJECT_ID} \
+  --region=${REGION} \
+  --image=${REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${IMG_NAME}/${IMG_NAME}:${IMG_VERSION} \
+  --set-env-vars=TZ=America/Los_Angeles \
+  --cpu=2 \
+  --memory=2Gi \
+  --task-timeout=4320m \
+  --max-retries=0 \
+  --args="docker","gcp","gcp_dev","gcp_no_acc_dev","dev","report","trace"
+```
+
+Organisms other than human/mouse
+
+```bash
+JOB_NAME="${IMG_NAME}-test-all-org"
+gcloud beta run jobs update ${JOB_NAME} \
+  --service-account=${SERVICE_ACCOUNT_EMAIL} \
+  --project=${GCP_PROJECT_ID} \
+  --region=${REGION} \
+  --image=${REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${IMG_NAME}/${IMG_NAME}:${IMG_VERSION} \
+  --set-env-vars=TZ=America/Los_Angeles \
+  --cpu=2 \
+  --memory=2Gi \
+  --task-timeout=4320m \
+  --max-retries=0 \
+  --args="docker","gcp","gcp_dev","gcp_no_acc_dev","dev","other_org","report","trace"
+```
+
+
+#### PROD
+
+human/mouse
 
 ```bash
 JOB_NAME="${IMG_NAME}"

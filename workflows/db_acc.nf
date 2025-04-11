@@ -1,5 +1,5 @@
-include { saveAsLog } from '../lib/utils.groovy'
-include { readAccessions } from '../lib/download.groovy'
+include { saveAsLog } from '../lib/utils.nf'
+include { readAccessions } from '../lib/download.nf'
 
 workflow DB_ACC_WF {
     main:

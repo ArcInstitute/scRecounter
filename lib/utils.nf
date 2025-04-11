@@ -1,3 +1,25 @@
+process SRA_STAT {
+    label "download_env"
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    disk 10.GB
+
+    input:
+    tuple val(sample), val(accession), val(metadata)
+
+    output:
+    tuple val(sample), val(accession), path("sra-stat.csv")
+
+    script:
+    """
+    sra-stat.py ${accession}
+    """
+
+    stub:
+    """
+    touch sra-stat.csv
+    """
+}
+
 def readStarParams(star_params_file){
     // read the input CSV file and check if all required columns are present
     return Channel

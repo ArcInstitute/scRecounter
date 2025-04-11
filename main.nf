@@ -4,7 +4,7 @@ include { STAR_PARAMS_WF } from './workflows/star_params.nf'
 include { STAR_FULL_WF } from './workflows/star_full.nf'
 include { SRA_STAT } from './lib/utils.nf'
 // util functions
-include { readAccessions; addStats; } from './lib/utils.groovy'
+include { readAccessions; addStats; } from './lib/utils.nf'
 
 // Main workflow
 workflow { 
