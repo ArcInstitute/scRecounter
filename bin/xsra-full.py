@@ -157,6 +157,14 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
             output_format="fastq", 
             threads=args.threads
         )
+        if status == "Failure" and args.provider == "gcp":
+            # try https provider
+            status,msg = xsra_dump(
+                sra_file, args.output_dir, 
+                provider="https", 
+                output_format="fastq", 
+                threads=args.threads
+            )
         add_to_log(log_df, args.sample, accession, "xsra", "dump", status, msg)
 
         # delete temp sra file
