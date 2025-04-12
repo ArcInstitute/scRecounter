@@ -15,7 +15,6 @@ from typing import Optional, List, Tuple, Dict, TextIO, Union
 import numpy as np
 import pandas as pd
 import scanpy as sc
-        
 import anndata
 from scipy import sparse
 from scipy.io import mmread

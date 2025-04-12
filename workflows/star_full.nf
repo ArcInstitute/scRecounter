@@ -20,15 +20,30 @@ workflow STAR_FULL_WF{
 
     // Use xsra to download all reads
     XSRA(ch_accessions_filt_group)
+    ch_fastq = XSRA.out.R1.join(XSRA.out.R2)
+    ch_fastq.count().view{ count -> "XSRA accession count: $count" }
 
-    // combine reads and star params
-    ch_fastq = XSRA.out.R1
-        .map{ sample,fastq -> [sample,fastq] }
+    //-- For accessions lacking paired reads from fasterq-dump, fallback to fastq-dump --//
+    ch_accessions_fallback = XSRA.out.R1
         .join(
-            XSRA.out.R2.map{ sample,fastq -> [sample,fastq] }
+            XSRA.out.R2.map{ sample,fastq -> [sample,fastq,true] },
+            remainder: true
         )
-        .groupTuple()
-        .join(ch_star_params)
+        .filter{ it -> it[3] != true }
+        .map{ it -> it[0] } 
+        .combine(ch_accessions_filt_group, by: 0)
+
+    // run fastq-dump on the fallback accessions
+    FASTQ_DUMP(ch_accessions_fallback)
+    ch_fastq_fallback = FASTQ_DUMP.out.R1.join(FASTQ_DUMP.out.R2)
+    ch_fastq_fallback.count().view{ count -> "fastq-dump (fallback) accession count: $count" }
+    
+    // combine the fasterq-dump and fastq-dump results
+    ch_fastq = ch_fastq.mix(ch_fastq_fallback)
+    ch_fastq.count().view{ count -> "XSRA + fastq-dump accession count: $count" }
+
+    // group by reads by sample and join with star params
+    ch_fastq = ch_fastq.groupTuple().join(ch_star_params)
 
     //-- Run STAR with the selected parameters on all reads --//
     // run STAR
@@ -222,3 +237,42 @@ process XSRA {
     """
 }
 
+process FASTQ_DUMP {
+    publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
+    label "download_env"
+    maxRetries 1
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    cpus 4
+    memory { 4.GB * task.attempt }
+    time { 6.h * task.attempt }
+    disk {[request: 375.GB, type: 'local-ssd']}
+    machineType { 
+        def options = ['n2-*', 'c2-*', 'n2d-*', 'c2d-*']
+        return options[new Random().nextInt(options.size())]
+    }
+    
+    input:
+    tuple val(sample), val(accessions)
+
+    output:
+    tuple val(sample), path("reads/read_1.fq.zst"), emit: "R1"
+    tuple val(sample), path("reads/read_2.fq.zst"), emit: "R2", optional: true
+    path "${task.process}.log",                     emit: "log"
+
+    script:
+    def accessions_str = accessions.join(" ")
+    """
+    export GCP_SQL_DB_HOST="${params.db_host}"
+    export GCP_SQL_DB_NAME="${params.db_name}"
+    export GCP_SQL_DB_USERNAME="${params.db_username}"
+
+    fastq-dump.py \\
+      --sample ${sample} \\
+      --threads ${task.cpus} \\
+      --min-read-length ${params.min_read_len} \\
+      --outdir reads \\
+      --maxSpotId ${params.fallback_max_spots} \\
+      ${accessions_str} \\
+      2>&1 | tee -a ${task.process}.log
+    """
+}
