@@ -42,7 +42,7 @@ workflow STAR_FULL_WF{
     ch_fastq = ch_fastq.mix(ch_fastq_fallback)
     ch_fastq.count().view{ count -> "XSRA + fastq-dump accession count: $count" }
 
-    // group by reads by sample and join with star params
+    //-- group by reads by sample and join with star params --//
     ch_fastq = ch_fastq.groupTuple().join(ch_star_params)
 
     //-- Run STAR with the selected parameters on all reads --//

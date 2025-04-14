@@ -21,8 +21,6 @@ A Nextflow pipeline to re-process single-cell RNA-seq data from the Sequence Rea
     * Download all reads with `fasterq-dump`
     * Map the reads with STARsolo using the "best" STAR parameters
 
-TODO: update to `xsra`
-
 # Manuscript
 
 **scBaseCamp: An AI agent-curated, uniformly processed, and continually expanding single cell data repository**.
