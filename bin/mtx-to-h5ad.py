@@ -53,12 +53,16 @@ def parse_args():
         help='Sample name'
     )
     parser.add_argument(
-        '--output-dir', type=str, default='mtx-to-h5ad_out',
+        '--output-dir', type=str, default='h5ad',
         help='Output directory'
     )
     parser.add_argument(
         '--keep-raw-h5ad', action="store_true", default=False,
-        help='Keep raw h5ad files'
+        help='Keep raw h5ad files instead of just the filtered ones'
+    )
+    parser.add_argument(
+        '--keep-input', action="store_true", default=False,
+        help='Keep input files'
     )
     parser.add_argument(
         '--feature-types', type=str, nargs="+",
@@ -272,7 +276,8 @@ def match_barcodes(
 
 def build_gene_anndata_filt(
     mtx_filt: str, barcode_filt: str, 
-    mtx_raw: Dict[str,str], barcode_raw: str
+    mtx_raw: Dict[str,str], barcode_raw: str,
+    keep_input: bool = False,
     ) -> sc.AnnData:
     """
     Generate an anndata object from the STAR aligner output folder.
@@ -283,6 +288,7 @@ def build_gene_anndata_filt(
         barcode_filt: Path to filtered barcode file
         mtx_raw: Path to raw matrix files
         barcode_raw: Path to raw barcode file
+        keep_input: bool
     Returns:
         Anndata object
     """
@@ -309,8 +315,10 @@ def build_gene_anndata_filt(
         X = mmread(f'{matrix_type}_filtered.mtx').astype('float32')
         adata.layers[matrix_type] = sparse.csr_matrix(X).transpose()
         # delete filtered files
-        os.remove(f'{matrix_type}_filtered.mtx')
-        os.remove(f'barcodes_{matrix_type}_filtered.tsv')
+        if not keep_input:
+            logging.info(f"  Deleting temporary filtered files for {matrix_type}...")
+            os.remove(f'{matrix_type}_filtered.mtx')
+            os.remove(f'barcodes_{matrix_type}_filtered.tsv')
         
     return adata
 
@@ -348,6 +356,7 @@ def load_matrix_as_anndata(
         output_dir: str,
         mtx_raw: Dict[str, str],
         barcode_raw: str,
+        keep_input: bool = False,
         feat_raw: Optional[str] = None,
         mtx_filt: Optional[Dict[str, str]] = None,
         feat_filt: Optional[str] = None,
@@ -367,6 +376,7 @@ def load_matrix_as_anndata(
         feat_filt: Path to filtered feature file
         barcode_filt: Path to filtered barcode file
         use_database: bool
+        keep_input: bool
     """
     # build anndata
     if mtx_filt is None:
@@ -387,7 +397,10 @@ def load_matrix_as_anndata(
             adata = build_velocyto_anndata(mtx_filt, feat_filt, barcode_filt)
         elif 'matrix' in mtx_filt:
             logging.info("Building gene anndata...")
-            adata = build_gene_anndata_filt(mtx_filt['matrix'], barcode_filt, mtx_raw, barcode_raw)
+            adata = build_gene_anndata_filt(
+                mtx_filt['matrix'], barcode_filt, 
+                mtx_raw, barcode_raw, keep_input
+            )
         else:
             raise ValueError("Invalid matrix_paths")
         out_prefix = "filtered"
@@ -395,19 +408,32 @@ def load_matrix_as_anndata(
     # drop 'feature_types' column in var
     adata.var.drop(columns=['feature_types'], inplace=True)
 
+    # list layers
+    layers_str = ", ".join(list(adata.layers.keys()))
+    logging.info(f"Layers: {layers_str}")
+
     # calculate total counts
+    ## primary matrix
     if sparse.issparse(adata.X):
         adata.obs["gene_count"] = (adata.X > 0).sum(axis=1).A1
         adata.obs["umi_count"] = adata.X.sum(axis=1).A1
     else:
         adata.obs["gene_count"] = (adata.X > 0).sum(axis=1)
         adata.obs["umi_count"] = adata.X.sum(axis=1)
+    ## layer matrices
+    for layer in adata.layers: 
+        if sparse.issparse(adata.layers[layer]):
+            adata.obs[f"gene_count_{layer}"] = (adata.layers[layer] > 0).sum(axis=1).A1
+            adata.obs[f"umi_count_{layer}"] = adata.layers[layer].sum(axis=1).A1
+        else:
+            adata.obs[f"gene_count_{layer}"] = (adata.layers[layer] > 0).sum(axis=1)
+            adata.obs[f"umi_count_{layer}"] = adata.layers[layer].sum(axis=1)
 
     # add metadata to adata
     adata.obs["SRX_accession"] = srx_id
 
     ## write to h5ad
-    h5ad_outdir = os.path.join(output_dir, "h5ad", out_prefix)
+    h5ad_outdir = os.path.join(output_dir, out_prefix)
     os.makedirs(h5ad_outdir, exist_ok=True)
     outfile = os.path.join(h5ad_outdir, f"{feature_type}.h5ad")
     logging.info(f"Writing to {outfile}...")
@@ -473,37 +499,50 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
             mtx_filt = mtx_filt,
             feat_filt = feat_filt,
             barcode_filt = barcode_filt,
-            use_database = args.use_database
+            use_database = args.use_database,
+            keep_input = args.keep_input
         )
 
         # delete the filtered matrix files
-        for mtx in mtx_filt.values():
-            if os.path.exists(mtx):
-                os.remove(mtx)
+        if not args.keep_input:
+            logging.info(f"Deleting input files for {feat_type} (filtered)...")
+            for mtx in mtx_filt.values():
+                if os.path.exists(mtx):
+                    os.remove(mtx)
+            if os.path.exists(barcode_filt):
+                os.remove(barcode_filt)
+            if os.path.exists(feat_filt):
+                os.remove(feat_filt)
 
         # garbage collect
         del mtx_filt, barcode_filt, feat_filt
         gc.collect()
         
         # convert raw matrices to h5ad
-        if not args.keep_raw_h5ad:
-            continue
-        
-        load_matrix_as_anndata(
-            srx_id = args.sample, 
-            metadata = metadata,
-            output_dir = args.output_dir,
-            feature_type = feat_type,
-            mtx_raw = mtx_raw,
-            barcode_raw = barcode_raw,
-            feat_raw = feat_raw,
-            use_database = args.use_database
-        )
+        if args.keep_raw_h5ad:
+            load_matrix_as_anndata(
+                srx_id = args.sample, 
+                metadata = metadata,
+                output_dir = args.output_dir,
+                feature_type = feat_type,
+                mtx_raw = mtx_raw,
+                barcode_raw = barcode_raw,
+                feat_raw = feat_raw,
+                use_database = args.use_database,
+                keep_input = args.keep_input
+            )
 
         # delete the raw mtx files
-        for mtx in mtx_raw.values():
-            if os.path.exists(mtx):
-                os.remove(mtx)
+        if not args.keep_input:
+            logging.info(f"Deleting input files for {feat_type} (raw)...")
+            for mtx in mtx_raw.values():
+                if os.path.exists(mtx):
+                    os.remove(mtx)
+            if os.path.exists(barcode_raw):
+                os.remove(barcode_raw)
+            # feat_raw might not exist for Velocyto
+            if feat_raw and os.path.exists(feat_raw):  
+                os.remove(feat_raw)
 
         # garbage collect
         del mtx_raw, barcode_raw, feat_raw

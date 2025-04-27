@@ -40,7 +40,7 @@ workflow STAR_FULL_WF{
     
     // combine the fasterq-dump and fastq-dump results
     ch_fastq = ch_fastq.mix(ch_fastq_fallback)
-    ch_fastq.count().view{ count -> "XSRA + fastq-dump accession count: $count" }
+    ch_fastq.count().view{ count -> "Total (XSRA + fastq-dump) accession count: $count" }
 
     //-- group by reads by sample and join with star params --//
     ch_fastq = ch_fastq.groupTuple().join(ch_star_params)
@@ -89,7 +89,7 @@ process STAR_FULL {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "star_env"
     maxRetries 3
-    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+   // errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 8
     memory { 72.GB * task.attempt }
     time { 10.h * task.attempt }
@@ -105,12 +105,12 @@ process STAR_FULL {
           val(cell_barcode_length), val(umi_length), val(strand)
 
     output: 
-    tuple val(sample), path("summary/*.csv"),                        emit: summary
-    tuple val(sample), path("mtx-to-h5ad_out/h5ad/filtered/*.h5ad"), emit: h5ad_filtered
-    tuple val(sample), path("mtx-to-h5ad_out/h5ad/raw/*.h5ad"),      emit: h5ad_raw, optional: true
-    tuple val(sample), path("resultsSolo.out/*/*.stats.gz"),         emit: stats, optional: true
-    tuple val(sample), path("resultsSolo.out/*/*.txt.gz"),           emit: txt, optional: true
-    path "${task.process}.log",                                      emit: "log"
+    tuple val(sample), path("summary/*.csv"),                emit: summary
+    tuple val(sample), path("h5ad/filtered/*.h5ad"),         emit: h5ad_filtered
+    tuple val(sample), path("h5ad/raw/*.h5ad"),              emit: h5ad_raw, optional: true
+    tuple val(sample), path("resultsSolo.out/*/*.stats.gz"), emit: stats, optional: true
+    tuple val(sample), path("resultsSolo.out/*/*.txt.gz"),   emit: txt, optional: true
+    path "${task.process}.log",                              emit: "log"
 
     script:
     def use_database = params.use_database ? "--use-database" : ""
