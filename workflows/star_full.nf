@@ -89,7 +89,7 @@ process STAR_FULL {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "star_env"
     maxRetries 3
-   // errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 8
     memory { 72.GB * task.attempt }
     time { 10.h * task.attempt }
