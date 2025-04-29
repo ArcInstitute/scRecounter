@@ -139,9 +139,14 @@ def db_get_unprocessed_records(
     return pd.read_sql(str(stmt), conn)
 
 def main(args):
+    # log arguments
+    logging.info(f"Max SRX: {args.max_srx}")
+    logging.info(f"Organisms: {args.organisms}")
+    logging.info(f"Database: {args.database}")
+
     # parse organisms
     args.organisms = args.organisms.split(",")
-
+    
     # set process name; used to determine which records have been processed
     process = "Get db accessions"
 
