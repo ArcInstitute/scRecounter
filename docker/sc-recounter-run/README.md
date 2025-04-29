@@ -94,7 +94,7 @@ docker tag ${IMG_NAME}:${IMG_VERSION} \
 
 ### GCP Cloud Run Jobs
 
-#### TEST
+#### `TEST`
 
 human/mouse
 
@@ -105,7 +105,7 @@ gcloud beta run jobs update ${JOB_NAME} \
   --project=${GCP_PROJECT_ID} \
   --region=${REGION} \
   --image=${REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${IMG_NAME}/${IMG_NAME}:${IMG_VERSION} \
-  --set-env-vars=TZ=America/Los_Angeles \
+  --set-env-vars=TZ=America/Los_Angeles,DEPLOYMENT=test \
   --cpu=2 \
   --memory=2Gi \
   --task-timeout=4320m \
@@ -122,7 +122,7 @@ gcloud beta run jobs update ${JOB_NAME} \
   --project=${GCP_PROJECT_ID} \
   --region=${REGION} \
   --image=${REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${IMG_NAME}/${IMG_NAME}:${IMG_VERSION} \
-  --set-env-vars=TZ=America/Los_Angeles \
+  --set-env-vars=TZ=America/Los_Angeles,DEPLOYMENT=test \
   --cpu=2 \
   --memory=2Gi \
   --task-timeout=4320m \
@@ -131,7 +131,7 @@ gcloud beta run jobs update ${JOB_NAME} \
 ```
 
 
-#### PROD
+#### `PROD`
 
 human/mouse
 
@@ -142,7 +142,7 @@ gcloud beta run jobs update ${JOB_NAME} \
   --project=${GCP_PROJECT_ID} \
   --region=${REGION} \
   --image=${REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${IMG_NAME}/${IMG_NAME}:${IMG_VERSION} \
-  --set-env-vars=TZ=America/Los_Angeles \
+  --set-env-vars=TZ=America/Los_Angeles,DEPLOYMENT=prod \
   --cpu=2 \
   --memory=2Gi \
   --task-timeout=4320m \
@@ -159,7 +159,7 @@ gcloud beta run jobs update ${JOB_NAME} \
   --project=${GCP_PROJECT_ID} \
   --region=${REGION} \
   --image=${REGION}-docker.pkg.dev/${GCP_PROJECT_ID}/${IMG_NAME}/${IMG_NAME}:${IMG_VERSION} \
-  --set-env-vars=TZ=America/Los_Angeles \
+  --set-env-vars=TZ=America/Los_Angeles,DEPLOYMENT=prod \
   --cpu=2 \
   --memory=2Gi \
   --task-timeout=4320m \
