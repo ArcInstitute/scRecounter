@@ -129,6 +129,8 @@ def xsra_describe(
     Returns:
         A list of lists with the R1 and R2 read names, or None if no reads are correct
     """
+    logging.info(f"# Running 'xsra describe' on {accession}")
+
     # xsra describe
     cmd = ["xsra", "describe", "--limit", "10000", accession]
 
@@ -159,7 +161,7 @@ def xsra_describe(
             read_lens_filt[seg['sid']] = seg['mean_length']
     # if not at least 2 reads pass the filter, return None
     if len(read_lens_filt) < 2:
-        msg = f"Less than 2 reads pass the filter: {len(read_lens_filt)}"
+        msg = f"Less than 2 reads pass the 'min read length' filter: {len(read_lens_filt)}"
         logging.warning(msg)
         return None,msg
     # R2 should be the largest read, while R1 should be the second largest
@@ -202,6 +204,8 @@ def xsra_dump(
     Returns:
         Tuple of (status, message)
     """
+    logging.info(f"# Running 'xsra dump' on {accession}")
+
     # xsra dump
     if output_format == "fasta":
         output_format = "a"
@@ -264,7 +268,14 @@ def check_output(
     Returns:
         Tuple of (status, message)
     """
-    logging.info(f"Checking output for {accession}")
+    # check for executa
+    logging.info(f"# Checking output for {accession}")
+
+    # check for read names
+    if read_names is None:
+        msg = f"No read names found for {accession}"
+        logging.warning(msg)
+        return "Failure", msg
 
     # list all files in output_dir
     out_files_str = ", ".join(glob(os.path.join(output_dir, "*")))
