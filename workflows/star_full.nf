@@ -204,6 +204,7 @@ process XSRA {
     cpus 6
     memory { 8.GB * (task.attempt > 2 ? task.attempt - 1 : 1) }
     disk { [request: (375 * (task.attempt > 2 ? task.attempt - 1 : 1)).GB, type: 'local-ssd'] }
+    time { 2.h * task.attempt }
     machineType { 
         def options = ['n2-*', 'c2-*', 'n2d-*', 'c2d-*']
         return options[new Random().nextInt(options.size())]

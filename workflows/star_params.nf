@@ -217,7 +217,7 @@ process STAR_PARAM_SEARCH {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "star_env"
     label "process_medium"
-    //errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     disk 10.GB
 
     input:
