@@ -114,8 +114,8 @@ def db_get_unprocessed_records(
     )
 
     # status
-    #df_target = pd.read_sql(str(target_srx), conn)
-    #print(f"No. of target records: {df_target.shape[0]}")
+    df_target = pd.read_sql(str(target_srx), conn)
+    logging.info(f"No. of target records: {df_target.shape[0]}")
 
     # main query to obtain the SRR for each SRX and then format the output
     stmt = (
@@ -135,14 +135,16 @@ def db_get_unprocessed_records(
         .distinct()
     )
         
-    # fetch as pandas dataframe
-    return pd.read_sql(str(stmt), conn)
+    df = pd.read_sql(str(stmt), conn)
+    logging.info(f"No. of obtained records: {df.shape[0]}")
+    return df
 
 def main(args):
     # log arguments
     logging.info(f"Max SRX: {args.max_srx}")
     logging.info(f"Organisms: {args.organisms}")
-    logging.info(f"Database: {args.database}")
+    logging.info(f"NCBI database(s): {args.database}")
+    logging.info(f"SQL database: {os.getenv('GCP_SQL_DB_NAME')}")
 
     # parse organisms
     args.organisms = args.organisms.split(",")
