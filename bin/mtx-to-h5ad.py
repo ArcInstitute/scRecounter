@@ -121,7 +121,7 @@ def get_metadata(srx_id: str) -> Optional[pd.DataFrame]:
 
 def build_velocyto_anndata(matrix_paths: Dict[str,str], feature_paths: str, barcode_paths: str) -> sc.AnnData:
     """
-    Generate an anndata object from the STAR aligner output folder
+    Generate an anndata object from the STAR aligner output folder using memory-efficient sparse matrix loading.
     Args:
         matrix_paths: Path to matrix files, {matrix_type: path}
         feature_paths: Path to feature file
@@ -130,50 +130,70 @@ def build_velocyto_anndata(matrix_paths: Dict[str,str], feature_paths: str, barc
         Anndata object
     """
     # check exists
-    for matrix_path in matrix_paths.values():
-        if not os.path.exists(matrix_path):
-            raise FileNotFoundError(f"{matrix_path} not found")
-
-    # Transpose counts matrix to have Cells as rows and Genes as cols as expected by AnnData objects
-    ## Using spliced.mtx as the reference matrix
-    X = sc.read_mtx(matrix_paths['spliced']).X.transpose()
+    required_matrices = ['spliced', 'unspliced', 'ambiguous']
+    for matrix_type in required_matrices:
+        matrix_path = matrix_paths.get(matrix_type)
+        if not matrix_path or not os.path.exists(matrix_path):
+            raise FileNotFoundError(f"{matrix_type} matrix path not found or file missing: {matrix_path}")
+    if not os.path.exists(feature_paths):
+        raise FileNotFoundError(f"Feature file not found: {feature_paths}")
+    if not os.path.exists(barcode_paths):
+        raise FileNotFoundError(f"Barcode file not found: {barcode_paths}")
 
     # Load the 3 matrices containing Spliced, Unspliced and Ambigous reads
-    mtxU = np.loadtxt(matrix_paths['unspliced'], skiprows=3, delimiter=' ')
-    mtxS = np.loadtxt(matrix_paths['spliced'], skiprows=3, delimiter=' ')
-    mtxA = np.loadtxt(matrix_paths['ambiguous'], skiprows=3, delimiter=' ')
+    # mmread reads as (features, cells), transpose to (cells, features) for AnnData
+    try:
+        logging.info("Reading spliced matrix...")
+        spliced = mmread(matrix_paths['spliced']).astype('float32').transpose().tocsr()
+        logging.info("Reading unspliced matrix...")
+        unspliced = mmread(matrix_paths['unspliced']).astype('float32').transpose().tocsr()
+        logging.info("Reading ambiguous matrix...")
+        ambiguous = mmread(matrix_paths['ambiguous']).astype('float32').transpose().tocsr()
+    except Exception as e:
+        logging.error(f"Error reading MTX files: {e}")
+        raise
 
-    # Extract sparse matrix shape informations from the third row
-    shapeU = np.loadtxt(matrix_paths['unspliced'], skiprows=2, max_rows = 1 ,delimiter=' ')[0:2].astype(int)
-    shapeS = np.loadtxt(matrix_paths['spliced'], skiprows=2, max_rows = 1 ,delimiter=' ')[0:2].astype(int)
-    shapeA = np.loadtxt(matrix_paths['ambiguous'], skiprows=2, max_rows = 1 ,delimiter=' ')[0:2].astype(int)
-
-    # Read the sparse matrix with csr_matrix((data, (row_ind, col_ind)), shape=(M, N))
-    # Subract -1 to rows and cols index because csr_matrix expects a 0 based index
-    # Traspose counts matrix to have Cells as rows and Genes as cols as expected by AnnData objects
-    spliced = sparse.csr_matrix((mtxS[:,2], (mtxS[:,0]-1, mtxS[:,1]-1)), shape = shapeS).transpose()
-    unspliced = sparse.csr_matrix((mtxU[:,2], (mtxU[:,0]-1, mtxU[:,1]-1)), shape = shapeU).transpose()
-    ambiguous = sparse.csr_matrix((mtxA[:,2], (mtxA[:,0]-1, mtxA[:,1]-1)), shape = shapeA).transpose()
+    # Use spliced counts as the primary matrix X
+    X = spliced
 
     # Load Genes and Cells identifiers
-    obs = pd.read_csv(barcode_paths, header = None, index_col = 0)
+    try:
+        obs = pd.read_csv(barcode_paths, header=None, index_col=0, names=['barcode'])
+        obs.index.name = None # AnnData expects unnamed index for obs
 
-    # Remove index column name to make it compliant with the anndata format
-    obs.index.name = None
-    var = pd.read_csv(
-        feature_paths, sep='\t', names = ('gene_symbols', 'feature_types'), index_col = 0
-    )
+        var = pd.read_csv(
+            feature_paths, sep='\t', header=None, names=('gene_ids', 'feature_types'), index_col=0
+        )
+        var.index.name = None # AnnData expects unnamed index for var
+    except Exception as e:
+        logging.error(f"Error reading feature/barcode files: {e}")
+        raise
+
+    # Ensure var index matches matrix shape
+    if X.shape[1] != len(var):
+         raise ValueError(f"Shape mismatch: Matrix columns ({X.shape[1]}) != Feature count ({len(var)})")
+    # Ensure obs index matches matrix shape
+    if X.shape[0] != len(obs):
+         raise ValueError(f"Shape mismatch: Matrix rows ({X.shape[0]}) != Barcode count ({len(obs)})")
+
 
     # Build AnnData object to be used with ScanPy and ScVelo
-    adata = anndata.AnnData(
-        X = X, obs = obs, var = var,
-        layers = {'spliced': spliced, 'unspliced': unspliced, 'ambiguous': ambiguous}
-    )
-    adata.var_names_make_unique()
+    try:
+        adata = anndata.AnnData(
+            X = X, obs = obs, var = var,
+            layers = {'spliced': spliced, 'unspliced': unspliced, 'ambiguous': ambiguous}
+        )
+        adata.var_names_make_unique()
+    except Exception as e:
+        logging.error(f"Error creating AnnData object: {e}")
+        raise
 
-    # Subset Cells based on STAR filtering
-    selected_barcodes = pd.read_csv(barcode_paths, header = None)
-    return adata[selected_barcodes[0]]
+    # # Subset Cells based on STAR filtering (This seems redundant if barcode_paths already points to filtered barcodes)
+    #selected_barcodes = pd.read_csv(barcode_paths, header = None)
+    #return adata[selected_barcodes[0]]
+
+    # Assuming the barcode_paths file provided already corresponds to the cells in the matrices
+    return adata
 
 def open_file(filename: str, mode: str = 'r') -> Union[TextIO, gzip.GzipFile]:
     """Open a file, handling gzip if the filename ends with .gz"""
@@ -388,7 +408,8 @@ def load_matrix_as_anndata(
             logging.info("Building gene anndata...")
             adata = build_gene_anndata_raw(mtx_raw, feat_raw, barcode_raw)
         else:
-            raise ValueError("Invalid matrix_paths")
+            x = ','.join(mtx_raw.keys())
+            raise ValueError(f"Invalid matrix_paths. Available keys: {x}")
         out_prefix = "raw"
     else:
         logging.info("Processing filtered matrix...")
@@ -402,11 +423,13 @@ def load_matrix_as_anndata(
                 mtx_raw, barcode_raw, keep_input
             )
         else:
-            raise ValueError("Invalid matrix_paths")
+            x = ','.join(mtx_filt.keys())
+            raise ValueError(f"Invalid matrix_paths. Available keys: {x}")
         out_prefix = "filtered"
 
     # drop 'feature_types' column in var
-    adata.var.drop(columns=['feature_types'], inplace=True)
+    if 'feature_types' in adata.var.columns:
+        adata.var.drop(columns=['feature_types'], inplace=True)
 
     # list layers
     layers_str = ", ".join(list(adata.layers.keys()))

@@ -116,7 +116,7 @@ process STAR_FULL {
     def use_database = params.use_database ? "--use-database" : ""
     def keep_raw_h5ad = params.keep_raw_h5ad ? "--keep-raw-h5ad" : ""
     """
-    echo "# Running STAR for ${sample}" | tee -a ${task.process}.log
+    echo "# Running STAR for ${sample}" | tee ${task.process}.log
 
     # Format R1 and R2 file paths for STAR
     R1=\$(printf "%s," input*_R1.fq.zst)
