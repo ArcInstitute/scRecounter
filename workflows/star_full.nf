@@ -199,7 +199,7 @@ def saveAsSTAR(sample, filename) {
 process XSRA {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "download_env"
-    maxRetries 4
+    maxRetries 3
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 6
     memory { 8.GB * (task.attempt > 2 ? task.attempt - 1 : 1) }
@@ -221,13 +221,13 @@ process XSRA {
     script:
     def accessions_str = accessions.join(" ")
     def use_database = params.use_database ? "--use-database" : ""
+    def gcp_project_id = params.gcp_project_id ? "--gcp-project-id ${params.gcp_project_id}" : ""
     """
     export GCP_SQL_DB_HOST="${params.db_host}"
     export GCP_SQL_DB_NAME="${params.db_name}"
     export GCP_SQL_DB_USERNAME="${params.db_username}"
-    export GCP_PROJECT_ID="${params.gcp_project_id}"
 
-    xsra-full.py ${use_database} \\
+    xsra-full.py ${use_database} ${gcp_project_id} \\
       --sample ${sample} \\
       --threads ${task.cpus} \\
       --min-read-length ${params.min_read_len} \\

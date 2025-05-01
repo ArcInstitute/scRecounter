@@ -37,8 +37,10 @@ def parse_args():
                         help='Number of threads')
     parser.add_argument('--output-dir', type=str, default='prefetch_out',
                         help='Output directory')
-    parser.add_argument('--min-read-length', type=int, default=28,
+    parser.add_argument('--min-read-length', type=int, default=26,
                         help='Minimum read length')  
+    parser.add_argument('--gcp-project-id', type=str, default=None,
+                        help='GCP project ID')
     parser.add_argument('--provider', type=str, default='https',
                         choices=['https', 'gcp'],
                         help='Provider for xsra: https or gcp')
@@ -47,12 +49,14 @@ def parse_args():
     return parser.parse_args()
 
 # functions
-def xsra_prefetch(accessions: List[str], output_dir: str, threads: int) -> Tuple[str, str]:
+def xsra_prefetch(accessions: List[str], output_dir: str, provider: str, gcp_project_id: str=None, threads: int=1) -> Tuple[str, str]:
     """
     Run `xsra prefetch` to prefetch the reads.
     Args:
         accessions: List of SRA accessions
         output_dir: Output directory
+        provider: Provider for xsra: https or gcp
+        gcp_project_id: GCP project ID
         threads: Number of threads
     Returns:
         Tuple of (status, message)
@@ -60,11 +64,10 @@ def xsra_prefetch(accessions: List[str], output_dir: str, threads: int) -> Tuple
     logging.info(f"Prefetching {', '.join(accessions)}")
 
     # use gcp or https provider?
-    project_id = os.getenv("GCP_PROJECT_ID")
-    if project_id:
+    if provider == "gcp" and gcp_project_id:
         cmd = [
             "xsra", "prefetch", 
-            "--gcp-project-id", project_id, 
+            "--gcp-project-id", gcp_project_id, 
             "--provider", "gcp", 
             "--retry-limit", "10",
             "--retry-delay", "1000",
@@ -99,7 +102,8 @@ def describe_accessions(
         read_names, msg = xsra_describe(accession, min_read_length, output_format)
         if read_names is None:
             add_to_log(log_df, sample, accession, "xsra", "describe", "Failure", msg)
-            return None
+            logging.warning(f"Accession {accession} failed to process: {msg}")
+            exit(0)
         return (accession, read_names, msg)
     
     # Use ThreadPoolExecutor to parallelize processing
@@ -143,7 +147,11 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
     )
 
     # run `xsra prefetch` on accessions
-    status,msg = xsra_prefetch(args.accessions, args.output_dir, threads=args.threads)
+    status,msg = xsra_prefetch(
+        args.accessions, args.output_dir, args.provider, 
+        gcp_project_id=args.gcp_project_id, 
+        threads=args.threads
+    )
     for accession in args.accessions:
         add_to_log(log_df, args.sample, accession, "xsra", "prefetch", status, msg)
 
@@ -152,19 +160,10 @@ def main(args: argparse.Namespace, log_df: pd.DataFrame) -> Optional[None]:
         # dump reads
         sra_file = os.path.join(args.output_dir, f"{accession}.sra")
         status,msg = xsra_dump(
-            sra_file, args.output_dir, 
-            provider=args.provider, 
+            sra_file, args.output_dir,
             output_format="fastq", 
             threads=args.threads
         )
-        if status == "Failure" and args.provider == "gcp":
-            # try https provider
-            status,msg = xsra_dump(
-                sra_file, args.output_dir, 
-                provider="https", 
-                output_format="fastq", 
-                threads=args.threads
-            )
         add_to_log(log_df, args.sample, accession, "xsra", "dump", status, msg)
 
         # delete temp sra file

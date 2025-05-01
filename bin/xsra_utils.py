@@ -187,16 +187,21 @@ def xsra_describe(
 
 def xsra_dump(
     accession: str, output_dir: str, output_format: str, 
-    provider: str="https", threads: int=1, limit: Optional[int]=None,
-    retries: int=3, backoff: int=3
+    provider: str="https", 
+    gcp_project_id: Optional[str]=None,
+    threads: int=1, 
+    limit: Optional[int]=None,
+    retries: int=3, 
+    backoff: int=3
     ) -> Tuple[str, str]:
     """
     Run `xsra dump` to dump the reads.
     Params:
-        accession: SRA accession
+        accession: SRA accession or SRA file
         output_dir: Output directory
         output_format: Output format
         provider: Provider for xsra: https or gcp
+        gcp_project_id: GCP project ID
         threads: Number of threads
         limit: Maximum spot ID
         retries: Number of retry attempts
@@ -229,6 +234,8 @@ def xsra_dump(
             "--provider", provider,
             "--outdir", output_dir,
         ]
+    if gcp_project_id:
+        cmd += ["--gcp-project-id", gcp_project_id]
     if limit and limit > 0:
         cmd += ["--limit", str(limit)]
     cmd += [accession]
