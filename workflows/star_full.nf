@@ -199,7 +199,7 @@ def saveAsSTAR(sample, filename) {
 process XSRA {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "download_env"
-    maxRetries 3
+    maxRetries 2
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 6
     memory { 8.GB * (task.attempt > 2 ? task.attempt - 1 : 1) }
