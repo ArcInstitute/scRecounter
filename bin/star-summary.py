@@ -46,6 +46,11 @@ def main(args):
     pd.set_option('display.max_rows', 100)
     pd.set_option('display.width', 300)
 
+    # logging database
+    if args.use_database:
+        logging.info("Using database to store STAR results")
+        logging.info(f"Database name: {os.getenv('GCP_SQL_DB_NAME')}")
+
     # read in all summary csv files and concatenate
     df = []
     regex = re.compile(r".csv$")
@@ -85,7 +90,7 @@ def main(args):
     df["sample"] = args.sample
 
     # status
-    logging.info(f"Number of rows after formattings: {df.shape[0]}")
+    logging.info(f"Number of rows after formatting: {df.shape[0]}")
 
     # upsert results to database
     if args.use_database:
