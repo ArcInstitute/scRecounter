@@ -63,7 +63,7 @@ def read_seqkit_stats(stats_file: str, sample: str, accession: str) -> pd.DataFr
     DF["read"] =  "read" + DF["file"].str.extract(r'read_([12]).fa.zst$') + "_length"
     DF = DF[["accession", "read", "avg_len"]]
     # convert avg_len to int
-    DF["avg_len"] = DF["avg_len"].astype(int)
+    DF["avg_len"] = DF["avg_len"].fillna(0).astype(int)
     # rename "avg_len" to "read_length"
     DF = DF.rename(columns={"avg_len": "read_length"})
     # pivot wider
@@ -177,7 +177,8 @@ def write_all_data(data_all: pd.DataFrame, outfile_merged: str) -> None:
     data_all["saturation"] = data_all["Number of Reads"] / data_all["Sequencing Saturation"]
     data_all["num_spots"] = data_all["saturation"].where(data_all["spot_count"] > data_all["saturation"], data_all["spot_count"])
     data_all["num_cells"] = data_all["num_spots"] / data_all["Number of Reads"] * data_all["Estimated Number of Cells"] #* data_all["Reads Mapped to GeneFull: Unique+Multiple GeneFull"]
-    data_all["Total Estimated Number of Cells"] = data_all["num_cells"].round().astype(int)
+    # Handle potential inf/nan before converting to int
+    data_all["Total Estimated Number of Cells"] = data_all["num_cells"].replace([float('inf'), -float('inf')], float('nan')).fillna(0).round().astype(int)
     data_all.drop(columns=["saturation", "num_spots", "num_cells"], inplace=True)
 
     # Write parameters as CSV
@@ -247,7 +248,8 @@ def main(args, log_df):
 
     # Convert dtypes
     for x in ["cell_barcode_length", "umi_length", "read1_length", "read2_length"]:
-        data_filt[x] = data_filt[x].astype(int)
+        # Handle potential NaN before converting to int
+        data_filt[x] = data_filt[x].fillna(0).astype(int)
 
     # Check that read lengths are >= CELL_BARCODE_LENGTH + UMI_LENGTH
     data_filt["CHECK"] = data_filt["cell_barcode_length"] + data_filt["umi_length"] - data_filt["read1_length"]
