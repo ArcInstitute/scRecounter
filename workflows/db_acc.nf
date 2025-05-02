@@ -10,7 +10,7 @@ workflow DB_ACC_WF {
 
     // obtain accessions from the database
     ch_accessions = GET_DB_ACCESSIONS()
-    ch_accessions.csv.ifEmpty { println 'No accessions found in the scRecounter database' }
+    ch_accessions.csv.ifEmpty { log.warn 'No accessions found in the scRecounter database' }
 
     emit:
     ch_accessions.csv

@@ -10,11 +10,11 @@ include { readAccessions; addStats; } from './lib/utils.nf'
 workflow { 
     if (params.accessions == "" || params.accessions == true) {
         // Obtain accessions from the scRecoutner SQL database
-        println "No accessions provided. Accessions will be obtained from the scRecounter database"
+        log.info "No accessions provided. Accessions will be obtained from the scRecounter database"
         ch_accessions = DB_ACC_WF()
     } else {
         // Use the provided accessions
-        println "Using provided accessions."
+        log.info "Using provided accessions."
         ch_accessions = Channel.fromPath(params.accessions, checkIfExists: true)
     }
 

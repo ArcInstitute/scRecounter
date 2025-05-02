@@ -470,19 +470,6 @@ def load_matrix_as_anndata(
     # if use_database:
     #     adata.obs["organism"] = metadata["organism"].values[0]
     # adata.obs.to_csv(outfile, index=False)
-    
-    # upsert metadata to postgresql database
-    if use_database and mtx_filt is not None:
-        logging.info(f"Upserting metadata for SRX accession {srx_id}...")
-        # add feature type
-        metadata["feature_type"] = feature_type
-        # add obs_count to metadata
-        metadata["obs_count"] = adata.shape[0]
-        # upsert metadata
-        with db_connect() as conn:
-            db_upsert(metadata, "scbasecamp_metadata_tmp", conn)
-    else:
-        logging.info(f"Skipping upserting metadata for SRX accession {srx_id}")
 
 def get_basename(path: str) -> str:
     # remove trailing .gz
