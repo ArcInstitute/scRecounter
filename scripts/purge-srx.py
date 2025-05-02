@@ -34,7 +34,10 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument('--dry-run', action='store_true', default=False,
                         help='Print actions without executing.')
     parser.add_argument('--gcs-dir', type=str, default='gs://arc-ctc-screcounter/prod3/',
-                        help='Base directory in GCP bucket where SCRECOUNTER directories are stored.')               
+                        help='Base directory in GCP bucket where SCRECOUNTER directories are stored.') 
+    parser.add_argument('--tenant', type=str, default='prod',
+                        choices=['prod', 'test'],
+                        help='SQL database tenant')                
     return parser.parse_args()
 
 def parse_gs_path(gs_path: str) -> Tuple[str, str]:
@@ -154,6 +157,7 @@ def main(args: argparse.Namespace) -> None:
        - For each target folder, find the "accessions.csv" file 2 levels up from the target folder
        - Also delete the SRX from all scRecounter tables in the SQL database
     """
+    os.environ["GCP_SQL_DB_NAME"] = f"sragent-{args.tenant}"
     print(f"GCP_SQL_DB_NAME: {os.getenv('GCP_SQL_DB_NAME')}", file=sys.stderr)
 
     # Parse the GCP bucket path
