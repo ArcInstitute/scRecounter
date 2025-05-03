@@ -106,7 +106,7 @@ def db_get_unprocessed_records(
                 srx_metadata.lib_prep == "10x_Genomics",
                 srx_metadata.organism.isin(organisms),
                 srx_metadata.czi_collection_id.isnull() | srx_metadata.czi_collection_id.isin(["", "NaN", "None"]),
-                #~srx_metadata.tech_10x.isin(["other", "not_applicable"])  # TODO: comment to make the query more permissive
+                ~srx_metadata.tech_10x.isin(["other", "not_applicable"])    # TODO: comment to make the query more permissive
             ])
         )
         .distinct()
