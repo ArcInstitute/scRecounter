@@ -94,7 +94,7 @@ process STAR_FULL {
     maxRetries 3
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 12
-    memory { (sa_size > 0 ? sa_size + 8.GB : 30.GB) * task.attempt }
+    memory { (sa_size > 0 ? sa_size + 10.GB : 32.GB) * task.attempt }
     time { 10.h * task.attempt }
     disk { [request: (375 * task.attempt).GB, type: 'local-ssd'] }
     machineType { 
