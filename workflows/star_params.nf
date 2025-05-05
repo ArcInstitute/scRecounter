@@ -1,5 +1,5 @@
 include { joinReads; saveAsLog; subsampleByGroup; } from '../lib/utils.nf'
-include { makeParamSets; validateRequiredColumns; loadBarcodes; loadStarIndices; expandStarParams } from '../lib/star_params.nf'
+include { makeParamSets; validateRequiredColumns; loadBarcodes; loadStarIndices; expandStarParams; addSaSizeToParams } from '../lib/star_params.nf'
 
 // Workflow to run STAR alignment on scRNA-seq data
 workflow STAR_PARAMS_WF{
@@ -31,8 +31,14 @@ workflow STAR_PARAMS_WF{
     // Pairwise combine samples with barcodes, strand, and star index
     ch_params = makeParamSets(ch_fasta, ch_barcodes, ch_star_indices)
 
+    // Add SA file size to the parameters channel
+    ch_params = addSaSizeToParams(ch_params)
+
     // Run STAR on subsampled reads, for all pairwise parameter combinations
     STAR_PARAM_SEARCH(ch_params)
+
+    // remove the last value of ch_params (sa_size)
+    ch_params = ch_params.map { tuple -> tuple[0..-2] }
 
     // Format the STAR parameters into a CSV file
     STAR_FORMAT_PARAMS(STAR_PARAM_SEARCH.out.csv)
@@ -48,7 +54,7 @@ workflow STAR_PARAMS_WF{
     ch_star_params_json = STAR_SELECT_PARAMS.out.json
         .filter { sample, accession, json_file -> 
             if(json_file.size() < 5) {
-                println "WARNING: No valid STAR parameters found for ${sample}; skipping"
+                log.warn "WARNING: No valid STAR parameters found for ${sample}; skipping"
             }
             return json_file.size() > 5
         }
@@ -216,12 +222,15 @@ def saveAsValid(sample, filename) {
 process STAR_PARAM_SEARCH {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample, accession) }
     label "star_env"
-    label "process_medium"
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
+    cpus 8
+    memory { (sa_size > 0 ? Math.round(nextflow.util.MemoryUnit.of(sa_size).toGiga()) : 30.GB) * task.attempt }
+    time { 4.h * task.attempt }
     disk 10.GB
 
     input:
-    tuple val(sample), val(accession), val(metadata), path(fastq_1), path(fastq_2), path(barcodes_file), path(star_index), val(params)
+    tuple val(sample), val(accession), val(metadata), path(fastq_1), path(fastq_2), 
+          path(barcodes_file), path(star_index), val(params), val(sa_size)
 
     output:
     tuple val(sample), val(accession), val(metadata), val(params), path("star_summary.csv"), emit: "csv"

@@ -1,5 +1,5 @@
 include { joinReads; saveAsLog; } from '../lib/utils.nf'
-
+include { addSaSize; starFullMem; } from '../lib/star_full.nf'
 // Workflow to run STAR alignment on scRNA-seq data
 workflow STAR_FULL_WF{
     take:
@@ -46,6 +46,9 @@ workflow STAR_FULL_WF{
     ch_fastq = ch_fastq.groupTuple().join(ch_star_params)
 
     //-- Run STAR with the selected parameters on all reads --//
+    // add the SA file size to the parameters channel
+    ch_fastq = addSaSize(ch_fastq)
+
     // run STAR
     STAR_FULL(ch_fastq)
 
@@ -90,8 +93,8 @@ process STAR_FULL {
     label "star_env"
     maxRetries 3
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
-    cpus 8
-    memory { 72.GB * task.attempt }
+    cpus 12
+    memory { starFullMem(sa_size, task.attempt) }
     time { 10.h * task.attempt }
     disk { [request: (375 * task.attempt).GB, type: 'local-ssd'] }
     machineType { 
@@ -102,7 +105,7 @@ process STAR_FULL {
     input:
     tuple val(sample), path("input*_R1.fq.zst"), path("input*_R2.fq.zst"), 
           path(barcodes_file), path(star_index),
-          val(cell_barcode_length), val(umi_length), val(strand)
+          val(cell_barcode_length), val(umi_length), val(strand), val(sa_size)
 
     output: 
     tuple val(sample), path("summary/*.csv"),                emit: summary
@@ -116,6 +119,7 @@ process STAR_FULL {
     def use_database = params.use_database ? "--use-database" : ""
     def keep_raw_h5ad = params.keep_raw_h5ad ? "--keep-raw-h5ad" : ""
     """
+    echo "TEST"
     echo "# Running STAR for ${sample}" | tee ${task.process}.log
 
     # Format R1 and R2 file paths for STAR
@@ -199,7 +203,7 @@ def saveAsSTAR(sample, filename) {
 process XSRA {
     publishDir file(params.output_dir), mode: "copy", overwrite: true, saveAs: { filename -> saveAsLog(filename, sample) }
     label "download_env"
-    maxRetries 2
+    maxRetries 3
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 6
     memory { 8.GB * (task.attempt > 2 ? task.attempt - 1 : 1) }

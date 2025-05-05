@@ -1,13 +1,30 @@
-import groovy.json.JsonSlurper
+def addSaSizeToParams(ch_params) {
+    // Add SA file size to the parameters channel
+    def ch_params_with_size = ch_params.map { sample, accession, metadata, fastq_1, fastq_2, barcodes_file, star_index, params ->
+        def sa_path = file("${star_index}/SA")
+        def sa_size = 30L * 1024 * 1024 * 1024 // Default size if file not found
+        try {
+            if (sa_path.exists()) {
+                sa_size = sa_path.size()
+            } else {
+                log.warn "[${sample}/${accession}] SA file not found at ${sa_path}. Using default memory overhead (30 GB)."
+            }
+        } catch (Exception e) {
+            log.warn "[${sample}/${accession}] Error accessing SA file ${sa_path}: ${e.getMessage()}. Using default memory overhead (30 GB)."
+        }
+        tuple(sample, accession, metadata, fastq_1, fastq_2, barcodes_file, star_index, params, sa_size)
+    }
+    return ch_params_with_size
+}
 
 def expandStarParams(ch_fastq, ch_star_params_json) {
     def processedSamples = [] 
     
     // read the JSON file with the STAR parameters and join with the fastq channel
-    ch_params = ch_fastq.join(ch_star_params_json, by: [0,1])
+    def ch_params = ch_fastq.join(ch_star_params_json, by: [0,1])
         .map{ sample, accession, metadata, read1, read2, json_file -> 
             processedSamples << [sample, accession] 
-            def params = new JsonSlurper().parseText(json_file.text)
+            def params = new groovy.json.JsonSlurper().parseText(json_file.text)
             def barcodes_file = params.barcodes_file
             def star_index = params.star_index
             def cell_barcode_length = params.cell_barcode_length
@@ -20,9 +37,9 @@ def expandStarParams(ch_fastq, ch_star_params_json) {
 
     // status on number of parameter combinations
     ch_params.ifEmpty{ 
-        println "WARNING: No valid parameter set found for the following samples:"
+        log.warn "WARNING: No valid parameter set found for the following samples:"
         processedSamples.each { sampleInfo -> 
-            println "- Sample: ${sampleInfo[0]}, Accession: ${sampleInfo[1]}"
+            log.warn "- Sample: ${sampleInfo[0]}, Accession: ${sampleInfo[1]}"
         }
     }
     return ch_params
@@ -30,7 +47,7 @@ def expandStarParams(ch_fastq, ch_star_params_json) {
 
 def makeParamSets(ch_subsample, ch_barcodes, ch_star_indices) {
     // pairwise combine the subsample, barcodes and star indices channels
-    ch_params = ch_subsample
+    def ch_params = ch_subsample
         .combine(Channel.of("Forward", "Reverse"))
         .combine(ch_barcodes)
         .combine(ch_star_indices)
@@ -70,7 +87,7 @@ def validateRequiredColumns(row, required) {
 
 def loadBarcodes(params) {
     // load the barcodes from the input CSV file
-    ch_barcodes = Channel
+    def ch_barcodes = Channel
         .fromPath(params.barcodes, checkIfExists: true)
         .splitCsv(header: true)
         .map { row ->
@@ -94,7 +111,7 @@ def loadBarcodes(params) {
 
 def loadStarIndices(params) {
     // load the STAR indices from the input CSV file
-    ch_indices = Channel
+    def ch_indices = Channel
         .fromPath(params.star_indices, checkIfExists: true)
         .splitCsv(header: true)
         .map { row ->
