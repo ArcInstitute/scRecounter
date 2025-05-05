@@ -224,7 +224,7 @@ process STAR_PARAM_SEARCH {
     label "star_env"
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 8
-    memory { (sa_size > 0 ? Math.round(nextflow.util.MemoryUnit.of(sa_size).toGiga()) : 30.GB) * task.attempt }
+    memory { (sa_size > 0 ? sa_size + 8.GB : 30.GB) * task.attempt }
     time { 4.h * task.attempt }
     disk 10.GB
 

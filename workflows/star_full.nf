@@ -1,5 +1,5 @@
 include { joinReads; saveAsLog; } from '../lib/utils.nf'
-include { addSaSize; starFullMem; } from '../lib/star_full.nf'
+include { addSaSize; } from '../lib/star_full.nf'
 // Workflow to run STAR alignment on scRNA-seq data
 workflow STAR_FULL_WF{
     take:
@@ -94,7 +94,7 @@ process STAR_FULL {
     maxRetries 3
     errorStrategy { task.attempt <= maxRetries ? 'retry' : 'ignore' }
     cpus 12
-    memory { starFullMem(sa_size, task.attempt) }
+    memory { (sa_size > 0 ? sa_size + 8.GB : 30.GB) * task.attempt }
     time { 10.h * task.attempt }
     disk { [request: (375 * task.attempt).GB, type: 'local-ssd'] }
     machineType { 
@@ -119,7 +119,6 @@ process STAR_FULL {
     def use_database = params.use_database ? "--use-database" : ""
     def keep_raw_h5ad = params.keep_raw_h5ad ? "--keep-raw-h5ad" : ""
     """
-    echo "TEST"
     echo "# Running STAR for ${sample}" | tee ${task.process}.log
 
     # Format R1 and R2 file paths for STAR

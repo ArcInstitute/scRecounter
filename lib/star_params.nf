@@ -12,6 +12,7 @@ def addSaSizeToParams(ch_params) {
         } catch (Exception e) {
             log.warn "[${sample}/${accession}] Error accessing SA file ${sa_path}: ${e.getMessage()}. Using default memory overhead (30 GB)."
         }
+        sa_size = Math.round(nextflow.util.MemoryUnit.of(sa_size).toGiga()).GB
         tuple(sample, accession, metadata, fastq_1, fastq_2, barcodes_file, star_index, params, sa_size)
     }
     return ch_params_with_size
