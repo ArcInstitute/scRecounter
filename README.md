@@ -167,6 +167,13 @@ nextflow run main.nf \
   -profile docker,trace,report,gcp,gcp_dev,dev,gcp_no_acc_dev
 ```
 
+GCP run with accessions pulled from scRecounter SQL database (non-human/mouse species)
+
+```bash
+nextflow run main.nf \
+  -profile docker,trace,report,gcp,gcp_dev,dev,gcp_no_acc_dev,other_org
+```
+
 ### Characterize datasets
 
 Use just a small subset of reads in the dataset to identify library prep method, species, etc.

@@ -23,6 +23,15 @@ Saccharomyces_cerevisiae,/processed_datasets/scRecount/scRecounter/star_refs/Sac
 Schistosoma_mansoni,/processed_datasets/scRecount/scRecounter/star_refs/Schistosoma_mansoni/star
 Solanum_lycopersicum,/processed_datasets/scRecount/scRecounter/star_refs/Solanum_lycopersicum/star
 Sus_scrofa,/processed_datasets/scRecount/scRecounter/star_refs/Sus_scrofa/star
-Troglodytes_gorilla,/processed_datasets/scRecount/scRecounter/star_refs/Troglodytes_gorilla/star
 Xenopus_tropicalis,/processed_datasets/scRecount/scRecounter/star_refs/Xenopus_tropicalis/star
 Zea_mays,/processed_datasets/scRecount/scRecounter/star_refs/Zea_mays/star
+Capra_hircus,/processed_datasets/scRecount/scRecounter/star_refs/Capra_hircus/star
+Cavia_porcellus,/processed_datasets/scRecount/scRecounter/star_refs/Cavia_porcellus/star
+Chlorocebus_aethiops,/processed_datasets/scRecount/scRecounter/star_refs/Chlorocebus_aethiops/star
+Gasterosteus_aculeatus,/processed_datasets/scRecount/scRecounter/star_refs/Gasterosteus_aculeatus/star
+Mesocricetus_auratus,/processed_datasets/scRecount/scRecounter/star_refs/Mesocricetus_auratus/star
+Monodelphis_domestica,/processed_datasets/scRecount/scRecounter/star_refs/Monodelphis_domestica/star
+Pan_paniscus,/processed_datasets/scRecount/scRecounter/star_refs/Pan_paniscus/star
+Salmo_salar,/processed_datasets/scRecount/scRecounter/star_refs/Salmo_salar/star
+Taeniopygia_guttata,/processed_datasets/scRecount/scRecounter/star_refs/Taeniopygia_guttata/star
+Tupaia_belangeri,/processed_datasets/scRecount/scRecounter/star_refs/Tupaia_belangeri/star
