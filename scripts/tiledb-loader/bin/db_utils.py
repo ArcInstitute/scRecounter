@@ -269,7 +269,7 @@ def get_unique_columns(table: str, conn: connection) -> List[str]:
 def get_secret(secret_id: str) -> str:
     """
     Fetch secret from GCP Secret Manager.
-    Rquired environment variables: GCP_PROJECT_ID, GOOGLE_APPLICATION_CREDENTIALS
+    Required environment variables: GCP_PROJECT_ID, GOOGLE_APPLICATION_CREDENTIALS
     Args:
         secret_id: The secret id
     Returns:

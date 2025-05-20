@@ -236,7 +236,7 @@ if __name__ == '__main__':
         outdir=args.outdir, 
         gcp_download=args.gcp_download, 
         tries=args.tries, 
-        max_size_db=args.max_size_gb
+        max_size_gb=args.max_size_gb
     )
 
     # write log

@@ -167,16 +167,16 @@ def main(args: argparse.Namespace) -> None:
     client = storage.Client()
     bucket = client.bucket(bucket_name)
 
-    # Dind target SRX directories in GCP bucket
+    # Find target SRX directories in GCP bucket
     srx_dirs = list_screcounter_directories(bucket, path_prefix, args.srx_accession)
 
-    # Selete SRX accessions from scRecounter tables
+    # Delete SRX accessions from scRecounter tables
     purge_accession_tables(srx_dirs, bucket, dry_run=args.dry_run)
 
-    # Selete SRX directories from GCP bucket
+    # Delete SRX directories from GCP bucket
     delete_srx_star_dirs(srx_dirs, bucket, dry_run=args.dry_run)
 
-    # Selete SRX accessions from scRecounter tables
+    # Delete SRX accessions from scRecounter tables
     with db_connect() as conn:
         delete_srx(args.srx_accession, conn, dry_run=args.dry_run)
 

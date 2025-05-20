@@ -41,7 +41,7 @@ parser.add_argument('--use-database', action='store_true',
          
 # functions
 def main(args):
-    # set pandas display optionqs
+    # set pandas display options
     pd.set_option('display.max_columns', 50)
     pd.set_option('display.max_rows', 100)
     pd.set_option('display.width', 300)

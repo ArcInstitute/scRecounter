@@ -215,7 +215,7 @@ def write_data(data: pd.DataFrame, data_all: pd.DataFrame, outfile_selected: str
     write_all_data(data_all, outfile_merged)
 
 def main(args, log_df):
-    # set pandas display optionqs
+    # set pandas display options
     pd.set_option('display.max_columns', 40)
     pd.set_option('display.width', 300)
     process = "Select STAR params"

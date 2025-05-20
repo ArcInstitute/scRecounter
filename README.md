@@ -1,5 +1,5 @@
-scRecouter
-==========
+scRecounter
+===========
 
 A Nextflow pipeline to re-process single-cell RNA-seq data from the Sequence Read Archive.
 
