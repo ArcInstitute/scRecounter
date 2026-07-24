@@ -1,6 +1,8 @@
 scRecouter
 ==========
 
+[![DOI](https://zenodo.org/badge/876248064.svg)](https://doi.org/10.5281/zenodo.21539134)
+
 A Nextflow pipeline to re-process single-cell RNA-seq data from the Sequence Read Archive.
 
 # Workflow
